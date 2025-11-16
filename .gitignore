@@ -1,0 +1,44 @@
+# Sensitive files
+.credentials.json
+*.key
+*.pem
+
+# Runtime data
+history.jsonl
+debug/
+file-history/
+session-env/
+shell-snapshots/
+todos/
+statsig/
+
+# Project-specific (not global config)
+projects/
+
+# Node modules and local packages
+local/
+node_modules/
+
+# Internal Claude directory
+.claude/
+
+# Plans and prompts (per CLAUDE.md instructions)
+docs/**/.plans/
+docs/**/.prompts/
+**/.plans/
+**/.prompts/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+ide/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Plugin runtime
+plugins/
