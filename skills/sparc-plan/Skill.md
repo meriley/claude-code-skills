@@ -1,57 +1,27 @@
 ---
 name: SPARC Implementation Planning
-description: Creates comprehensive SPARC plans (Specification, Pseudocode, Architecture, Refinement, Completion) with tasks, dependencies, security/performance considerations for significant features.
+description: Creates comprehensive implementation plans using the SPARC framework (Specification, Pseudocode, Architecture, Refinement, Completion). Invokes check-history for context, generates detailed plans with tasks, dependencies, security/performance considerations. For significant features and refactoring.
 version: 1.0.0
 ---
 
-# ⚠️ MANDATORY: SPARC Implementation Planning Skill
+# SPARC Implementation Planning Skill
 
-## 🚨 WHEN YOU MUST USE THIS SKILL
+## Purpose
+Create comprehensive, structured implementation plans for significant development work using the SPARC (Specification, Pseudocode, Architecture, Refinement, Completion) framework.
 
-**Mandatory triggers:**
-1. Starting significant feature (> 8 hours of work)
-2. Major refactoring affecting multiple components
-3. Complex bug fixes requiring architectural changes
-4. When user explicitly requests "create an implementation plan"
-5. Before making breaking changes to public APIs
-6. When work affects multiple services/components
+## When to Use
+- Starting a new significant feature
+- Major refactoring efforts
+- Complex bug fixes requiring architectural changes
+- When user explicitly requests "create an implementation plan"
+- Before making breaking changes
+- When planning affects multiple components/services
 
-**This skill is MANDATORY because:**
-- Prevents ad-hoc implementation without design (reduces bugs)
-- Ensures comprehensive consideration of security/performance
-- Identifies blockers and dependencies early
-- Creates implementation roadmap for complex work
-- Documents architectural decisions for future reference
-
-**ENFORCEMENT:**
-
-**P1 Violations (High - Quality Failure):**
-- Skipping planning for significant work (> 8 hours)
-- Missing security considerations from plan
-- Missing performance considerations from plan
-- No task breakdown or dependencies identified
-- Incomplete specification phase
-
-**P2 Violations (Medium - Efficiency Loss):**
-- Not invoking check-history for context
-- Missing risk assessment
-- Unclear task ordering or estimates
-
-**When NOT to Use:**
+## When NOT to Use
 - Trivial changes (single file, < 20 lines)
 - Documentation-only updates
 - Simple bug fixes
 - Configuration changes
-
-**Blocking Conditions:**
-- For work > 8 hours: Must complete full SPARC planning
-- For work 4-8 hours: Simplified planning (specification, architecture, task list)
-- For work < 4 hours: Can skip formal planning
-
----
-
-## Purpose
-Create comprehensive, structured implementation plans for significant development work using the SPARC (Specification, Pseudocode, Architecture, Refinement, Completion) framework.
 
 ## SPARC Framework Overview
 
@@ -63,151 +33,521 @@ Create comprehensive, structured implementation plans for significant developmen
 4. **Refinement**: Iteratively improve and optimize
 5. **Completion**: Finalize, document, and verify
 
-## Workflow (Abbreviated)
+See REFERENCE.md for detailed phase descriptions.
+
+## Workflow
 
 ### Step 1: Invoke check-history
+
+Gather context about existing work:
+
 ```
 Invoke: check-history skill
 ```
-Gather context about existing work and patterns.
 
-### Step 2: Create Specification
-- Functional requirements
-- Non-functional requirements (performance, security, scale)
-- Constraints
-- Success criteria
-- User stories/use cases
+**Understand:**
+- Recent related commits
+- Existing patterns and conventions
+- Previous similar implementations
+- Current codebase structure
 
-### Step 3: Create Pseudocode
-- Algorithm pseudocode
-- Component interface definitions
-- Workflow descriptions
-- Error handling strategy
+### Step 2: Gather Requirements
 
-### Step 4: Create Architecture
-- Component breakdown
-- Architecture patterns
-- Data models
-- Component interactions
-- Technology choices
-- Security architecture
-- Performance architecture
+**Ask user clarifying questions:**
+- What problem are we solving?
+- What are the functional requirements?
+- What are the non-functional requirements (performance, security, scale)?
+- Are there any constraints (time, resources, compatibility)?
+- What's the expected user/API interface?
+- Are there any existing solutions to reference?
 
-### Step 5: Create Refinement Plan
-- Code quality checks
-- Performance optimization approach
-- Security review plan
-- Test coverage improvements
+**Document user responses.**
 
-### Step 6: Create Completion Criteria
-- Completion checklist
-- Documentation requirements
-- Deployment plan
+### Step 3: Research Dependencies (If Needed)
 
-### Step 7: Generate Task List
-- Break down into ordered tasks
-- Identify dependencies
-- Estimate time per task
-- Assign owners
+If external libraries or unfamiliar patterns needed:
 
-### Step 8: Identify Risks and Blockers
-- List potential blockers
-- Mitigation strategies
+```
+Invoke Context7 for library documentation
+```
+
+Research:
+- Best practices for the technology
+- Security considerations
+- Performance characteristics
+- Integration patterns
+
+### Step 4: Create Phase 1 - Specification
+
+Generate detailed specification document covering:
+
+#### Functional Requirements
+- Core features and capabilities
+- User stories / use cases
+- Input/output specifications
+- Edge cases to handle
+- Error scenarios
+
+#### Non-Functional Requirements
+- **Performance**: Response time, throughput, resource usage
+- **Security**: Authentication, authorization, data protection, audit
+- **Scalability**: Expected load, growth projections
+- **Reliability**: Uptime requirements, error handling
+- **Maintainability**: Code quality, documentation needs
+
+#### Constraints
+- Technology stack limitations
+- Compatibility requirements
+- Timeline and resource constraints
+- Regulatory or compliance requirements
+
+#### Success Criteria
+- How will we know when this is complete?
+- What metrics define success?
+- What testing is required?
+
+**See REFERENCE.md Section 1 for detailed specification template.**
+
+### Step 5: Create Phase 2 - Pseudocode
+
+Generate structured pseudocode for key algorithms and workflows:
+
+#### Algorithm Pseudocode
+```
+function processUserAuthentication(credentials):
+    1. Validate input format
+       - Check username not empty
+       - Check password meets requirements
+    
+    2. Query user from database
+       - Handle user not found
+       - Handle database errors
+    
+    3. Verify password
+       - Use bcrypt comparison
+       - Constant-time comparison to prevent timing attacks
+    
+    4. Generate session token
+       - Create JWT with claims
+       - Set appropriate expiry
+       - Sign with secret key
+    
+    5. Return success response
+       - Include token
+       - Include user profile (safe fields only)
+```
+
+#### Component Interface Definitions
+```
+interface AuthService:
+    method authenticate(username: string, password: string) -> Result<Session, AuthError>
+    method validateToken(token: string) -> Result<User, ValidationError>
+    method refreshToken(refreshToken: string) -> Result<Session, AuthError>
+    method logout(sessionId: string) -> Result<void, Error>
+```
+
+**See REFERENCE.md Section 2 for pseudocode examples.**
+
+### Step 6: Create Phase 3 - Architecture
+
+Design the system structure:
+
+#### Component Breakdown
+- List all components/modules needed
+- Define responsibilities of each component
+- Identify external dependencies
+- Note shared utilities
+
+#### Architecture Patterns
+- Which design patterns apply? (e.g., Repository, Factory, Strategy)
+- Layered architecture (presentation, business, data)
+- Separation of concerns
+- Dependency injection approach
+
+#### Data Models
+```go
+type User struct {
+    ID           string    `json:"id"`
+    Username     string    `json:"username"`
+    PasswordHash string    `json:"-"` // Never expose in JSON
+    Email        string    `json:"email"`
+    CreatedAt    time.Time `json:"created_at"`
+    UpdatedAt    time.Time `json:"updated_at"`
+}
+
+type Session struct {
+    ID        string
+    UserID    string
+    Token     string
+    ExpiresAt time.Time
+}
+```
+
+#### Component Interactions
+```
+User Request → Handler → Validator → Service → Repository → Database
+                   ↓          ↓          ↓          ↓
+               Middleware  Schema   Business   Data Layer
+```
+
+#### Technology Choices
+- Which libraries/frameworks to use?
+- Why these choices? (performance, security, familiarity)
+- Any alternatives considered?
+
+#### Security Architecture
+- Authentication mechanism
+- Authorization approach
+- Data encryption (at rest, in transit)
+- Input validation strategy
+- Audit logging plan
+
+#### Performance Architecture
+- Caching strategy
+- Database indexing plan
+- Query optimization approach
+- Resource pooling
+
+**See REFERENCE.md Section 3 for architecture templates.**
+
+### Step 7: Create Phase 4 - Refinement Plan
+
+Outline the iterative improvement process:
+
+#### Code Quality Checks
+- Linting requirements
+- Code review checklist
+- Refactoring opportunities
+- Technical debt to address
+
+#### Performance Optimization
+- Profiling approach
+- Bottleneck identification
+- Optimization targets
+- Benchmark requirements
+
+#### Security Review
+- Security scanning checklist
+- Penetration testing plan
+- Compliance verification
+- Vulnerability remediation
+
+#### Test Coverage Improvements
+- Current coverage gaps
+- Target coverage (90%+ unit, 100% E2E)
+- Test cases to add
+- Integration test scenarios
+
+**See REFERENCE.md Section 4 for refinement checklist.**
+
+### Step 8: Create Phase 5 - Completion Criteria
+
+Define what "done" means:
+
+#### Completion Checklist
+- [ ] All functional requirements implemented
+- [ ] All tests passing (90%+ unit coverage, 100% E2E pass)
+- [ ] All linter issues resolved
+- [ ] Security scan passed
+- [ ] Performance requirements met
+- [ ] Documentation complete
+- [ ] Code reviewed and approved
+- [ ] Deployed to staging environment
+- [ ] User acceptance testing passed
+
+#### Documentation Requirements
+- API documentation
+- User guide / README updates
+- Inline code comments (why, not what)
+- Architecture decision records
+
+#### Deployment Plan
+- Migration scripts (if needed)
+- Rollback plan
+- Monitoring setup
+- Alert configuration
+
+**See REFERENCE.md Section 5 for completion templates.**
+
+### Step 9: Generate Ranked Task List
+
+Break down implementation into ordered tasks:
+
+```markdown
+## Implementation Task List
+
+### Phase 1: Foundation (Priority: CRITICAL)
+1. [ ] Set up database schema for users table
+   - Estimated: 2 hours
+   - Dependencies: None
+   - Owner: Pedro
+
+2. [ ] Implement User model with validation
+   - Estimated: 1 hour
+   - Dependencies: Task 1
+   - Owner: Pedro
+
+3. [ ] Create database repository layer
+   - Estimated: 3 hours
+   - Dependencies: Task 2
+   - Owner: Pedro
+
+### Phase 2: Core Logic (Priority: HIGH)
+4. [ ] Implement password hashing service
+   - Estimated: 2 hours
+   - Dependencies: Task 2
+   - Owner: Pedro
+
+5. [ ] Implement JWT token generation
+   - Estimated: 2 hours
+   - Dependencies: Task 2
+   - Owner: Pedro
+
+[... continue with all tasks ...]
+
+### Phase 5: Testing & Refinement (Priority: MEDIUM)
+15. [ ] Add unit tests for all services (target: 95%)
+    - Estimated: 6 hours
+    - Dependencies: Tasks 4-10
+    - Owner: Pedro
+
+16. [ ] Add integration tests for auth flow
+    - Estimated: 4 hours
+    - Dependencies: Tasks 11-14
+    - Owner: Pedro
+```
+
+### Step 10: Identify Dependencies and Blockers
+
+Create dependency graph:
+
+```markdown
+## Task Dependencies
+
+Task 1 (Database schema)
+  └─> Task 2 (User model)
+       ├─> Task 3 (Repository)
+       ├─> Task 4 (Password hashing)
+       └─> Task 5 (JWT generation)
+            └─> Task 6 (Auth service)
+                 └─> Task 7 (HTTP handlers)
+
+## Potential Blockers
+
+1. **Database access**: Need database credentials and connection
+   - Risk: HIGH
+   - Mitigation: Set up local Docker database
+
+2. **JWT secret key**: Need secure key generation
+   - Risk: MEDIUM
+   - Mitigation: Use crypto/rand for generation
+
+3. **External auth provider**: If integrating OAuth
+   - Risk: LOW (optional feature)
+   - Mitigation: Implement basic auth first
+```
+
+### Step 11: Create Security & Performance Plans
+
+#### Security Plan
+```markdown
+## Security Checkpoints
+
+### Design Phase
+- [ ] Threat modeling completed
+- [ ] Authentication mechanism reviewed
+- [ ] Authorization strategy defined
+- [ ] Data encryption plan verified
+
+### Implementation Phase
+- [ ] Input validation on all endpoints
+- [ ] SQL injection prevention (parameterized queries)
+- [ ] XSS prevention (proper escaping)
+- [ ] CSRF protection (tokens)
+- [ ] Rate limiting implemented
+
+### Testing Phase
+- [ ] Security scan passed (no secrets)
+- [ ] Dependency vulnerabilities checked
+- [ ] Penetration testing completed
+- [ ] Security code review done
+```
+
+#### Performance Plan
+```markdown
+## Performance Targets
+
+### Requirements
+- Authentication: < 100ms p95
+- Token validation: < 10ms p95
+- Database queries: < 50ms p95
+- Memory usage: < 50MB per request
+
+### Measurement Points
+1. After initial implementation (baseline)
+2. After query optimization
+3. After caching implementation
+4. Before production deployment
+
+### Optimization Strategy
+1. Profile with pprof (Go) / clinic.js (Node)
+2. Identify bottlenecks
+3. Optimize database queries (indexes, query optimization)
+4. Add caching (Redis) for frequent reads
+5. Use connection pooling
+6. Benchmark against targets
+```
+
+### Step 12: Document and Present Plan
+
+Save all planning documents to disk (don't commit yet):
+
+```
+Create directory: docs/planning/<feature-name>/
+Files:
+- specification.md
+- pseudocode.md
+- architecture.md
+- refinement-plan.md
+- completion-checklist.md
+- task-list.md
+- security-plan.md
+- performance-plan.md
+```
+
+Present summary to user:
+
+```markdown
+# Implementation Plan: JWT Authentication System
+
+## Summary
+Comprehensive authentication system with JWT tokens, including user management, 
+session handling, and security best practices.
+
+## Phases
+1. **Specification**: Complete (see specification.md)
+2. **Pseudocode**: Complete (see pseudocode.md)
+3. **Architecture**: Complete (see architecture.md)
+4. **Refinement**: Planned (see refinement-plan.md)
+5. **Completion**: Criteria defined (see completion-checklist.md)
+
+## Task Breakdown
+- Total tasks: 22
+- Estimated time: 40 hours
+- Critical path: 18 tasks (28 hours)
+
+## Key Decisions
+- Technology: Go with JWT tokens
+- Database: PostgreSQL
+- Caching: Redis for session storage
+- Testing: 95% unit coverage target
+
+## Security Considerations
+- Bcrypt password hashing (cost factor: 12)
+- JWT with RS256 signing
+- Token expiry: 1 hour (access), 30 days (refresh)
+- Rate limiting: 5 attempts per minute per IP
+
+## Performance Targets
+- Authentication: < 100ms p95
+- Token validation: < 10ms p95
+
+## Risks
+1. Database performance (Mitigation: Connection pooling, indexes)
+2. Token storage size (Mitigation: Redis with TTL)
+
+## Next Steps
+1. Review plan and confirm approach
+2. Create branch: mriley/feat/jwt-authentication
+3. Begin Phase 1: Database schema
+4. Implement tasks in order from task-list.md
+
+Plan documents saved to: docs/planning/jwt-authentication/
+
+Ready to begin implementation?
+```
+
+---
+
+## Integration with Other Skills
+
+This skill invokes:
+- **`check-history`** - Step 1 (gather context)
+
+This skill may be followed by:
+- **`manage-branch`** - Create feature branch
+- **`safe-commit`** - Commit planning documents
+
+---
+
+## Best Practices
+
+1. **Be thorough** - Better to over-plan than under-plan
+2. **Be specific** - Vague plans lead to vague implementations
+3. **Consider all aspects** - Security, performance, testing, documentation
+4. **Identify risks early** - Mitigation is easier with planning
+5. **Make it reviewable** - User should be able to understand and validate plan
+6. **Save everything** - Plans are valuable documentation
+7. **Be realistic** - Estimate time conservatively
+
+---
+
+## When to Skip Planning
+
+Some tasks don't need full SPARC planning:
+
+- **Simple bug fixes** - Go straight to implementation
+- **Documentation updates** - No architecture needed
+- **Trivial refactoring** - Single file, obvious change
+- **Configuration changes** - Low risk, reversible
+
+**Rule of thumb:** If implementation is < 4 hours and touches < 3 files, skip formal planning.
+
+---
+
+## Adapting SPARC for Different Project Sizes
+
+### Small feature (< 8 hours)
+- Brief specification (1 paragraph)
+- Simplified pseudocode
+- Component list (no diagrams)
+- Basic task list
+- Standard checklist
+
+### Medium feature (8-40 hours)
+- Detailed specification
+- Comprehensive pseudocode
+- Architecture diagrams
+- Detailed task list with estimates
+- Security & performance plans
+
+### Large feature (> 40 hours)
+- Full SPARC documentation
+- Multiple architecture views
+- Dependency graphs
 - Risk assessment matrix
+- Milestone planning
 
-### Step 9: Create Security & Performance Plans
-- Security checkpoints
-- Performance targets
-- Measurement approach
+---
 
-### Step 10: Document and Present
-Save planning documents, present summary to user.
+## Quick Reference
 
-## Output Artifacts
+**Invoke SPARC planning when:**
+- User requests implementation plan
+- Starting significant feature (> 8 hours)
+- Making breaking changes
+- Refactoring multiple components
+- Need architecture decision record
 
+**Output artifacts:**
 1. Specification document
 2. Pseudocode for algorithms
 3. Architecture design
 4. Refinement plan
 5. Completion checklist
-6. Ranked task list (with dependencies and estimates)
+6. Ranked task list
 7. Security plan
 8. Performance plan
 
-## Integration Points
-
-Invokes:
-- **`check-history`** - Gather context
-
-Followed by:
-- **`manage-branch`** - Create feature branch
-- **`safe-commit`** - Commit planning documents
-
-## Anti-Patterns
-
-### ❌ Anti-Pattern: Starting Without Planning
-
-**Wrong approach:**
-```
-User: "Add JWT authentication"
-Assistant: *immediately starts coding without planning*
-```
-
-**Why wrong:**
-- No architecture design
-- Security considerations missed
-- Performance implications unknown
-- Dependencies not identified
-- Incomplete or incorrect implementation
-
-**Correct approach:** Create SPARC plan first
-```
-User: "Add JWT authentication"
-Assistant: "This is significant work - let me create an implementation plan using SPARC framework"
-*Invokes sparc-plan skill*
-*Creates full specification, architecture, task list*
-*User reviews and approves plan*
-*Then implementation begins with clear roadmap*
-```
-
----
-
-### ❌ Anti-Pattern: Skipping for "Simple" Features
-
-**Wrong approach:**
-```
-Feature seems straightforward, skip planning
-Discover midway: need to migrate data, coordinate with other team, security implications
-```
-
-**Correct approach:** Assess complexity first
-```
-Evaluate: "How long will this take?"
-> 4 hours? Create at least simplified plan
-> 8 hours? Full SPARC planning required
-Identify: dependencies, security, performance implications
-```
-
----
-
-## Success Criteria
-
-Plan is complete when:
-- ✅ Specification phase documented
-- ✅ Architecture designed
-- ✅ Tasks broken down with dependencies
-- ✅ Time estimates provided
-- ✅ Security considerations identified
-- ✅ Performance targets defined
-- ✅ Risk assessment completed
-- ✅ User reviewed and approved plan
-
-## References
-
-**Based on:**
-- CLAUDE.md Section 3 (Available Skills Reference - sparc-plan)
-- SPARC Framework methodology
-
-**Related skills:**
-- `check-history` - Invoked in Step 1
-- `manage-branch` - Create feature branch after planning
+**Next step after planning:**
+Review with user, get approval, create branch, begin implementation.

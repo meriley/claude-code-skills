@@ -1,70 +1,71 @@
 ---
 name: Safe Destructive Operations
-description: Safety protocol for destructive operations. Lists affected files, warns of data loss, suggests alternatives, requires explicit confirmation for git reset --hard, git clean, rm -rf.
-version: 1.0.0
+description: ⚠️ MANDATORY - YOU MUST invoke this skill before ANY destructive operation. Safety protocol for destructive git/file operations. Lists affected files, warns about data loss, suggests safe alternatives, requires explicit double confirmation. NEVER run destructive commands without invoking this skill.
+version: 1.0.1
 ---
 
-# ⚠️ MANDATORY: Safe Destructive Operations Skill
+# Safe Destructive Operations Skill
 
-## 🚨 WHEN YOU MUST USE THIS SKILL
-
-**Mandatory triggers:**
-1. Before ANY `git reset --hard` command
-2. Before ANY `git clean -fd` command
-3. Before ANY `rm -rf <directory>` command
-4. Before ANY `git checkout -- .` or `git restore .`
-5. Before ANY `docker system prune -a`
-6. Before ANY `kubectl delete` operations
-7. Before ANY operation that permanently deletes data
-
-**This skill is MANDATORY because:**
-- Prevents permanent data loss from accidental commands (ZERO TOLERANCE)
-- User work is irreversible once deleted
-- This is PRIMARY DIRECTIVE: Failing here = total failure
-- Requires explicit confirmation showing understanding of consequences
-- Provides safer alternatives for nearly all destructive operations
-
-**ENFORCEMENT:**
-
-**P0 Violations (Critical - Immediate Failure):**
-- Running destructive command WITHOUT invoking this skill (DATA LOSS RISK)
-- Running destructive command WITHOUT explicit user confirmation (AUTHORIZATION VIOLATION)
-- NOT showing what will be deleted before executing (TRANSPARENCY FAILURE)
-- NOT suggesting safer alternatives (RISK MITIGATION FAILURE)
-- Executing after ambiguous confirmation (too vague/unclear)
-- Executing without double-confirmation for especially dangerous ops (SAFETY FAILURE)
-
-**P1 Violations (High - Quality Failure):**
-- Failing to list specific files/directories that will be lost
-- Not explaining the consequences of the operation
-- Incomplete or unclear confirmation request
-- Not waiting for user response before proceeding
-
-**P2 Violations (Medium - Efficiency Loss):**
-- Not showing file sizes or quantities being deleted
-- Not explaining recovery options
-- Not suggesting safe alternatives
-
-**Blocking Conditions:**
-- User MUST explicitly confirm (typed command or clear approval)
-- Ambiguous responses must trigger re-confirmation
-- Especially dangerous ops (git reset --hard, rm -rf) require double confirmation
-- Must show what will be deleted BEFORE execution
-- Must suggest safer alternatives BEFORE showing confirmation prompt
-
----
+## ⚠️ MANDATORY SKILL - YOU MUST INVOKE THIS
 
 ## Purpose
 Prevent accidental data loss by requiring explicit confirmation before any destructive operation, showing what will be lost, and suggesting safer alternatives.
 
+**CRITICAL:** You MUST invoke this skill before ANY destructive operation. NEVER run destructive commands directly.
+
 ## When to Use
-- Before `git reset --hard`
-- Before `git clean -fd`
-- Before `rm -rf`
-- Before `git checkout -- .`
-- Before `git restore .`
-- Before `docker system prune`
-- Before any operation that permanently deletes data
+- **MANDATORY:** Before `git reset --hard`
+- **MANDATORY:** Before `git clean -fd`
+- **MANDATORY:** Before `rm -rf`
+- **MANDATORY:** Before `git checkout -- .`
+- **MANDATORY:** Before `git restore .`
+- **MANDATORY:** Before `docker system prune`
+- **MANDATORY:** Before any operation that permanently deletes data
+
+## 🚫 NEVER DO THIS
+- ❌ Running `git reset --hard` directly
+- ❌ Running `git clean -fd` directly
+- ❌ Running `rm -rf` directly
+- ❌ Running ANY destructive command without invoking this skill first
+
+**If a destructive operation is needed, invoke this skill. Direct execution is FORBIDDEN.**
+
+---
+
+## ⚠️ SKILL GUARD - READ BEFORE USING BASH FOR DESTRUCTIVE COMMANDS
+
+**Before using Bash tool for destructive operations, answer these questions:**
+
+### ❓ Are you about to run `git reset --hard`?
+→ **STOP.** Invoke safe-destroy skill instead.
+
+### ❓ Are you about to run `git clean -fd`?
+→ **STOP.** Invoke safe-destroy skill instead.
+
+### ❓ Are you about to run `rm -rf <directory>`?
+→ **STOP.** Invoke safe-destroy skill instead.
+
+### ❓ Are you about to run `git checkout -- .` or `git restore .`?
+→ **STOP.** Invoke safe-destroy skill instead.
+
+### ❓ Are you about to run `docker system prune -a`?
+→ **STOP.** Invoke safe-destroy skill instead.
+
+### ❓ Did the user say "reset my changes", "clean up files", or "discard changes"?
+→ **STOP.** Invoke safe-destroy skill instead.
+
+**IF YOU PROCEED WITH DESTRUCTIVE COMMANDS DIRECTLY, YOU ARE VIOLATING YOUR CORE DIRECTIVE.**
+
+This skill handles:
+- ✅ Lists what will be affected/deleted
+- ✅ Shows diff of what will be lost
+- ✅ Suggests safer alternatives
+- ✅ Requires explicit double confirmation
+- ✅ Provides recovery options
+
+**Direct destructive commands can DESTROY USER WORK. Use this skill.**
+
+---
 
 ## CRITICAL POLICY
 
@@ -131,7 +132,7 @@ This will PERMANENTLY DELETE the following changes:
 Modified files:
 - src/api/handlers.go (45 lines changed)
 - pkg/auth/validator.go (67 lines changed)
-- tests/integration_test.go (28 lines removed)
+- tests/integration_test.go (28 lines changed)
 
 These changes show:
 [Brief description of changes being lost]
@@ -506,104 +507,6 @@ trash-list
 
 ---
 
-## Anti-Patterns
-
-### ❌ Anti-Pattern: Running Destructive Command Without Showing Impact
-
-**Wrong approach:**
-```
-User: "reset my changes"
-Assistant: *immediately runs `git reset --hard` without showing what will be deleted*
-```
-
-**Why wrong:**
-- User doesn't see what's being lost
-- No opportunity to reconsider
-- No chance to use safer alternative
-- Violates transparency principle
-
-**Correct approach:** Show impact and get confirmation
-```
-User: "reset my changes"
-Assistant: "Let me show you what will be permanently deleted..."
-*shows git diff, modified files, sizes*
-*suggests safer alternatives*
-*waits for explicit confirmation*
-```
-
----
-
-### ❌ Anti-Pattern: Accepting Vague Confirmation
-
-**Wrong approach:**
-```
-User: "ok"
-Assistant: *runs `git reset --hard`*
-```
-
-**Why wrong:**
-- "Ok" could mean anything
-- User may not understand consequences
-- No clear confirmation of intent
-- Violates confirmation requirements
-
-**Correct approach:** Require explicit confirmation
-```
-User: "ok"
-Assistant: "Please explicitly type: 'I want to run git reset --hard'"
-*WAITS for explicit confirmation*
-```
-
----
-
-### ❌ Anti-Pattern: Skipping Safer Alternatives
-
-**Wrong approach:**
-```
-User: "delete these untracked files"
-Assistant: *immediately runs `git clean -fd` without suggesting alternatives*
-```
-
-**Why wrong:**
-- User doesn't know safer options exist
-- Doesn't empower user to choose
-- Violates risk mitigation principle
-
-**Correct approach:** Always suggest alternatives first
-```
-User: "delete these untracked files"
-Assistant: "SAFER ALTERNATIVES: 1. Move to backup, 2. Review first, 3. Add to .gitignore"
-*shows what would be deleted*
-*explains each alternative*
-*gets explicit confirmation*
-```
-
----
-
-### ❌ Anti-Pattern: Proceeding Without Double Confirmation for High-Risk Ops
-
-**Wrong approach:**
-```
-User: "I want to run git reset --hard"
-Assistant: *immediately executes without re-confirming*
-```
-
-**Why wrong:**
-- git reset --hard is especially dangerous
-- User might have mistyped or changed mind
-- No final safety check
-- Violates protection principle
-
-**Correct approach:** Double confirmation for dangerous ops
-```
-User: "I want to run git reset --hard"
-Assistant: "FINAL CONFIRMATION: This will permanently delete all uncommitted changes and CANNOT be undone. Type 'CONFIRM' to proceed:"
-*WAITS for explicit "CONFIRM"*
-*THEN executes*
-```
-
----
-
 ## Quick Reference
 
 **Destructive command requested**
@@ -615,15 +518,3 @@ Assistant: "FINAL CONFIRMATION: This will permanently delete all uncommitted cha
 6. EXECUTE - Only after approval
 
 **Remember: It's better to annoy the user with confirmations than to lose their work.**
-
----
-
-## References
-
-**Based on:**
-- CLAUDE.md Section 1 (Core Policies - DESTRUCTIVE COMMAND SAFEGUARDS, ZERO TOLERANCE)
-- CLAUDE.md Section 3 (Available Skills Reference - safe-destroy)
-- Project instructions: ABSOLUTELY FORBIDDEN Commands - explicit confirmation required
-
-**Related skills:**
-- `safe-commit` - Uses safe practices with git operations

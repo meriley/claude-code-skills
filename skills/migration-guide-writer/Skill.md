@@ -1,202 +1,607 @@
 ---
 name: Migration Guide Writer
-description: Creates migration guides following Diátaxis How-To pattern. Maps old/new APIs with before/after examples, documents breaking changes. Zero fabrication tolerance.
+description: Creates problem-oriented migration guides following Diátaxis How-To pattern. Maps old APIs to new APIs with before/after examples, documents breaking changes, provides troubleshooting. Zero tolerance for fabricated APIs or unverified performance claims.
 version: 1.0.0
 ---
 
-# ⚠️ MANDATORY: Migration Guide Writer Skill
-
-## 🚨 WHEN YOU MUST USE THIS SKILL
-
-**Mandatory triggers:**
-1. After breaking changes to public APIs
-2. During major version releases
-3. When migrating to new libraries/frameworks
-4. System replacements or rewrites
-5. Significant architecture changes affecting users
-6. User requests: "write migration guide for v2"
-
-**This skill is MANDATORY because:**
-- Helps users transition to new APIs (critical for adoption)
-- Prevents frustration from breaking changes
-- Documents mapping between old and new systems
-- Provides working before/after examples
-- Reduces support burden for migration questions
-
-**ENFORCEMENT:**
-
-**P0 Violations (Critical - Immediate Failure):**
-- Documenting APIs that don't actually exist (FABRICATION)
-- Incorrect before/after examples (won't work)
-- Unverified performance claims
-- Missing breaking changes documentation
-- Example code that references non-existent methods
-
-**P1 Violations (High - Quality Failure):**
-- Incomplete migration path (missing key changes)
-- Missing troubleshooting section
-- Unclear problem-oriented structure
-- No step-by-step instructions
-- Missing deprecation timeline
-
-**P2 Violations (Medium - Efficiency Loss):**
-- Not organized by problem/use case
-- Missing common migration patterns
-- Unclear error messages or solutions
-
-**Blocking Conditions:**
-- ALL code examples must be verified and tested
-- EVERY API reference must exist in source
-- Breaking changes must be explicitly documented
-- Migration path must be complete and working
-
----
+# Migration Guide Writer Skill
 
 ## Purpose
 
-Create problem-oriented migration guides following the Diátaxis How-To pattern. Maps old APIs to new APIs with before/after examples, documents breaking changes, provides troubleshooting.
+Create comprehensive migration guides for moving from old systems/APIs to new ones. Follows the Diátaxis How-To pattern for problem-oriented documentation. Verifies all APIs in both old and new systems before documenting, with zero tolerance for fabrication.
 
 ## When to Use This Skill
 
-- **After breaking changes** - Help users migrate to new API
-- **Major version releases** - Document upgrade path
-- **System replacements** - Guide transition to new system
-- **Architecture changes** - Explain impact and migration
-- **Library upgrades** - Show upgrade and usage changes
+- **New system replaces old** - Guide users through migration
+- **Breaking API changes** - Document how to adapt to changes
+- **Major version upgrades** - Help users upgrade safely
+- **Service decomposition** - Guide migration from monolith to microservices
+- **Deprecation notices** - Show how to move away from deprecated APIs
+- **User requests** - "how to migrate from X to Y"
+- **Architectural changes** - Document pattern changes
 
-## Guide Structure (Diátaxis How-To Pattern)
+## Diátaxis Framework: How-To Guide
 
-### 1. Overview
-- What's changing and why
-- Impact assessment
-- Timeline for migration
-- Support duration for old version
+**How-To Type Characteristics:**
+- **Problem-oriented** - Focused on specific migration goal
+- **Assumes knowledge** - Not teaching from zero (that's tutorials)
+- **Series of steps** - Path from old to new
+- **Multiple approaches** - May show different migration strategies
+- **Real-world scenarios** - Production migration patterns
+- **Troubleshooting** - Common issues and solutions
 
-### 2. Before/After API Mapping
-```
-## Migration: Task API v1 to v2
+**What NOT to Include:**
+- ❌ Tutorials (learning from zero) - Use tutorial-writer skill
+- ❌ Complete API reference - Link to api-doc-writer docs
+- ❌ Deep explanations of WHY - Link to explanation docs
+- ❌ Marketing comparisons - Technical facts only
 
-### Creating Tasks
-**Before (v1):**
-```go
-task := CreateTask(title, description)
-```
+## Critical Rules (Zero Tolerance)
 
-**After (v2):**
-```go
-task, err := taskService.Create(ctx, &CreateTaskRequest{
-    Title: title,
-    Description: description,
-})
-```
+### P0 - CRITICAL Violations (Must Fix)
+1. **Fabricated Old APIs** - Old methods that never existed
+2. **Fabricated New APIs** - New methods that don't exist in source
+3. **Wrong Signatures** - Before/After code with incorrect APIs
+4. **Unverified Performance Claims** - "10x faster" without benchmarks
+5. **Invalid Migration Code** - Code that won't compile
 
-**Why changed:** Added context support, better error handling, request structuring
-```
+### P1 - HIGH Violations (Should Fix)
+6. **Missing Troubleshooting** - No guidance for common errors
+7. **Incomplete Breaking Changes** - Not documenting all changes
+8. **Unverified Timing Claims** - Fabricated latency numbers
 
-### 3. Step-by-Step Migration Guide
-1. Update imports
-2. Update function calls
-3. Handle new error patterns
-4. Update configurations
-5. Test thoroughly
+### P2 - MEDIUM Violations
+9. **Marketing Language** - Buzzwords instead of technical facts
+10. **Missing Prerequisites** - Not stating version requirements
 
-### 4. Breaking Changes Document
-- What changed and why
-- How to fix it
-- Deprecation timeline
-- Compatibility matrix
+## Step-by-Step Workflow
 
-### 5. Common Issues & Troubleshooting
-```
-## Common Issues
+### Step 1: Systems Analysis Phase (10-15 minutes)
 
-**Issue: "function Create not found"**
-- **Cause**: v1 function no longer exists
-- **Solution**: Update to `taskService.Create()` with new signature
-- **Reference**: See [Before/After](#beforeafter) section
-```
+**Understand both old and new systems:**
 
-### 6. Working Examples
-- Complete before/after code
-- All examples must be verified
-- Test examples before documenting
+```bash
+# Read old system documentation
+Read [old_system_docs]
+Read [old_system_source] # If available
 
-## Integration Points
+# Read new system source code (REQUIRED)
+Read [new_system_source]
 
-Works with:
-- **api-doc-writer** - New API reference (guide links to this)
-- **tutorial-writer** - Getting started with new system
-- **api-documentation-verify** - Verify examples work
-
-## Anti-Patterns
-
-### ❌ Anti-Pattern: Fabricated APIs in Examples
-
-**Wrong approach:**
-```
-Old Code:
-taskService.CreateTask(params)
-
-New Code:
-taskService.createNewTask(newParams) // This method doesn't exist!
+# Find equivalent operations
+# For each old API, identify corresponding new API
 ```
 
-**Correct approach:** Verify all APIs exist
-```
-Old Code:
-CreateTask(title, description)
+**Create mapping checklist:**
+```markdown
+## API Mapping Checklist
 
-New Code:
-taskService.Create(ctx, &CreateTaskRequest{Title: title, Description: description})
-// ✅ Verified against source code
+### Old System: [OldSystemName]
+- [ ] All old APIs identified
+- [ ] Old API signatures verified (if source available)
+- [ ] Old patterns documented
+
+### New System: [NewSystemName]
+- [ ] All new APIs read from source
+- [ ] New API signatures verified
+- [ ] New patterns understood
+- [ ] Breaking changes identified
+
+### Mapping
+- [ ] CRUD operations mapped
+- [ ] Authentication mapped
+- [ ] Error handling mapped
+- [ ] Configuration mapped
+- [ ] No-direct-equivalent cases noted
+```
+
+**Search for benchmarks:**
+```bash
+# Look for benchmark files
+find . -name "*bench*" -o -name "*benchmark*"
+
+# If comparing systems, need benchmarks for performance claims
+# If no benchmarks exist, DO NOT make performance claims
+```
+
+### Step 2: Pattern Identification Phase (15-20 minutes)
+
+**Identify common migration patterns:**
+
+1. **CRUD Operations** - Create, Read, Update, Delete mappings
+2. **Authentication** - Auth pattern changes
+3. **Configuration** - Config format changes
+4. **Error Handling** - Error pattern changes
+5. **Async Operations** - Callback → Promise → Async/Await
+6. **Data Access** - Database query changes
+7. **API Calls** - HTTP client changes
+8. **State Management** - State pattern changes
+
+**For each pattern:**
+```markdown
+## Pattern: [PatternName]
+
+### Old System Approach
+[Verified old code]
+
+### New System Approach
+[Verified new code from source]
+
+### Breaking Changes
+- [Specific change 1]
+- [Specific change 2]
+
+### Migration Steps
+1. [Step 1]
+2. [Step 2]
+```
+
+**Identify breaking changes explicitly:**
+- Method renamed
+- Parameter added/removed/reordered
+- Return type changed
+- Behavior changed
+- Configuration format changed
+- Dependencies changed
+
+### Step 3: Documentation Phase (20-30 minutes)
+
+**Use this structure:**
+
+```markdown
+# How to Migrate from [Old System] to [New System]
+
+## Goal
+
+[Specific migration outcome - what they'll achieve]
+
+## When to Use This Guide
+
+- You're currently using [Old System] version [X.Y]
+- You need to migrate to [New System] version [A.B]
+- [Specific scenario or requirement]
+
+## Prerequisites
+
+**Before starting:**
+- [Old System] version: [X.Y.Z or range]
+- [New System] version: [A.B.C or range]
+- [Required dependency 1]: version [X.Y]
+- [Required dependency 2]: version [A.B]
+- [Required knowledge]: Understanding of [concept]
+
+**Installation:**
+```bash
+# Install new system
+[verified installation command]
+```
+
+## Overview of Changes
+
+**Major Breaking Changes:**
+1. **[Change 1]**: [What changed and impact]
+2. **[Change 2]**: [What changed and impact]
+3. **[Change 3]**: [What changed and impact]
+
+**New Capabilities:**
+- [Feature 1] - [Brief description]
+- [Feature 2] - [Brief description]
+
+**Removed/Deprecated:**
+- [Old Feature 1] - [Replacement or workaround]
+- [Old Feature 2] - [Replacement or workaround]
+
+## Migration Patterns
+
+### Pattern 1: [Common Task Name]
+
+#### Before (Old System)
+
+```[language]
+// Old system code - verified against old docs/source
+import "[old/import/path]"
+
+[verified old code demonstrating the pattern]
+```
+
+**What this does**: [Brief explanation]
+
+#### After (New System)
+
+```[language]
+// New system code - VERIFIED against source
+import "[new/import/path]"
+
+[verified new code from source demonstrating the pattern]
+```
+
+**What changed**:
+- [Specific change 1]: [Old approach] → [New approach]
+- [Specific change 2]: [Technical reason if architectural]
+
+**Why This Works**: [Brief factual explanation - no marketing]
+
+---
+
+### Pattern 2: [Another Common Task]
+
+[Repeat Before/After structure]
+
+---
+
+## Step-by-Step Migration
+
+[Optional: If there's a specific sequence to follow]
+
+### Step 1: [First Action] ([time estimate])
+
+**What to do:**
+```[language]
+[Specific code or commands]
+```
+
+**Verification:**
+```bash
+# How to verify this step worked
+[verification command]
+# Expected output:
+[expected result]
+```
+
+### Step 2: [Next Action] ([time estimate])
+
+[Continue step pattern]
+
+## Architecture Comparison
+
+[Only factual architectural statements - no unverified performance claims]
+
+### Old System Architecture
+- [Architectural fact 1]: [e.g., "Network-based RPC calls"]
+- [Architectural fact 2]: [e.g., "Separate process communication"]
+
+### New System Architecture
+- [Architectural fact 1]: [e.g., "In-process function calls"]
+- [Architectural fact 2]: [e.g., "Direct memory access"]
+
+**Implications:**
+- ✅ **Factual**: "Eliminates network overhead between processes"
+- ✅ **Factual**: "Reduces database round-trips through batching"
+- ❌ **UNVERIFIED**: "10x faster" [Need benchmarks!]
+- ❌ **UNVERIFIED**: "Reduces latency from 50ms to 5ms" [Need measurements!]
+
+[If benchmarks exist, reference them]:
+**Performance Characteristics**: See `benchmarks/old-vs-new.bench.ts` for measurements
+
+## Troubleshooting
+
+### Issue: [Common Problem 1]
+
+**Symptom**: [What the developer sees/experiences]
+```
+[Error message or behavior]
+```
+
+**Cause**: [Why this happens - technical explanation]
+
+**Solution**:
+```[language]
+// How to fix
+[verified solution code]
 ```
 
 ---
 
-### ❌ Anti-Pattern: Incomplete Breaking Changes
+### Issue: [Common Problem 2]
 
-**Wrong approach:**
-```
-"Breaking changes: API structure updated"
-(Doesn't explain what changed or how to fix)
-```
-
-**Correct approach:** Explicit detailed breaking changes
-```
-**Breaking Changes:**
-
-1. Function signature changed
-   - Old: `CreateTask(title, description)`
-   - New: `taskService.Create(ctx, *CreateTaskRequest)`
-   - Fix: Add context parameter, use request struct
-
-2. Error handling changed
-   - Old: Returns bool for success
-   - New: Returns error for failures
-   - Fix: Check err != nil instead of bool result
-```
+[Repeat troubleshooting pattern]
 
 ---
+
+### Issue: Compilation Errors After Migration
+
+**Symptom**: Code doesn't compile after changing imports
+
+**Common Causes**:
+1. [Type import changed]: [Old import] → [New import]
+2. [Method signature changed]: [Old signature] → [New signature]
+
+**Solution**: Check [link to API reference] for updated signatures
+
+---
+
+## Configuration Migration
+
+[If configuration format changed]
+
+### Old Configuration
+
+```[format]
+# Old config format
+[verified old config]
+```
+
+### New Configuration
+
+```[format]
+# New config format - verified against source
+[verified new config]
+```
+
+**Mapping**:
+- `old.setting1` → `new.setting_one` (renamed)
+- `old.setting2` → `new.setting_two` (type changed: string → number)
+- `old.setting3` → (removed - no longer needed)
+- (new) → `new.setting_four` (new required setting)
+
+## Breaking Changes Reference
+
+**Complete list of breaking changes:**
+
+1. **[Module/Package Name]**
+   - `OldMethod()` renamed to `NewMethod()`
+   - `MethodWithChange(param1)` now requires `param2`
+   - `RemovedMethod()` removed - use `NewApproach()` instead
+
+2. **[Another Module]**
+   - [List all breaking changes]
+
+3. **Configuration**
+   - [Config changes]
+
+4. **Dependencies**
+   - [Dependency changes]
+
+## Complete Example
+
+[Full before/after example of a real use case]
+
+### Old System - Complete Working Example
+
+```[language]
+// Complete old system code
+[verified old code if possible]
+```
+
+### New System - Complete Working Example
+
+```[language]
+// Complete new system code - VERIFIED against source
+import "[actual/new/import]"
+
+[complete verified new code showing full migration]
+```
+
+## Migration Checklist
+
+Use this checklist to track your migration:
+
+- [ ] Prerequisites installed
+- [ ] Old code backed up
+- [ ] Dependencies updated
+- [ ] Imports updated
+- [ ] [Pattern 1] migrated
+- [ ] [Pattern 2] migrated
+- [ ] [Pattern 3] migrated
+- [ ] Configuration migrated
+- [ ] Tests updated
+- [ ] All tests passing
+- [ ] Documentation updated
+- [ ] Peer review completed
+
+## Additional Resources
+
+- **API Reference**: [Link to api-doc-writer docs for new system]
+- **Tutorial**: [Link to tutorial-writer docs for new system]
+- **Explanation**: [Link to architecture explanation docs]
+- **Old System Docs**: [Link to old documentation]
+- **Changelog**: [Link to official changelog]
+
+---
+
+**Migration Guide Metadata**
+
+**Last Updated**: [YYYY-MM-DD]
+**Old System Version**: [Version range covered]
+**New System Version**: [Version range covered]
+**Verification Status**: ✅ All APIs verified against source code
+
+**Source Files Verified**:
+- New system: `path/to/new/source/*.ext`
+- Old system: [If source available] `path/to/old/source/*.ext`
+
+---
+
+**Verification Checklist**
+
+### Source Code Verification (P0 - CRITICAL)
+- [ ] All new system APIs verified against source
+- [ ] All new system signatures exact
+- [ ] Old system APIs verified (if source available) or checked against docs
+- [ ] No fabricated methods in either system
+- [ ] Before/After examples use real imports
+
+### Performance Claims (P0 - CRITICAL)
+- [ ] No unverified "Nx faster" claims
+- [ ] No fabricated timing numbers
+- [ ] Any performance claims backed by benchmarks
+- [ ] Only factual architectural statements
+
+### Completeness (P1 - HIGH)
+- [ ] All breaking changes documented
+- [ ] Common migration patterns covered
+- [ ] Troubleshooting for typical issues
+- [ ] Configuration changes documented
+- [ ] Prerequisites clearly stated
+
+### Quality (P2 - MEDIUM)
+- [ ] No marketing language
+- [ ] Technical descriptions only
+- [ ] Consistent Before/After structure
+- [ ] Source references included
+```
+
+### Step 4: Troubleshooting Phase (10-15 minutes)
+
+**Anticipate common migration errors:**
+
+1. **Compilation Errors**
+   - Type mismatches
+   - Missing imports
+   - Method signature changes
+
+2. **Runtime Errors**
+   - Null pointer exceptions from changed behavior
+   - Configuration errors
+   - Dependency conflicts
+
+3. **Logical Errors**
+   - Changed default behavior
+   - Different error handling
+   - Changed return values
+
+**For each anticipated error:**
+```markdown
+### Issue: [Error Type]
+**Symptom**: [What appears]
+**Cause**: [Why it happens]
+**Solution**: [How to fix with verified code]
+```
+
+### Step 5: Verification Phase (5-10 minutes)
+
+**Verification checklist:**
+
+```bash
+# For new system APIs
+Read [new_source_files]
+# Verify every "After" code block uses real APIs
+
+# For performance claims
+find . -name "*bench*"
+# If making performance claims, verify benchmarks exist
+# If no benchmarks, REMOVE performance claims
+
+# For code examples
+# Check imports are real
+# Check methods exist
+# Check signatures match
+```
+
+**Critical checks:**
+- [ ] Every "After" code block verified against source
+- [ ] No fabricated new APIs
+- [ ] No unverified performance claims removed
+- [ ] All imports are real
+- [ ] Breaking changes list is complete
+- [ ] Troubleshooting covers common issues
+
+## Integration with Other Skills
+
+### Works With:
+- **api-doc-writer** - Link to new system API reference
+- **tutorial-writer** - Link to getting started with new system
+- **api-documentation-verify** - Verify migration guide accuracy
+
+### Invokes:
+- None (standalone skill)
+
+### Invoked By:
+- User (manual invocation)
+- After major version releases
+- When deprecating old systems
+
+## Output Format
+
+**Primary Output**: Markdown file with structured migration guide
+
+**File Location**:
+- `docs/migrations/[old]-to-[new].md`
+- `MIGRATION.md` in project root
+- `docs/how-to/migrate-from-[old].md`
+
+## Common Pitfalls to Avoid
+
+### 1. Unverified Performance Claims
+```markdown
+❌ BAD - No benchmark evidence
+The new system is 10x faster than the old system
+
+✅ GOOD - Factual architectural statement
+The new system eliminates network overhead by using in-process calls
+[If benchmarks exist]: See benchmarks/comparison.bench.ts for measurements
+```
+
+### 2. Fabricated New APIs
+```markdown
+❌ BAD - API doesn't exist
+// After (New System)
+await newSystem.easyMigrate(oldConfig) // This method was never implemented!
+
+✅ GOOD - Real API from source
+// After (New System)
+const adapter = new ConfigAdapter(oldConfig)
+await newSystem.initialize(adapter.transform())
+```
+
+### 3. Incomplete Breaking Changes
+```markdown
+❌ BAD - Missing changes
+Major changes: Method renamed
+
+✅ GOOD - Complete list
+Breaking Changes:
+1. CreateTask() renamed to Create()
+2. Create() now requires ctx parameter
+3. TaskParams.Owner changed from string to UserId type
+4. UpdateTask() removed - use Patch() instead
+5. Error type changed from string to TaskError
+```
+
+### 4. Missing Troubleshooting
+```markdown
+❌ BAD - No troubleshooting section
+[Guide ends after migration patterns]
+
+✅ GOOD - Comprehensive troubleshooting
+## Troubleshooting
+[Multiple common issues with solutions]
+```
+
+## Time Estimates
+
+**Small Migration** (< 5 API changes): 45 minutes - 1.5 hours
+**Medium Migration** (5-15 API changes): 1.5 - 3 hours
+**Large Migration** (15+ changes): 3 - 6 hours
+**System Replacement**: 4 - 8 hours
+
+## Example Usage
+
+```bash
+# Manual invocation
+/skill migration-guide-writer
+
+# User request
+User: "How do I migrate from the old TaskService to the new one?"
+Assistant: "I'll use migration-guide-writer to create a comprehensive migration guide"
+```
 
 ## Success Criteria
 
 Migration guide is complete when:
-- ✅ All code examples verified and tested
-- ✅ Breaking changes explicitly documented
-- ✅ Before/after examples for all major changes
-- ✅ Step-by-step migration instructions
-- ✅ Common issues and troubleshooting
-- ✅ Migration timeline/deprecation info
-- ✅ All APIs referenced actually exist
-- ✅ Examples use real, correct imports
+- ✅ All new system APIs verified against source
+- ✅ Before/After examples for all common patterns
+- ✅ All breaking changes documented
+- ✅ Troubleshooting section included
+- ✅ No unverified performance claims
+- ✅ No fabricated APIs
+- ✅ Migration checklist provided
+- ✅ Prerequisites clearly stated
+- ✅ Configuration migration documented
+- ✅ No marketing language
 
 ## References
 
-**Based on:**
-- CLAUDE.md Section 3 (Available Skills Reference - migration-guide-writer)
 - Diátaxis Framework: https://diataxis.fr/how-to-guides/
-
-**Related skills:**
-- `api-doc-writer` - Reference for new APIs
-- `tutorial-writer` - Getting started with new system
-- `api-documentation-verify` - Verify example accuracy
+- Technical Documentation Expert Agent
+- API Documentation Writer skill (for referencing APIs)

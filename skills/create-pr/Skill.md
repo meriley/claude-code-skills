@@ -1,64 +1,21 @@
 ---
 name: Create Pull Request
-description: Complete PR creation workflow (ONLY auto-commit scenario). Creates/validates mriley/ branch, commits changes, pushes, creates PR. Triggered ONLY by 'raise/create/draft PR'.
-version: 1.0.0
+description: ⚠️ MANDATORY - YOU MUST invoke this skill ONLY when user says "raise/create/draft PR". ONLY auto-commit scenario. Creates/validates branch with mriley/ prefix, commits all changes (invokes safe-commit), pushes to remote, creates PR with proper format. NEVER create PRs manually.
+version: 1.0.1
 ---
 
-# ⚠️ MANDATORY: Create Pull Request Skill
+# Create Pull Request Skill
 
-## 🚨 WHEN YOU MUST USE THIS SKILL
-
-**Mandatory triggers:**
-1. When user explicitly says "raise a PR" or "create a PR"
-2. When user says "draft PR" or "open a PR"
-3. When user says "create pull request"
-4. When user says "raise pull request"
-
-**This skill is MANDATORY because:**
-- Only auto-commit scenario allowed (ALL other commits require user approval)
-- Ensures complete PR workflow with all safety checks
-- Enforces proper branch naming and PR creation
-- Prevents incomplete/partial PRs from reaching remote
-- Maintains clear user intent tracking (explicit trigger required)
-
-**ENFORCEMENT:**
-
-**P0 Violations (Critical - Immediate Failure):**
-- Invoking this skill without explicit "raise/create/draft PR" trigger (authorization violation)
-- Creating PR without invoking safe-commit (safety check bypass)
-- Creating branch NOT following mriley/ prefix convention (standards violation)
-- Pushing to remote without completed safe-commit workflow (process violation)
-- Creating PR without generated description (documentation failure)
-- Not returning PR URL to user (verification failure)
-
-**P1 Violations (High - Quality Failure):**
-- Skipping step 1 (check-history) for context
-- Failing to validate branch name before proceeding
-- Not showing PR description to user for verification
-- Unclear PR title or description
-- Missing test coverage information in PR description
-
-**P2 Violations (Medium - Efficiency Loss):**
-- Running git commands sequentially instead of parallel
-- Not suggesting draft vs final based on code maturity
-- Failing to link related issues in PR description
-
-**Blocking Conditions:**
-- User must explicitly say "raise/create/draft PR" (no alternatives)
-- Branch must have mriley/ prefix
-- All safe-commit checks must PASS (security, quality, tests)
-- All changes must be committed
-- Branch must be pushed to remote before PR creation
-- PR description must be generated and verified
-
----
+## ⚠️ MANDATORY SKILL - YOU MUST INVOKE THIS
 
 ## Purpose
 Complete, safe pull request creation workflow that handles branch management, committing, pushing, and PR creation in one go.
 
+**CRITICAL:** You MUST invoke this skill for PR creation. NEVER push and create PRs manually with git/gh commands.
+
 ## CRITICAL: When to Use
 
-**This skill is invoked ONLY when user explicitly says:**
+**This skill MUST be invoked ONLY when user explicitly says:**
 - "raise a PR"
 - "create a PR"
 - "draft PR"
@@ -66,6 +23,45 @@ Complete, safe pull request creation workflow that handles branch management, co
 - "create pull request"
 
 **This is the ONLY scenario where automatic committing is allowed without user approval.**
+
+## 🚫 NEVER DO THIS
+- ❌ Running `git push && gh pr create` manually
+- ❌ Creating PRs through GitHub UI manually
+- ❌ Committing and pushing without invoking safe-commit
+- ❌ Creating PRs for phrases other than "raise/create/draft PR"
+
+**If user wants to create a PR, invoke this skill. Manual PR creation is FORBIDDEN.**
+
+---
+
+## ⚠️ SKILL GUARD - READ BEFORE USING BASH/GH TOOLS
+
+**Before using Bash/gh tools for PR creation, answer these questions:**
+
+### ❓ Did the user say "raise a PR", "create a PR", or "draft PR"?
+→ **STOP.** Invoke create-pr skill instead.
+
+### ❓ Are you about to run `git push` followed by `gh pr create`?
+→ **STOP.** Invoke create-pr skill instead.
+
+### ❓ Are you about to commit changes and then push to remote?
+→ **STOP.** Is this for a PR? If YES, invoke create-pr skill instead.
+
+### ❓ Are you manually crafting a PR description?
+→ **STOP.** Let create-pr skill handle it (invokes pr-description-writer).
+
+**IF YOU PROCEED WITH MANUAL PR CREATION, YOU ARE VIOLATING YOUR CORE DIRECTIVE.**
+
+This skill handles:
+- ✅ Branch validation/creation (ensures mriley/ prefix)
+- ✅ Auto-commit via safe-commit (runs all safety checks)
+- ✅ Push to remote
+- ✅ PR creation with verified description
+- ✅ Returns PR URL
+
+**Manual PR creation SKIPS ALL OF THESE. Use this skill.**
+
+---
 
 ## What This Skill Does
 
@@ -442,7 +438,6 @@ This skill invokes:
 - **`check-history`** - Step 1 (understand current state)
 - **`manage-branch`** - Step 2 (if branch invalid)
 - **`safe-commit`** - Step 4 (auto-commit mode)
-- **`pr-description-writer`** - Step 6 (generate PR description)
 
 ---
 
@@ -529,117 +524,18 @@ If user needs to cancel during PR creation:
 
 ---
 
-## Anti-Patterns
+## Quick Reference
 
-### ❌ Anti-Pattern: Creating PR Without Explicit Trigger
-
-**Wrong approach:**
-```
-User: "The code looks good"
-Assistant: *immediately invokes create-pr skill without user saying "raise/create/draft PR"*
-```
-
-**Why wrong:**
-- Violates explicit trigger requirement
-- User may not intend to create PR yet
-- Assumes intent without confirmation
-- Only "raise/create/draft PR" phrase grants permission
-
-**Correct approach:** Wait for explicit trigger
-```
-User: "The code looks good"
-Assistant: *Code review complete, but does NOT invoke create-pr*
-Assistant: "Code review looks solid. Ready to create a PR?"
-
-User: "Yes, create a PR"
-Assistant: *NOW invokes create-pr skill*
-```
-
----
-
-### ❌ Anti-Pattern: Skipping Branch Name Validation
-
-**Wrong approach:**
+**Trigger phrase:**
 ```
 User: "raise a PR"
-Assistant: *immediately commits without checking branch name follows mriley/ prefix*
 ```
 
-**Why wrong:**
-- Non-compliant branches pollute repository
-- Makes git history harder to parse
-- Violates branch naming standards
-- Future work harder to organize
+**What happens:**
+1. Check/create valid branch (mriley/ prefix)
+2. Auto-commit all changes (with full safety checks)
+3. Push to remote
+4. Create draft PR with generated description
+5. Return PR URL
 
-**Correct approach:** Validate or create proper branch
-```
-User: "raise a PR"
-Assistant: *checks current branch: "main"*
-Assistant: *invokes manage-branch to create mriley/feat/... branch*
-Assistant: *then proceeds with safe-commit and PR creation*
-```
-
----
-
-### ❌ Anti-Pattern: PR Without Description
-
-**Wrong approach:**
-```
-User: "raise a PR"
-Assistant: *creates PR with minimal/auto-generated description*
-```
-
-**Why wrong:**
-- Reviewers lack context
-- No test coverage information
-- No explanation of changes
-- Low quality PR record in history
-
-**Correct approach:** Generate comprehensive description
-```
-User: "raise a PR"
-Assistant: *invokes pr-description-writer skill*
-*generates verified description with all sections*
-*shows description to user for verification*
-*creates PR with complete information*
-```
-
----
-
-### ❌ Anti-Pattern: Skipping Test Checks
-
-**Wrong approach:**
-```
-User: "raise a PR"
-Assistant: *invokes safe-commit but skips run-tests*
-```
-
-**Why wrong:**
-- PR gets created with failing tests
-- CI/CD blocks merge
-- Wastes reviewer time
-- Violates 100% E2E pass requirement
-
-**Correct approach:** ALL checks must pass
-```
-User: "raise a PR"
-Assistant: *invokes safe-commit with all checks*
-*security-scan, quality-check, run-tests ALL PASS*
-*THEN creates PR*
-```
-
----
-
-## References
-
-**Based on:**
-- CLAUDE.md Section 1 (Core Policies - Git Commit Permission Rules)
-- CLAUDE.md Section 3 (Available Skills Reference - create-pr)
-- CLAUDE.md Section 3 (Available Skills Reference - pr-description-writer)
-- Project instructions: PR creation explicit trigger only
-
-**Related skills:**
-- `check-history` - Context gathering
-- `manage-branch` - Branch creation and validation
-- `safe-commit` - Auto-commit with all safety checks
-- `pr-description-writer` - PR description generation
+**This is the ONLY auto-commit scenario in the entire workflow.**

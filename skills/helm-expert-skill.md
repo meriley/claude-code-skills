@@ -1,29 +1,11 @@
----
-name: Helm Chart Expert
-description: Comprehensive guide for writing production-ready Helm charts and conducting thorough chart reviews. Covers ArgoCD integration, GitOps workflows, security best practices, and deployment patterns.
-version: 1.0.0
----
-
 # Helm Chart Expert Skill
 
-## Purpose
-
-Provide comprehensive guidance for creating production-ready Helm charts and conducting thorough chart reviews. This skill covers Helm chart best practices, ArgoCD/GitOps integration, security patterns, testing strategies, and production deployment patterns.
-
-## When to Use This Skill
-
-- **Creating new Helm charts** - Use templates and best practices
-- **Reviewing Helm charts** - Follow comprehensive checklist
-- **ArgoCD integration** - Application and ApplicationSet patterns
-- **GitOps workflows** - Multi-environment deployment strategies
-- **Troubleshooting charts** - Common issues and solutions
-- **Security hardening** - Secrets management and security contexts
-- **Production deployments** - Blue-green, canary, and rolling updates
-- **Chart testing** - Unit tests, integration tests, and helm test hooks
+## Overview
+This skill provides comprehensive guidance for writing production-ready Helm charts and conducting thorough chart reviews, with special focus on ArgoCD and GitOps workflows.
 
 ## Quick Start Checklist
 
-### New Chart Creation
+### � New Chart Creation
 ```bash
 # 1. Create chart structure
 helm create mychart
@@ -38,7 +20,7 @@ helm template ./mychart --debug
 helm install test ./mychart --dry-run --debug
 ```
 
-## Chart Writing Guidelines
+## � Chart Writing Guidelines
 
 ### 1. Chart.yaml Essentials
 ```yaml
@@ -316,7 +298,7 @@ spec:
       {{- end }}
 ```
 
-## Chart Review Checklist
+## � Chart Review Checklist
 
 ### Security Review
 - [ ] **No hardcoded secrets** in values.yaml or templates
@@ -367,7 +349,7 @@ spec:
 - [ ] **Upgrade notes** for breaking changes
 - [ ] **Dependencies** are documented
 
-## ArgoCD Integration
+## � ArgoCD Integration
 
 ### Application Template
 ```yaml
@@ -452,7 +434,7 @@ spec:
           selfHeal: '{{env != "prod"}}'
 ```
 
-## Secrets Management
+## � Secrets Management
 
 ### Using Helm Secrets Plugin
 ```bash
@@ -503,7 +485,7 @@ spec:
         property: password
 ```
 
-## Testing Templates
+## � Testing Templates
 
 ### Unit Test Example (helm-unittest)
 ```yaml
@@ -555,7 +537,7 @@ spec:
           wget -O- http://{{ include "mychart.fullname" . }}:{{ .Values.service.port }}/healthz
 ```
 
-## Production Patterns
+## � Production Patterns
 
 ### Multi-Stage Deployment
 ```yaml
@@ -624,7 +606,7 @@ spec:
 {{- end }}
 ```
 
-## Common Issues and Solutions
+## � Common Issues and Solutions
 
 ### Issue: Nil Pointer Errors
 ```yaml
@@ -660,7 +642,7 @@ metadata:
 {{- end }}
 ```
 
-## Advanced Techniques
+## � Advanced Techniques
 
 ### Dynamic Resource Generation
 ```yaml
@@ -695,7 +677,7 @@ dependencies:
 {{- end }}
 ```
 
-## Quality Gates
+## � Quality Gates
 
 ### Pre-Commit Hooks
 ```yaml
@@ -718,7 +700,7 @@ helm-lint:
   stage: test
   script:
     - helm lint ./charts/*
-
+    
 helm-test:
   stage: test
   script:
@@ -736,7 +718,7 @@ helm-package:
     - helm repo index .
 ```
 
-## Monitoring and Observability
+## � Monitoring and Observability
 
 ### ServiceMonitor for Prometheus
 ```yaml
@@ -771,7 +753,7 @@ data:
 {{- end }}
 ```
 
-## Upgrade Strategies
+## � Upgrade Strategies
 
 ### Rolling Update Configuration
 ```yaml
@@ -799,7 +781,7 @@ spec:
           command: ["./backup.sh"]
 ```
 
-## Final Review Checklist
+## � Final Review Checklist
 
 ### Before Release
 - [ ] All tests pass (lint, unit, integration)
@@ -821,33 +803,7 @@ spec:
 - [ ] Documentation published
 - [ ] Team notified
 
-## Integration with Other Skills
-
-### Works With:
-- **security-scan** - Scan rendered Helm templates for hardcoded secrets
-- **quality-check** - Lint YAML files for formatting issues
-- Manual invocation for Helm-specific work
-
-### Invokes:
-- None (standalone reference skill)
-
-### Invoked By:
-- User (manual invocation when working with Helm)
-
-## Example Usage
-
-```bash
-# Manual invocation
-/skill helm-chart-expert
-
-# User requests
-User: "Help me create a production-ready Helm chart"
-User: "Review this Helm chart for security issues"
-User: "Show me how to integrate with ArgoCD"
-User: "How do I handle secrets in Helm?"
-```
-
-## References
+## � Resources
 
 - [Official Helm Best Practices](https://helm.sh/docs/chart_best_practices/)
 - [Kubernetes Labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels/)
@@ -858,6 +814,5 @@ User: "How do I handle secrets in Helm?"
 
 ---
 
-**Maintained by**: DevOps team
-**Review Schedule**: Quarterly
-**Last Updated**: 2025-01-12
+This skill is maintained by the DevOps team and should be reviewed quarterly for updates.
+

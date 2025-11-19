@@ -1,65 +1,71 @@
 ---
 name: Safe Commit
-description: Complete commit workflow with safety checks. Invokes security-scan, quality-check, run-tests. Shows diff, gets user approval, creates conventional commit. NO AI attribution.
-version: 1.0.0
+description: ⚠️ MANDATORY - YOU MUST invoke this skill when committing. Complete commit workflow with all safety checks. Invokes security-scan, quality-check, and run-tests skills. Shows diff, gets user approval, creates commit with conventional format. NO AI attribution. User approval REQUIRED except during PR creation. NEVER commit manually.
+version: 1.0.1
 ---
 
-# ⚠️ MANDATORY: Safe Commit Skill
+# Safe Commit Skill
 
-## 🚨 WHEN YOU MUST USE THIS SKILL
-
-**Mandatory triggers:**
-1. When user explicitly requests commit ("commit these changes", "commit this")
-2. As part of PR creation workflow when user says "raise/create/draft PR"
-3. After completing any feature, bug fix, or enhancement
-4. Before any code is persisted to git history
-
-**This skill is MANDATORY because:**
-- Prevents committing code without security checks (ZERO TOLERANCE)
-- Ensures all tests pass before code reaches repository (CRITICAL)
-- Enforces proper attribution and prevents AI signature pollution (ZERO TOLERANCE)
-- Maintains code quality standards (linting, formatting, type safety)
-- Requires explicit user approval to prevent unauthorized commits (except PR creation)
-
-**ENFORCEMENT:**
-
-**P0 Violations (Critical - Immediate Failure):**
-- Committing WITHOUT invoking security-scan (security risk)
-- Committing WITHOUT invoking quality-check (code quality risk)
-- Committing WITHOUT invoking run-tests (test failure risk)
-- Requesting user approval EXCEPT during PR creation (authorization violation)
-- Adding Co-authored-by tags or AI attribution of any kind (ZERO TOLERANCE)
-- Committing without conventional commit format with required scope (standards violation)
-- Committing as a different author (not Pedro/mriley)
-
-**P1 Violations (High - Quality Failure):**
-- Commit message lacks imperative mood or proper formatting
-- Missing scope in commit type (type without scope)
-- Insufficient or inaccurate commit message body
-- Failing to show diff to user before requesting approval
-
-**P2 Violations (Medium - Efficiency Loss):**
-- Running git commands sequentially instead of parallel
-- Failing to verify commit metadata after creation
-- Not checking git author configuration
-
-**Blocking Conditions:**
-- Security scan must PASS before quality check
-- Quality check must PASS before running tests
-- Tests must PASS (90%+ coverage, 100% E2E) before commit
-- User must explicitly approve (except during PR creation)
-- All files must be properly staged (git add .)
-
----
+## ⚠️ MANDATORY SKILL - YOU MUST INVOKE THIS
 
 ## Purpose
 Comprehensive, safe commit workflow that ensures code quality, security, and proper attribution before committing changes.
 
+**CRITICAL:** You MUST invoke this skill for all commits. NEVER commit manually using git commands.
+
 ## When to Use
-- When user says "commit these changes" or "commit this"
-- As part of PR creation workflow
+- **MANDATORY:** When user says "commit these changes" or "commit this"
+- As part of PR creation workflow (invoked by create-pr skill)
 - After completing a feature or bug fix
 - When user explicitly requests a commit
+
+## 🚫 NEVER DO THIS
+- ❌ Running `git add . && git commit -m "message"` manually
+- ❌ Creating commits without running security-scan
+- ❌ Creating commits without running quality-check
+- ❌ Creating commits without running run-tests
+- ❌ Skipping user approval (except during PR creation)
+- ❌ Adding AI attribution to commits
+
+**If you need to commit, invoke this skill. Manual commits are FORBIDDEN.**
+
+---
+
+## ⚠️ SKILL GUARD - READ BEFORE USING BASH/GIT TOOLS
+
+**Before using Bash tool for git commit, answer these questions:**
+
+### ❓ Are you about to run `git add .`?
+→ **STOP.** Are you then planning to run `git commit`? If YES, invoke safe-commit skill instead.
+
+### ❓ Are you about to run `git commit -m "message"`?
+→ **STOP.** Invoke safe-commit skill instead.
+
+### ❓ Are you about to run `git commit` with heredoc?
+→ **STOP.** Invoke safe-commit skill instead.
+
+### ❓ Did the user say "commit these changes" or "commit this"?
+→ **STOP.** Invoke safe-commit skill instead.
+
+### ❓ Have you completed a feature/fix and are ready to commit?
+→ **STOP.** Invoke safe-commit skill instead.
+
+### ❓ Are you creating a commit as part of ANY workflow?
+→ **STOP.** Invoke safe-commit skill instead.
+
+**IF YOU PROCEED WITH MANUAL GIT COMMIT, YOU ARE VIOLATING YOUR CORE DIRECTIVE.**
+
+This skill handles:
+- ✅ Security scanning (prevents secrets in commits)
+- ✅ Quality checks (prevents broken code)
+- ✅ Test execution (prevents regressions)
+- ✅ User approval (prevents unwanted commits)
+- ✅ Conventional commit format (maintains consistency)
+- ✅ NO AI attribution (protects user's identity)
+
+**Manual commits SKIP ALL OF THESE. Use this skill.**
+
+---
 
 ## CRITICAL POLICIES
 
@@ -466,139 +472,3 @@ If user explicitly states "force commit" or "skip checks":
 5. Create follow-up ticket for remediation
 
 **This should be EXTREMELY RARE.**
-
----
-
-## Anti-Patterns
-
-### ❌ Anti-Pattern: Skipping Security or Quality Checks
-
-**Wrong approach:**
-```
-User: "Commit these changes"
-Assistant: *immediately runs `git commit` without invoking security-scan or quality-check*
-```
-
-**Why wrong:**
-- Code with secrets gets committed to repository (permanent)
-- Linting errors and type issues persist in codebase
-- Tests may fail in CI/CD, blocking merges
-- Quality degrades over time with technical debt
-
-**Correct approach:** Use this skill with full safety checks
-```
-User: "Commit these changes"
-Assistant: "Let me commit these changes safely. I'll run security, quality, and test checks first."
-*Invokes security-scan → quality-check → run-tests*
-*Shows diff*
-*Requests approval*
-*Creates commit with proper message*
-```
-
----
-
-### ❌ Anti-Pattern: Committing Without User Approval
-
-**Wrong approach:**
-```
-User: "Those changes look good"
-Assistant: *immediately commits without asking for explicit approval*
-```
-
-**Why wrong:**
-- "Looks good" is code review, not commit authorization
-- User may not intend to commit yet
-- Violates permission model (auto-commit only during PR creation)
-- User loses control over when commits happen
-
-**Correct approach:** Always ask for explicit approval
-```
-User: "Those changes look good"
-Assistant: *shows diff and all passed checks*
-Assistant: "Should I commit these changes?"
-*WAITS for explicit "yes", "commit", "go ahead", etc.*
-```
-
----
-
-### ❌ Anti-Pattern: AI Attribution in Commits
-
-**Wrong approach:**
-```
-git commit -m "feat(auth): add JWT validation
-
-Co-authored-by: Claude <noreply@anthropic.com>"
-```
-
-**Why wrong:**
-- Violates CLAUDE.md strict attribution policy (ZERO TOLERANCE)
-- Pollutes commit history with false authorship
-- Misrepresents work ownership
-- Violates legal and ethical standards
-
-**Correct approach:** Only Pedro as author
-```
-git commit -m "feat(auth): add JWT validation
-
-Implement JWT token validation with expiry checking."
-```
-
----
-
-### ❌ Anti-Pattern: Missing Commit Scope
-
-**Wrong approach:**
-```
-feat: add JWT validation
-fix: handle empty input
-```
-
-**Why wrong:**
-- Violates conventional commit standard
-- Makes git history harder to parse and filter
-- Scope is REQUIRED by CLAUDE.md
-- Reduces searchability and context
-
-**Correct approach:** Always include scope
-```
-feat(auth): add JWT validation
-fix(parser): handle empty input
-```
-
----
-
-### ❌ Anti-Pattern: Running Checks Sequentially
-
-**Wrong approach:**
-```bash
-git status
-echo "---"
-git diff
-# ... sequentially running each check
-```
-
-**Why wrong:**
-- Wastes time (security → quality → tests run one at a time)
-- Inefficient use of available resources
-- Delays user feedback
-
-**Correct approach:** Run commands in parallel
-```bash
-git status & git diff & git log --oneline -5 &
-```
-
----
-
-## References
-
-**Based on:**
-- CLAUDE.md Section 1 (Core Policies - Git Commit Permission Rules)
-- CLAUDE.md Section 1 (Core Policies - Conventional Commit Format)
-- CLAUDE.md Section 3 (Available Skills Reference - safe-commit)
-- Project instructions: NO AI ATTRIBUTION, ZERO TOLERANCE
-
-**Related skills:**
-- `security-scan` - Must pass before commit
-- `quality-check` - Must pass before commit
-- `run-tests` - Must pass before commit
-- `create-pr` - Invokes this skill for PR creation

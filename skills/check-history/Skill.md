@@ -1,48 +1,59 @@
 ---
 name: Git History Context
-description: Reviews git history, status, and context before starting tasks. Runs parallel git commands to understand current state, recent changes, and related work.
-version: 1.0.0
+description: ⚠️ MANDATORY - YOU MUST invoke this skill at the start of EVERY task. Reviews git history, status, and context before starting any work. Runs parallel git commands to understand current state, recent changes, and related work. NEVER gather git context manually.
+version: 1.0.1
 ---
 
-# ⚠️ MANDATORY: Git History Context Skill
+# Git History Context Skill
 
-## 🚨 WHEN YOU MUST USE THIS SKILL
-
-**Mandatory triggers:**
-1. At the start of EVERY task or work session
-2. Before implementing any feature or fixing any bug
-3. Before creating implementation plans (sparc-plan invokes this)
-4. When investigating bugs or understanding code behavior
-5. Before committing changes (safe-commit may invoke this)
-
-**This skill is MANDATORY because:**
-- Prevents duplicate work by showing recent related changes
-- Provides context about project conventions and patterns
-- Identifies potential conflicts with ongoing work
-- Ensures awareness of recent changes that might affect your task
-
-**ENFORCEMENT:**
-
-**P2 Violations (Medium - Efficiency Loss):**
-- Starting a task without using this skill first
-- Implementing features without checking for related previous work
-- Missing context about recent changes in related areas
-
-**Blocking Conditions:**
-- This skill should complete before significant implementation work
-- Output provides essential context for next steps
-
----
+## ⚠️ MANDATORY SKILL - YOU MUST INVOKE THIS
 
 ## Purpose
 This skill gathers comprehensive git context before starting any work. It helps understand the current state of the repository, recent changes, and identify related previous work.
 
+**CRITICAL:** You MUST invoke this skill - NEVER gather git context manually with individual git commands.
+
 ## When to Use
-- **ALWAYS** at the start of any new task
+- **MANDATORY:** At the start of EVERY new task or user request
 - Before implementing features or fixing bugs
 - Before creating implementation plans
 - When investigating issues or understanding code behavior
 - When user asks about recent changes or project history
+
+## 🚫 NEVER DO THIS
+- ❌ Running `git status` manually
+- ❌ Running `git diff` manually
+- ❌ Running `git log` manually
+- ❌ Gathering git context with individual commands
+
+**If you need git context, invoke this skill. Manual execution is FORBIDDEN.**
+
+---
+
+## ⚠️ SKILL GUARD - READ BEFORE USING BASH TOOL
+
+**Before using Bash tool for git commands, answer these questions:**
+
+### ❓ Are you about to run `git status`?
+→ **STOP.** Invoke check-history skill instead.
+
+### ❓ Are you about to run `git diff`?
+→ **STOP.** Invoke check-history skill instead.
+
+### ❓ Are you about to run `git log`?
+→ **STOP.** Invoke check-history skill instead.
+
+### ❓ Are you gathering git context at the start of a task?
+→ **STOP.** Invoke check-history skill instead.
+
+### ❓ Are you about to run multiple git commands in parallel (git status & git diff & git log)?
+→ **STOP.** Invoke check-history skill instead.
+
+**IF YOU PROCEED WITH BASH FOR THESE GIT COMMANDS, YOU ARE VIOLATING YOUR CORE DIRECTIVE.**
+
+This skill runs these commands for you, in parallel, with proper analysis. Use it.
+
+---
 
 ## Workflow
 
@@ -172,43 +183,3 @@ This skill should be invoked by:
 3. **Focus on relevance** - Highlight information relevant to the current task
 4. **Note patterns** - Identify conventions and patterns in commit history
 5. **Flag concerns** - Highlight any potential conflicts or issues early
-
----
-
-## Anti-Patterns
-
-### ❌ Anti-Pattern: Starting Task Without Context
-
-**Wrong approach:**
-```
-User: "Fix the authentication bug"
-Assistant: *immediately starts editing code without checking history*
-```
-
-**Why wrong:**
-- Might duplicate recent work
-- Misses recent changes that could affect the fix
-- Ignores existing conventions and patterns
-- Wastes time discovering context mid-implementation
-
-**Correct approach:** Use this skill first
-```
-User: "Fix the authentication bug"
-Assistant: "Let me first use the check-history skill to understand recent changes and project state"
-*Invokes check-history skill*
-*Reviews output showing recent auth-related commits*
-*Then proceeds with fix informed by context*
-```
-
----
-
-## References
-
-**Based on:**
-- CLAUDE.md Section 0a (Pre-Action Checklist)
-- Git best practices for context gathering
-
-**Related skills:**
-- `sparc-plan` - Invokes this skill for planning context
-- `safe-commit` - Uses git status/diff for commit context
-- `create-pr` - Invokes this skill for PR description context

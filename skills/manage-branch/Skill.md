@@ -4,53 +4,7 @@ description: Creates and manages git branches with enforced mriley/ prefix namin
 version: 1.0.0
 ---
 
-# ⚠️ MANDATORY: Manage Branch Skill
-
-## 🚨 WHEN YOU MUST USE THIS SKILL
-
-**Mandatory triggers:**
-1. When user explicitly requests branch creation
-2. Before any work on a new feature, fix, or refactor
-3. When invoked by create-pr skill
-4. When validating existing branch names
-5. When switching between branches
-
-**This skill is MANDATORY because:**
-- Enforces mriley/ prefix convention ACROSS ALL BRANCHES (ZERO TOLERANCE)
-- Prevents polluting repository with non-compliant branch names
-- Ensures git history is organized and searchable
-- Validates branch state before operations
-- Prevents work loss through safety checks on switching
-
-**ENFORCEMENT:**
-
-**P0 Violations (Critical - Immediate Failure):**
-- Creating branch WITHOUT mriley/ prefix (ZERO TOLERANCE)
-- Creating branch with wrong prefix (e.g., pedro/, user/, etc.)
-- Switching branches with uncommitted changes without confirmation
-- Creating branch with invalid characters or casing
-- Creating duplicate branch names
-
-**P1 Violations (High - Quality Failure):**
-- Missing branch type designation (feat/fix/refactor/perf/etc)
-- Unclear or non-descriptive branch names
-- Not validating branch name against requirements
-- Branch name exceeds 50 characters
-- Using spaces or special characters instead of kebab-case
-
-**P2 Violations (Medium - Efficiency Loss):**
-- Not showing available branches when user uncertain
-- Not suggesting corrections for invalid names
-- Failing to verify branch creation success
-
-**Blocking Conditions:**
-- ALL branches MUST follow mriley/<type>/<name> pattern
-- Branch names must use kebab-case (lowercase with hyphens)
-- Branch names must be ≤ 50 characters total
-- Working directory must be clean before switching (unless stashed)
-- Branch must have proper type designation
-
----
+# Manage Branch Skill
 
 ## Purpose
 Enforce branch naming conventions and provide safe branch creation/switching operations with proper validation.
@@ -428,79 +382,6 @@ Did you mean one of these?
 
 ---
 
-## Anti-Patterns
-
-### ❌ Anti-Pattern: Creating Branch Without mriley/ Prefix
-
-**Wrong approach:**
-```
-User: "Create a branch for authentication"
-Assistant: *creates `feat/authentication` or `authentication` branch*
-```
-
-**Why wrong:**
-- Violates mriley/ prefix requirement (ZERO TOLERANCE)
-- Repository gets cluttered with non-compliant branches
-- Makes git history harder to organize and parse
-- Prevents filtering and bulk operations on mriley branches
-
-**Correct approach:** Always enforce mriley/ prefix
-```
-User: "Create a branch for authentication"
-Assistant: *validates requirement and creates `mriley/feat/authentication`*
-```
-
----
-
-### ❌ Anti-Pattern: Switching Branches With Uncommitted Changes
-
-**Wrong approach:**
-```
-User: "Switch to main branch"
-Assistant: *executes `git checkout main` with uncommitted changes*
-Result: Changes are lost or corrupted
-```
-
-**Why wrong:**
-- User work is lost or moved unexpectedly
-- Git may fail or leave repository in inconsistent state
-- Violates safety-first principle
-
-**Correct approach:** Check status and ask for confirmation
-```
-User: "Switch to main branch"
-Assistant: *checks `git status`*
-Assistant: "You have uncommitted changes. Options: commit, stash, or discard?"
-*WAITS for user decision*
-```
-
----
-
-### ❌ Anti-Pattern: Unclear Branch Names
-
-**Wrong approach:**
-```
-mriley/feat/stuff
-mriley/fix/bug
-mriley/work
-mriley/wip-changes
-```
-
-**Why wrong:**
-- Impossible to understand what branch is for
-- Makes git history unintelligible
-- Future work harder to organize
-- Makes finding related branches impossible
-
-**Correct approach:** Descriptive, specific names
-```
-mriley/feat/jwt-authentication
-mriley/fix/null-pointer-parser
-mriley/perf/optimize-database-queries
-```
-
----
-
 ## Quick Reference
 
 **Create branch:**
@@ -527,15 +408,3 @@ git branch -v
 ```bash
 git branch -d mriley/feat/old-branch
 ```
-
----
-
-## References
-
-**Based on:**
-- CLAUDE.md Section 1 (Core Policies - Branch Naming Requirements)
-- CLAUDE.md Section 3 (Available Skills Reference - manage-branch)
-
-**Related skills:**
-- `create-pr` - Uses this skill for branch validation
-- `safe-commit` - Works with branches created by this skill

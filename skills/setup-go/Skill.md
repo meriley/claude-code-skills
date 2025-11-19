@@ -4,80 +4,102 @@ description: Sets up Go development environment with proper tooling, linting, te
 version: 1.0.0
 ---
 
-# ⚠️ MANDATORY: Go Development Setup Skill
-
-## 🚨 WHEN YOU MUST USE THIS SKILL
-
-**Mandatory triggers:**
-1. Starting work on Go project
-2. After cloning Go repository
-3. When setting up CI/CD for Go
-4. When troubleshooting Go environment
-
-**This skill is MANDATORY because:**
-- Ensures consistent development environment
-- Sets up proper linting and testing
-- Prevents dependency conflicts
-- Enforces code quality standards
-- Reduces environment setup issues
-
-**ENFORCEMENT:**
-
-**P1 Violations (High - Quality Failure):**
-- Missing golangci-lint setup
-- No testing framework configured
-- Outdated dependencies (go mod not tidy)
-- Missing code generation setup
-- No linting in CI/CD
-
-**P2 Violations (Medium - Efficiency Loss):**
-- Not using Makefile
-- Missing git hooks
-- No pre-commit checks
-
-**Blocking Conditions:**
-- Must have golangci-lint configured
-- Must have testing framework
-- Must have go mod tidy run
-- Must have build verification
-
----
+# Go Development Setup Skill
 
 ## Purpose
+Quickly set up and verify a Go development environment with all necessary tooling.
 
-Sets up Go development environment with proper tooling, linting, testing, and dependencies.
+## When to Use
+- Starting work on a Go project
+- After cloning a Go repository
+- When setting up CI/CD for Go
+- When troubleshooting Go environment issues
 
 ## Workflow
 
 ### Step 1: Verify Go Installation
+
 ```bash
-go version  # Go 1.20+
+go version
+```
+
+**Expected**: Go 1.20 or higher
+
+**If not installed:**
+```
+❌ Go not found
+
+Install Go:
+- macOS: brew install go
+- Linux: https://golang.org/doc/install
+- Windows: https://golang.org/doc/install
+
+After installing, verify: go version
 ```
 
 ### Step 2: Check Project Structure
+
+Verify `go.mod` exists:
+
 ```bash
 ls go.mod
 ```
 
+**If doesn't exist:**
+```
+No go.mod found. Initialize Go module:
+
+go mod init <module-name>
+
+Example:
+go mod init github.com/username/project
+```
+
 ### Step 3: Install Dependencies
+
 ```bash
 go mod download
 go mod tidy
 ```
 
-### Step 4: Setup golangci-lint
-```bash
-# Install
-brew install golangci-lint  # macOS
-# or
-go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+**Explanation:**
+- `go mod download`: Downloads all dependencies
+- `go mod tidy`: Removes unused dependencies, adds missing ones
 
-# Create .golangci.yml
+**Report:**
+```
+✅ Dependencies installed
+
+Direct dependencies: X
+Indirect dependencies: Y
+Go version: 1.21
+```
+
+### Step 4: Setup golangci-lint
+
+**Check if installed:**
+```bash
+golangci-lint version
+```
+
+**If not installed:**
+```bash
+# macOS/Linux
+brew install golangci-lint
+
+# Or using go install
+go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+```
+
+**Create or verify .golangci.yml configuration:**
+
+```yaml
 linters:
   enable:
     - errcheck
     - gosimple
     - govet
+    - ineffassign
     - staticcheck
     - unused
     - gofmt
@@ -86,26 +108,109 @@ linters:
     - misspell
     - gocritic
     - unparam
+    
+linters-settings:
+  errcheck:
+    check-blank: true
+  govet:
+    check-shadowing: true
+  revive:
+    severity: warning
+  
+issues:
+  exclude-use-default: false
+  max-same-issues: 0
+  
+run:
+  timeout: 5m
+  tests: true
+```
+
+**Run linter to verify:**
+```bash
+golangci-lint run
 ```
 
 ### Step 5: Setup Testing
-```bash
-# Run tests
-go test ./... -v
 
-# Run with coverage
+**Run existing tests:**
+```bash
+go test ./... -v
+```
+
+**Setup test coverage:**
+```bash
 go test ./... -cover -coverprofile=coverage.out
+```
+
+**View coverage:**
+```bash
 go tool cover -func=coverage.out
 ```
 
+**Generate HTML coverage report:**
+```bash
+go tool cover -html=coverage.out -o coverage.html
+```
+
+**Report:**
+```
+✅ Tests completed
+
+Tests run: X
+Tests passed: X
+Tests failed: Y
+Coverage: Z%
+```
+
 ### Step 6: Verify Build
+
 ```bash
 go build ./...
 ```
 
-### Step 7: Create Makefile
+**Report:**
+```
+✅ Build successful
+
+All packages compile without errors.
+```
+
+**If build fails:**
+```
+❌ Build failed
+
+[Show error output]
+
+Common issues:
+1. Missing dependencies: run 'go mod tidy'
+2. Syntax errors: check the reported files
+3. Import cycle: review package dependencies
+```
+
+### Step 7: Setup Code Generation (if needed)
+
+**Check for generate directives:**
+```bash
+grep -r "//go:generate" . --include="*.go"
+```
+
+**If found, run:**
+```bash
+go generate ./...
+```
+
+### Step 8: Setup Makefile (Optional but Recommended)
+
+**Check if Makefile exists:**
+```bash
+ls Makefile
+```
+
+**If doesn't exist, create one:**
+
 ```makefile
-.PHONY: build test lint fmt clean coverage all
+.PHONY: build test lint fmt clean coverage
 
 build:
 	go build -v ./...
@@ -116,7 +221,6 @@ test:
 coverage:
 	go test -coverprofile=coverage.out ./...
 	go tool cover -func=coverage.out
-	go tool cover -html=coverage.out -o coverage.html
 
 lint:
 	golangci-lint run
@@ -135,82 +239,163 @@ clean:
 all: fmt lint test build
 ```
 
-### Step 8: Setup Git Hooks
+**Verify Makefile:**
+```bash
+make all
+```
+
+### Step 9: Setup Git Hooks (Optional)
+
+**Create pre-commit hook:**
+
 ```bash
 cat > .git/hooks/pre-commit << 'EOF'
 #!/bin/bash
 set -e
+
 echo "Running pre-commit checks..."
+
+# Format code
+echo "Formatting code..."
 gofmt -s -w .
+
+# Run linter
+echo "Running linter..."
 golangci-lint run
+
+# Run tests
+echo "Running tests..."
 go test ./...
+
 echo "✅ Pre-commit checks passed"
 EOF
+
 chmod +x .git/hooks/pre-commit
 ```
 
-## Configuration
+### Step 10: Summary Report
 
-### go.mod Management
-```bash
-go mod download       # Download dependencies
-go mod tidy          # Clean up dependencies
-go mod verify        # Verify dependencies
-go mod vendor        # Vendor dependencies (optional)
-go get -u <package>  # Update dependency
+```
+✅ Go Development Environment Setup Complete
+
+Go version: 1.21.5
+Module: github.com/user/project
+
+Tooling:
+✅ go mod tidy - Dependencies up to date
+✅ golangci-lint - Configured and passing
+✅ Tests - X tests passing (Y% coverage)
+✅ Build - Successful
+✅ Makefile - Created with common targets
+✅ Git hooks - Pre-commit hook installed
+
+Quick Commands:
+- Build: make build OR go build ./...
+- Test: make test OR go test ./...
+- Lint: make lint OR golangci-lint run
+- Format: make fmt OR gofmt -s -w .
+- Coverage: make coverage
+
+Ready to start development!
 ```
 
-### golangci-lint (.golangci.yml)
-```yaml
-linters:
-  enable:
-    - errcheck       # Check unchecked errors
-    - gosimple       # Simplification
-    - govet          # Vet issues
-    - staticcheck    # Static analysis
-    - unused         # Unused variables/functions
-    - gofmt          # Formatting
-    - goimports      # Import organization
-    - revive         # Code style
-    - misspell       # Spelling
-    - gocritic       # Critical issues
-    - unparam        # Unused parameters
+---
 
-run:
-  timeout: 5m
-  tests: true
+## Common Go Commands Reference
+
+### Dependency Management
+```bash
+go mod init <module>        # Initialize new module
+go mod download             # Download dependencies
+go mod tidy                 # Clean up dependencies
+go mod verify               # Verify dependencies
+go mod vendor               # Vendor dependencies
+go get <package>            # Add new dependency
+go get -u <package>         # Update dependency
 ```
 
-## Common Commands
-
+### Building
 ```bash
-# Build
-go build ./...
+go build                    # Build current package
+go build ./...              # Build all packages
+go build -o binary          # Build with custom name
+go install                  # Build and install binary
+```
 
-# Run tests
-go test ./...
-go test -v ./...
+### Testing
+```bash
+go test ./...               # Run all tests
+go test -v ./...            # Verbose output
+go test -cover ./...        # With coverage
+go test -race ./...         # Race condition detection
+go test -bench=.            # Run benchmarks
+go test -run TestName       # Run specific test
+```
+
+### Code Quality
+```bash
+go fmt ./...                # Format code
+goimports -w .              # Fix imports
+go vet ./...                # Static analysis
+golangci-lint run           # Comprehensive linting
+go mod tidy                 # Clean dependencies
+```
+
+### Debugging
+```bash
+go build -gcflags="-m"      # Escape analysis
+go build -race              # Race detector
+go test -cpuprofile cpu.prof  # CPU profiling
+go test -memprofile mem.prof  # Memory profiling
+go tool pprof cpu.prof      # Analyze profile
+```
+
+---
+
+## Troubleshooting
+
+### Issue: "go: command not found"
+**Solution**: Go not installed or not in PATH
+```bash
+# macOS
+brew install go
+
+# Verify PATH includes Go
+echo $PATH | grep go
+```
+
+### Issue: "cannot find package"
+**Solution**: Missing dependency
+```bash
+go mod download
+go mod tidy
+```
+
+### Issue: "import cycle not allowed"
+**Solution**: Circular dependency between packages
+- Review package dependencies
+- Refactor to break the cycle
+- Consider extracting shared code to new package
+
+### Issue: "golangci-lint: command not found"
+**Solution**: Linter not installed
+```bash
+go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+
+# Ensure $GOPATH/bin is in PATH
+export PATH=$PATH:$(go env GOPATH)/bin
+```
+
+### Issue: Tests failing with "race condition detected"
+**Solution**: Concurrent access to shared data
+```bash
+# Run with race detector to identify issue
 go test -race ./...
 
-# Code coverage
-go test -cover ./...
-go test -coverprofile=coverage.out ./...
-go tool cover -html=coverage.out
-
-# Linting
-golangci-lint run
-
-# Formatting
-gofmt -s -w .
-goimports -w .
-
-# Code generation
-go generate ./...
-
-# Cleanup
-go mod tidy
-go mod verify
+# Fix by using proper synchronization (mutex, channels, etc.)
 ```
+
+---
 
 ## Best Practices
 
@@ -218,39 +403,15 @@ go mod verify
 2. **Use `golangci-lint`** for comprehensive linting
 3. **Enable race detector** in CI/CD: `go test -race ./...`
 4. **Target 90%+ test coverage**
-5. **Use `goimports`** instead of `gofmt` (handles imports)
+5. **Use `goimports`** instead of `gofmt` (handles imports too)
 6. **Run `go vet`** to catch common mistakes
-7. **Create Makefile** for consistent commands
-8. **Setup pre-commit hooks** for early error detection
-
-## Anti-Patterns
-
-### ❌ Anti-Pattern: Not Running go mod tidy
-
-**Wrong:**
-```bash
-# Commit with outdated go.mod
-git add . && git commit -m "feat: add feature"
-```
-
-**Correct:**
-```bash
-# Always tidy before committing
-go mod tidy
-go mod verify
-git add . && git commit -m "feat: add feature"
-```
+7. **Use Makefiles** for consistent commands across team
+8. **Vendor dependencies** for reproducible builds (optional)
 
 ---
 
-## References
+## Integration with Other Skills
 
-**Based on:**
-- CLAUDE.md Section 3 (Available Skills Reference - setup-go)
-- Go best practices
-
-**Related skills:**
-- `quality-check` - Invokes linting
-- `run-tests` - Runs tests
-- `control-flow-check` - Go-specific audit
-- `error-handling-audit` - Go-specific audit
+This skill may be invoked by:
+- **`quality-check`** - When checking Go code quality
+- **`run-tests`** - When running Go tests

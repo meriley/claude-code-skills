@@ -1,217 +1,557 @@
 ---
 name: API Documentation Verification
-description: Verifies API documentation against source code: eliminates fabricated claims, validates examples. Zero tolerance for unverified claims or non-runnable code.
+description: Verifies API documentation against source code to eliminate fabricated claims, ensure accuracy, and validate examples. Zero tolerance for unverified claims, marketing language, or non-runnable code examples. Use before committing API docs or during documentation reviews.
 version: 1.0.0
 ---
 
-# ⚠️ MANDATORY: API Documentation Verification Skill
-
-## 🚨 WHEN YOU MUST USE THIS SKILL
-
-**Mandatory triggers:**
-1. Before committing any API documentation
-2. During API documentation reviews
-3. After updating API references
-4. Before releasing new API versions
-5. When verifying migration guides or tutorials
-
-**This skill is MANDATORY because:**
-- Prevents fabricated or incorrect documentation from reaching users (CRITICAL)
-- Catches unverified claims and marketing language (ZERO TOLERANCE)
-- Validates code examples actually work (CRITICAL)
-- Ensures documentation matches source code exactly
-- Builds user trust in documentation
-
-**ENFORCEMENT:**
-
-**P0 Violations (Critical - Immediate Failure):**
-- Fabricated methods or APIs (ZERO TOLERANCE)
-- Incorrect method signatures
-- Code examples that won't compile/run
-- Unverified performance claims
-- Marketing language and buzzwords
-
-**P1 Violations (High - Quality Failure):**
-- Incomplete API coverage
-- Missing error conditions
-- Vague parameter descriptions
-- No source code references
-
-**P2 Violations (Medium - Efficiency Loss):**
-- Inconsistent formatting
-- Redundant descriptions
-- Unclear examples
-
-**Blocking Conditions:**
-- ALL methods must exist in source code
-- ALL signatures must match exactly
-- ALL examples must be verified working
-- NO unverified claims allowed
-
----
+# API Documentation Verification Skill
 
 ## Purpose
 
-Verify API documentation against source code to eliminate fabricated claims, ensure accuracy, and validate examples. Zero tolerance for unverified claims, marketing language, or non-runnable code examples.
+Verify API documentation accuracy against source code. This skill eliminates fabricated API methods, unverified performance claims, non-runnable code examples, and marketing language. Every documented feature must exist in the codebase.
 
-## Verification Checklist
+## When to Use This Skill
 
-### Source Code Verification (P0 - CRITICAL)
-- ✅ Every documented method exists in source code
-- ✅ All method signatures exactly match source
-- ✅ All parameter types match source exactly
-- ✅ All return types match source exactly
-- ✅ Parameter names match source (not changed for clarity)
-- ✅ All type definitions exactly match source
+- **Before committing API documentation** - Verify all claims are accurate
+- **After code changes** - Ensure docs reflect current implementation
+- **Documentation reviews** - Validate technical accuracy
+- **Before releases** - Prevent shipping incorrect documentation
+- **When debugging docs issues** - Find discrepancies between docs and code
 
-### Example Verification (P0 - CRITICAL)
-- ✅ All code examples use real imports
-- ✅ All examples use verified API signatures
-- ✅ No fabricated methods in examples
-- ✅ Examples tested to verify they work
-- ✅ Examples produce expected output
+## What This Skill Checks
 
-### Completeness (P1 - HIGH)
-- ✅ All public methods documented
-- ✅ All public types documented
-- ✅ All public constants documented
-- ✅ Source file references included
-- ✅ Error conditions documented
+### 1. API Method Existence (Priority: CRITICAL)
+**Golden Rule**: Every documented API method, class, function, or endpoint MUST exist in source code.
 
-### Quality (P2 - MEDIUM)
-- ✅ No marketing language ("blazing fast", "enterprise-grade")
-- ✅ No decorative emojis
-- ✅ Consistent structure across entries
-- ✅ Technical descriptions (not tutorials)
-- ✅ Source references use method names (not line numbers)
+**Fabricated Documentation (CRITICAL FAILURE)**:
+```markdown
+## UserService API
 
-## Verification Workflow
+### Methods
 
-### Step 1: Read Documentation
-Examine documentation to understand what's being claimed.
-
-### Step 2: Verify Each Claimed Method
-For each documented method:
-1. Find the exact method in source code
-2. Copy exact signature
-3. Compare with documentation
-4. Flag any discrepancies
-
-### Step 3: Test Code Examples
-For each code example:
-1. Extract complete example code
-2. Verify all imports are real
-3. Attempt to compile/run
-4. Verify output matches documentation
-
-### Step 4: Check for Claims
-Identify any claims in documentation:
-- Performance numbers
-- Feature descriptions
-- Behavior guarantees
-- Error conditions
-
-For each claim:
-1. Verify against source code
-2. If performance claim, verify benchmark exists
-3. If behavior claim, verify in source logic
-4. Flag unverified claims
-
-### Step 5: Generate Report
-
-**Pass Report:**
-```
-✅ Documentation Verification PASSED
-
-- All 45 methods verified against source
-- All 12 code examples tested and verified
-- No fabricated methods or claims
-- No marketing language detected
-- Source references complete
-
-Ready for release.
+- `getUser(id: string): Promise<User>` - Fetch user by ID
+- `updateUserPreferences(userId: string, prefs: object)` - Update preferences
+- `deleteUser(id: string): Promise<void>` - Delete user account
 ```
 
-**Fail Report:**
-```
-❌ Documentation Verification FAILED
+**Verification Process**:
+1. Read source code for `UserService`
+2. Extract actual method signatures
+3. Compare documented methods against actual methods
 
-Critical Issues (P0):
-1. Method "TaskService.UpdateStatus" doesn't exist in source
-2. Code example in "Creating Tasks" won't compile (missing import)
-3. Performance claim "10x faster" unverified (no benchmark)
-
-High Priority Issues (P1):
-4. Missing description for error condition
-5. Signature mismatch in GetTask method
-
-Fix these issues before release.
+**Example Findings**:
+```markdown
+❌ FABRICATED: `updateUserPreferences` - does not exist in UserService
+✅ VERIFIED: `getUser` exists with matching signature
+⚠️ MISMATCH: `deleteUser` documented as `Promise<void>`, actually returns `Promise<DeleteResult>`
 ```
 
-## Anti-Patterns
+### 2. Parameter and Return Type Accuracy (Priority: CRITICAL)
+**Golden Rule**: Documented types must exactly match implementation.
 
-### ❌ Anti-Pattern: Trusting Documentation Without Verification
+**Inaccurate Documentation**:
+```typescript
+// Documentation says:
+// fetchTasks(partnerId: string): Promise<Task[]>
 
-**Wrong approach:**
-```
-API documentation says "TaskService.UpdateStatus() exists"
-Don't verify - just assume it's correct
-Later: Method doesn't exist, users complain
-```
-
-**Correct approach:** Verify everything
-```
-Claim: "TaskService.UpdateStatus exists"
-Action: Check source code
-Result: Method doesn't exist - REMOVE from documentation
-Action: Document only methods that actually exist
+// Actual implementation:
+async fetchTasks(
+  partnerId: string,
+  filters?: TaskFilters,
+  pagination?: Pagination
+): Promise<PaginatedResult<Task>>
 ```
 
----
+**Issues**:
+- ❌ Missing optional parameters `filters` and `pagination`
+- ❌ Wrong return type: documented as `Task[]`, actually `PaginatedResult<Task>`
 
-### ❌ Anti-Pattern: Code Examples Without Testing
+**Verification**:
+1. Extract actual function signature from source
+2. Compare parameter names, types, and optionality
+3. Verify return type matches
+4. Flag any discrepancies as CRITICAL
 
-**Wrong approach:**
-```
-Documentation example:
-```go
-user := User{Name: "John"}
-user.Save() // Hope this works
+### 3. Code Example Validity (Priority: CRITICAL)
+**Golden Rule**: All code examples must be runnable and produce documented results.
+
+**Non-Runnable Example**:
+```markdown
+## Example: Fetching Tasks
+
+\```typescript
+const tasks = await taskService.getTasks();
+console.log(tasks);
+\```
 ```
 
-**Correct approach:** Test examples
-```
-Documentation example:
-```go
-user := &User{Name: "John"}
-err := service.Save(ctx, user)
-if err != nil {
-    return fmt.Errorf("failed: %w", err)
+**Verification Issues**:
+- ❌ `getTasks()` requires `partnerId` parameter (missing)
+- ❌ `taskService` not defined - where does it come from?
+- ❌ No error handling - what if API call fails?
+- ❌ No type annotations - what type is `tasks`?
+
+**Correct Runnable Example**:
+```typescript
+import { TaskService } from './services/TaskService';
+import { TaskFilters } from './types';
+
+async function fetchTasks() {
+  const taskService = new TaskService();
+
+  try {
+    const result = await taskService.getTasks(
+      'partner-123',
+      { status: 'open' } as TaskFilters
+    );
+
+    console.log(`Fetched ${result.items.length} tasks`);
+    return result.items;
+  } catch (error) {
+    console.error('Failed to fetch tasks:', error);
+    throw error;
+  }
 }
-// ✅ Example tested and verified to work
 ```
 
----
+**Verification Process**:
+1. Extract all code examples from documentation
+2. Check if examples use actual API signatures
+3. Verify imports are correct
+4. Test if example could actually run
+5. Flag missing error handling, undefined variables
 
-## Success Criteria
+### 4. Performance Claims (Priority: CRITICAL)
+**Golden Rule**: ZERO tolerance for unverified performance claims. Must have benchmark data.
 
-Verification is complete when:
-- ✅ All methods verified against source
-- ✅ All signatures exactly match
-- ✅ All examples tested and verified
-- ✅ No fabricated methods
-- ✅ No unverified claims
-- ✅ No marketing language
-- ✅ Source references complete
-- ✅ Verification report generated
+**Unverified Claims (CRITICAL FAILURE)**:
+```markdown
+## Performance
+
+TaskService is highly optimized and provides blazing-fast query performance.
+Typical response times are under 10ms for most queries.
+```
+
+**Issues**:
+- ❌ "Highly optimized" - marketing language, no evidence
+- ❌ "Blazing-fast" - meaningless buzzword
+- ❌ "Under 10ms" - no benchmark data to support claim
+- ❌ "Most queries" - vague, undefined scope
+
+**Acceptable Performance Documentation**:
+```markdown
+## Performance Characteristics
+
+Based on benchmark tests (see `benchmarks/task-queries.bench.ts`):
+
+| Operation | P50 | P95 | P99 | Test Conditions |
+|-----------|-----|-----|-----|-----------------|
+| getTasks (10 items) | 45ms | 78ms | 120ms | Local DB, no cache |
+| getTasks (100 items) | 180ms | 320ms | 450ms | Local DB, no cache |
+| getTasks (10 items, cached) | 2ms | 5ms | 8ms | Redis cache hit |
+
+Benchmarks run on: MacBook Pro M1, 16GB RAM, PostgreSQL 14
+See benchmark source for reproduction steps.
+```
+
+**Verification**:
+1. Search for benchmark files referenced in docs
+2. Verify benchmark code exists and is runnable
+3. Check if claims match benchmark results
+4. Flag any performance claim without benchmark reference
+
+### 5. Configuration Documentation (Priority: HIGH)
+**Golden Rule**: Documented configuration options must exist in code.
+
+**Inaccurate Configuration Docs**:
+```markdown
+## Configuration
+
+\```yaml
+taskService:
+  maxRetries: 3
+  timeout: 5000
+  enableCache: true
+  cacheSize: 1000  # Maximum items in cache
+\```
+```
+
+**Verification Against Code**:
+```typescript
+// Actual configuration interface
+interface TaskServiceConfig {
+  maxRetries: number;
+  timeoutMs: number;  // ⚠️ Docs say "timeout", code says "timeoutMs"
+  enableCache: boolean;
+  // ❌ "cacheSize" doesn't exist in config interface
+}
+```
+
+**Findings**:
+- ⚠️ MISMATCH: Field name is `timeoutMs`, not `timeout`
+- ❌ FABRICATED: `cacheSize` option doesn't exist
+
+### 6. Error Documentation (Priority: HIGH)
+**Golden Rule**: Documented errors must match actual thrown errors.
+
+**Incomplete Error Documentation**:
+```markdown
+## Errors
+
+- `TaskNotFoundError` - Task with given ID doesn't exist
+```
+
+**Actual Code Review**:
+```typescript
+async function getTask(id: string): Promise<Task> {
+  if (!id) {
+    throw new ValidationError('Task ID required');  // ❌ Not documented
+  }
+
+  const task = await db.tasks.findById(id);
+  if (!task) {
+    throw new TaskNotFoundError(`Task ${id} not found`);  // ✅ Documented
+  }
+
+  if (!hasPermission(task)) {
+    throw new PermissionError('Insufficient permissions');  // ❌ Not documented
+  }
+
+  return task;
+}
+```
+
+**Findings**:
+- ❌ MISSING: `ValidationError` thrown but not documented
+- ❌ MISSING: `PermissionError` thrown but not documented
+- ✅ VERIFIED: `TaskNotFoundError` documented and thrown
+
+### 7. Marketing Language & Buzzwords (Priority: MEDIUM)
+**Golden Rule**: Technical documentation should be objective and precise.
+
+**Unacceptable Language**:
+```markdown
+❌ "TaskService provides blazing-fast, enterprise-grade performance"
+❌ "Our revolutionary API design makes development a breeze"
+❌ "Industry-leading scalability and reliability"
+❌ "Leverages cutting-edge technology for optimal results"
+❌ "Seamlessly integrates with your existing workflow"
+❌ "World-class developer experience"
+```
+
+**Acceptable Language**:
+```markdown
+✅ "TaskService implements connection pooling to reduce query latency"
+✅ "The API follows REST conventions for HTTP method semantics"
+✅ "Supports horizontal scaling via stateless design"
+✅ "Compatible with Express, Fastify, and Koa frameworks"
+✅ "Provides TypeScript types for compile-time safety"
+```
+
+**Banned Words/Phrases**:
+- "Blazing fast" / "Lightning fast" / "Blazingly"
+- "Revolutionary" / "Game-changing" / "Groundbreaking"
+- "Enterprise-grade" / "Industry-leading" / "World-class"
+- "Cutting-edge" / "State-of-the-art"
+- "Seamlessly" / "Effortlessly"
+- "Optimal" / "Best-in-class"
+- "Next-generation"
+- Unnecessary emojis (🚀 ⚡ 💯 🔥)
+
+### 8. Dependency Version Accuracy (Priority: MEDIUM)
+**Golden Rule**: Documented dependencies must match package.json versions.
+
+**Check**:
+```markdown
+Documentation says:
+- Requires Node.js 16+
+- Depends on TypeScript ^4.5.0
+
+package.json says:
+{
+  "engines": { "node": ">=18.0.0" },  // ⚠️ Docs say 16+, package.json says 18+
+  "devDependencies": {
+    "typescript": "^5.0.0"  // ⚠️ Docs say ^4.5.0, actually using ^5.0.0
+  }
+}
+```
+
+## Step-by-Step Execution
+
+### Step 1: Identify Documentation Files
+```bash
+# Find all documentation files
+find . -name "*.md" -o -name "README*" -o -name "DOCS*" -o -name "API*"
+find . -path "*/docs/*" -name "*.md"
+```
+
+### Step 2: Read Documentation Files
+Use Read tool to examine documentation, focusing on:
+- API method signatures
+- Code examples
+- Configuration options
+- Error documentation
+- Performance claims
+
+### Step 3: Extract Claims to Verify
+
+For each documentation file:
+
+**A. API Methods/Functions**
+1. Extract all documented methods: names, parameters, return types
+2. Note the source file/class they should exist in
+3. Create verification checklist
+
+**B. Code Examples**
+1. Extract all code blocks from documentation
+2. Note expected imports and setup
+3. Identify what needs verification
+
+**C. Configuration**
+1. Extract all configuration examples
+2. Note expected config fields and types
+3. List what needs verification
+
+**D. Performance Claims**
+1. Extract all statements about speed, latency, throughput
+2. Note if benchmark reference provided
+3. Flag unsupported claims
+
+### Step 4: Verify Against Source Code
+
+**A. Method Existence and Signatures**
+```bash
+# Find the source file mentioned in docs
+Read [source_file_path]
+
+# Extract actual method signatures
+# Compare with documented signatures
+```
+
+For each documented method:
+1. Search for method definition in source
+2. Extract actual signature (parameters, return type)
+3. Compare actual vs documented
+4. Flag: FABRICATED, VERIFIED, or MISMATCH
+
+**B. Code Example Validation**
+For each code example:
+1. Check if imports reference real modules
+2. Verify API calls use actual signatures
+3. Check if variables are properly defined
+4. Verify error handling exists
+5. Flag if example couldn't run
+
+**C. Configuration Verification**
+1. Find configuration interface/type in source
+2. Extract actual config fields
+3. Compare with documented options
+4. Flag fabricated or misnamed options
+
+**D. Error Verification**
+1. Search source for `throw` statements
+2. Extract all error types thrown
+3. Compare with documented errors
+4. Flag undocumented errors
+
+**E. Performance Claim Verification**
+1. Search for benchmark files
+2. If claim has benchmark reference, verify file exists
+3. If no benchmark, flag as UNVERIFIED
+4. Check if benchmark results match claims
+
+### Step 5: Check for Marketing Language
+1. Scan documentation text for banned words/phrases
+2. Flag marketing language instances
+3. Suggest objective alternatives
+
+### Step 6: Generate Report
+
+```markdown
+## API Documentation Verification: [doc_file]
+
+### 🚨 CRITICAL Issues (Must Fix Before Commit)
+
+#### Fabricated API Method
+- **Documentation**: `updateUserPreferences(userId: string, prefs: object)`
+  - **Location**: README.md:45
+  - **Issue**: Method does not exist in UserService
+  - **Fix**: Remove from documentation or implement the method
+
+#### API Signature Mismatch
+- **Documentation**: `getTasks(): Promise<Task[]>`
+  - **Actual**: `getTasks(partnerId: string, filters?: TaskFilters): Promise<PaginatedResult<Task>>`
+  - **Location**: API.md:120
+  - **Issues**:
+    - Missing required parameter `partnerId`
+    - Missing optional parameter `filters`
+    - Wrong return type: `Task[]` vs `PaginatedResult<Task>`
+  - **Fix**: Update documentation to match actual signature
+
+#### Non-Runnable Code Example
+- **Location**: EXAMPLES.md:67-74
+  - **Issues**:
+    - `taskService` variable not defined
+    - Missing required `partnerId` parameter
+    - No import statements
+    - No error handling
+  - **Fix**: Provide complete, runnable example with imports and error handling
+
+#### Unverified Performance Claim
+- **Location**: README.md:89
+  - **Claim**: "Response times under 10ms for most queries"
+  - **Issue**: No benchmark data or reference provided
+  - **Fix**: Either add benchmark reference or remove claim
+
+### ⚠️ HIGH Priority Issues
+
+#### Undocumented Error
+- **Error**: `PermissionError`
+  - **Thrown In**: TaskService.getTask() (line 45)
+  - **Documentation**: Not mentioned in error documentation
+  - **Fix**: Add to error documentation with conditions when thrown
+
+#### Configuration Mismatch
+- **Documented Field**: `timeout: 5000`
+  - **Actual Field**: `timeoutMs: 5000`
+  - **Location**: CONFIG.md:23
+  - **Fix**: Update documentation to use `timeoutMs`
+
+#### Fabricated Configuration Option
+- **Documented**: `cacheSize: 1000`
+  - **Issue**: Option doesn't exist in TaskServiceConfig interface
+  - **Fix**: Remove from documentation
+
+### ℹ️ MEDIUM Priority Issues
+
+#### Marketing Language
+- **Location**: README.md:12
+  - **Text**: "blazing-fast, enterprise-grade performance"
+  - **Issue**: Marketing buzzwords in technical documentation
+  - **Fix**: Replace with objective description: "Uses connection pooling to reduce query latency"
+
+#### Dependency Version Mismatch
+- **Documentation**: "Requires Node.js 16+"
+  - **package.json**: "node": ">=18.0.0"
+  - **Location**: README.md:150
+  - **Fix**: Update docs to "Requires Node.js 18+"
+
+### ✅ Verified Accurate
+
+- `getUser(id: string): Promise<User>` - Signature matches (UserService.ts:23)
+- `TaskNotFoundError` - Error exists and is thrown (errors.ts:45)
+- Code example at EXAMPLES.md:10-25 - Runnable and accurate
+```
+
+### Step 7: Provide Corrected Examples
+
+For each critical issue, provide the correct version:
+
+```markdown
+#### Corrected Example: getTasks
+
+**Incorrect Documentation**:
+\```typescript
+const tasks = await taskService.getTasks();
+\```
+
+**Correct Documentation**:
+\```typescript
+import { TaskService } from '@/services/TaskService';
+import type { TaskFilters, PaginatedResult, Task } from '@/types';
+
+async function example() {
+  const taskService = new TaskService();
+
+  const filters: TaskFilters = {
+    status: 'open'
+  };
+
+  const result: PaginatedResult<Task> = await taskService.getTasks(
+    'partner-123',  // Required partnerId parameter
+    filters
+  );
+
+  console.log(`Found ${result.total} tasks, showing ${result.items.length}`);
+  return result.items;
+}
+\```
+```
+
+### Step 8: Summary Statistics
+
+```markdown
+## Summary
+- Documentation files checked: X
+- API methods verified: Y
+- Issues found: Z
+  - CRITICAL (fabricated/mismatch): A
+  - HIGH (missing docs): B
+  - MEDIUM (marketing language): C
+- Code examples verified: W
+- Accurate items: V
+```
+
+## Integration Points
+
+This skill can be invoked:
+- **Manually** when reviewing documentation
+- **Before commits** that modify documentation
+- **In CI/CD** as documentation linting step
+- **Before releases** to ensure doc accuracy
+
+## Exit Criteria
+
+- All API methods verified against source code
+- All code examples validated for runnability
+- All performance claims checked for benchmark support
+- All configuration options verified
+- All errors documented
+- Marketing language flagged
+- Report generated with specific line numbers
+- CRITICAL issues should block documentation commits
+
+## Example Usage
+
+```bash
+# Manual invocation
+/skill api-documentation-verify
+
+# Verify specific doc file
+/skill api-documentation-verify README.md
+
+# Verify all docs in directory
+/skill api-documentation-verify docs/
+```
+
+## Automation Opportunities
+
+This skill can be automated in CI/CD:
+
+```yaml
+# .github/workflows/docs-verify.yml
+name: Verify Documentation
+
+on:
+  pull_request:
+    paths:
+      - '**.md'
+      - 'docs/**'
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Verify API Documentation
+        run: |
+          # Run skill via Claude Code API
+          claude-code skill api-documentation-verify
+```
 
 ## References
 
-**Based on:**
-- CLAUDE.md Section 3 (Available Skills Reference - api-documentation-verify)
-- Technical Documentation Expert verification patterns
-
-**Related skills:**
-- `api-doc-writer` - Creates documentation (this skill verifies)
-- `tutorial-writer` - Creates tutorials (this skill verifies)
-- `migration-guide-writer` - Creates guides (this skill verifies)
+- Diátaxis Framework: https://diataxis.fr/
+- Technical Documentation Expert Agent
+- Good Docs Project: https://thegooddocsproject.dev/
+- API Documentation Best Practices: https://swagger.io/resources/articles/best-practices-in-api-documentation/

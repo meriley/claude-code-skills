@@ -1,66 +1,66 @@
 ---
 name: Code Quality Check
-description: Runs language-specific linting, formatting, static analysis, and type checking. Treats linter issues as build failures that MUST be fixed before commit. Auto-fixes when possible.
-version: 1.0.0
+description: ⚠️ MANDATORY - Automatically invoked by safe-commit. Runs language-specific linting, formatting, static analysis, and type checking. Treats linter issues as build failures that MUST be fixed before commit. Auto-fixes when possible. NEVER run linters manually.
+version: 1.0.1
 ---
 
-# ⚠️ MANDATORY: Code Quality Check Skill
+# Code Quality Check Skill
 
-## 🚨 WHEN YOU MUST USE THIS SKILL
-
-**Mandatory triggers:**
-1. Before EVERY single commit (ZERO EXCEPTIONS)
-2. During code refinement phase
-3. After making any code changes
-4. Before creating pull requests
-5. When user requests code quality review
-
-**This skill is MANDATORY because:**
-- Prevents linting errors from entering codebase (MANDATORY)
-- Ensures code consistency across all files and developers
-- Catches type errors and static analysis issues early
-- Improves code readability and maintainability
-- Prevents technical debt accumulation
-- Enforces project coding standards
-
-**ENFORCEMENT:**
-
-**P0 Violations (Critical - Immediate Failure):**
-- Running commit WITHOUT invoking quality-check (standards violation)
-- Committing code with linting errors (ZERO TOLERANCE)
-- Committing with unresolved type errors (type safety violation)
-- Committing code with format violations (standards violation)
-- Using any/unknown types without addressing (type-safety violation)
-
-**P1 Violations (High - Quality Failure):**
-- Auto-fix available but not applied before reporting
-- Not running all applicable language checks
-- Missing language-specific deep audits (control-flow, error-handling, type-safety, n-plus-one)
-- Unclear error messages or line references
-- Not suggesting fixes for manual issues
-
-**P2 Violations (Medium - Efficiency Loss):**
-- Running linter checks sequentially instead of parallel
-- Not checking for project-specific configuration
-- Failing to verify fixes after auto-fixing
-
-**Blocking Conditions:**
-- ALL linting issues must be resolved (no exceptions)
-- ALL type errors must be fixed
-- ALL formatting issues must be corrected
-- Language-specific deep audits must PASS
-- Project configuration must be respected
-
----
+## ⚠️ MANDATORY SKILL - AUTO-INVOKED BY SAFE-COMMIT
 
 ## Purpose
 Enforce code quality standards through automated linting, formatting, and static analysis. Ensures code meets project conventions before committing.
 
+**CRITICAL:** This skill is automatically invoked by safe-commit. NEVER run linters manually.
+
 ## When to Use
-- **REQUIRED** before every commit
-- During code refinement phase
-- After making code changes
+- **AUTOMATICALLY** invoked by safe-commit before every commit
+- During code refinement phase (manual invocation allowed)
+- After making code changes (manual invocation allowed)
 - When user requests code quality review
+
+## 🚫 NEVER DO THIS
+- ❌ Running `eslint` or `npm run lint` manually before commit
+- ❌ Running `golangci-lint run` manually before commit
+- ❌ Running `flake8` or `black` manually before commit
+- ❌ Running linters outside of this skill during commit workflow
+
+**Let safe-commit invoke this skill automatically. Manual linting before commit is REDUNDANT and FORBIDDEN.**
+
+---
+
+## ⚠️ SKILL GUARD - READ BEFORE RUNNING LINTERS MANUALLY
+
+**Before using Bash tool to run linters, answer these questions:**
+
+### ❓ Are you about to run `npm run lint` or `eslint`?
+→ **STOP.** Are you doing this before commit? If YES, use safe-commit instead (it invokes this skill).
+
+### ❓ Are you about to run `golangci-lint run`?
+→ **STOP.** Are you doing this before commit? If YES, use safe-commit instead (it invokes this skill).
+
+### ❓ Are you about to run `flake8`, `black`, or `mypy`?
+→ **STOP.** Are you doing this before commit? If YES, use safe-commit instead (it invokes this skill).
+
+### ❓ Are you about to run `prettier --check` or formatting tools?
+→ **STOP.** Are you doing this before commit? If YES, use safe-commit instead (it invokes this skill).
+
+### ❓ Are you checking code quality before committing?
+→ **STOP.** Invoke safe-commit skill (it will invoke this skill automatically).
+
+**IF YOU RUN LINTERS MANUALLY BEFORE COMMIT, YOU ARE CREATING REDUNDANCY AND WASTING TIME.**
+
+When to run linters manually:
+- ✅ During development/refinement (not for commit)
+- ✅ When user explicitly requests quality check
+
+When NOT to run linters manually:
+- ❌ Before commit (use safe-commit instead)
+- ❌ As part of commit workflow (use safe-commit instead)
+
+**Safe-commit invokes this skill automatically. Don't duplicate the work.**
+
+---
 
 ## Philosophy
 
@@ -301,27 +301,9 @@ After standard linting/formatting, run specialized audits based on detected lang
 
 ---
 
-### For JavaScript / TypeScript Projects
-
-#### Invoke `eslint-master` Skill
-```bash
-/skill eslint-master
-```
-
-**What it does:**
-- Sets up optimal ESLint configuration
-- Migrates from legacy `.eslintrc` to flat config
-- Configures framework-specific rules (React, Vue, Angular)
-- Resolves ESLint errors efficiently
-- Optimizes for CI/CD performance
-
-**Report CRITICAL ESLint errors** - configuration must be valid before proceeding.
-
----
-
 ### For TypeScript Projects
 
-#### Invoke `type-safety-audit` Skill (in addition to eslint-master)
+#### Invoke `type-safety-audit` Skill
 ```bash
 /skill type-safety-audit
 ```
@@ -336,25 +318,6 @@ After standard linting/formatting, run specialized audits based on detected lang
 - tsconfig.json strict mode
 
 **Report CRITICAL issues** from this audit - they should block commit.
-
----
-
-### For React Projects
-
-#### Invoke `react-hooks-optimizer` Skill (in addition to eslint-master)
-```bash
-/skill react-hooks-optimizer
-```
-
-**What it audits:**
-- useEffect anti-patterns (state sync, event handling in effects)
-- Memory leaks from uncleaned effects
-- Race conditions in async effects
-- Missing dependencies or unstable references
-- Performance issues from excessive re-renders
-- Hook composition and architecture problems
-
-**Report CRITICAL issues** from this audit - memory leaks and race conditions block commit.
 
 ---
 
@@ -545,103 +508,3 @@ Only if user explicitly states "skip quality checks" or "I acknowledge quality i
 4. Proceed with commit
 
 **This should be RARE - quality checks exist for good reason.**
-
----
-
-## Anti-Patterns
-
-### ❌ Anti-Pattern: Skipping Quality Checks
-
-**Wrong approach:**
-```
-User: "Commit these changes"
-Assistant: *immediately commits without running linters or type checks*
-```
-
-**Why wrong:**
-- Linting errors accumulate in codebase
-- Type issues cause runtime failures
-- Code format becomes inconsistent
-- Technical debt increases
-- Makes future maintenance harder
-
-**Correct approach:** Always run quality-check first
-```
-User: "Commit these changes"
-Assistant: "Let me check code quality first..."
-*Invokes quality-check skill*
-*Runs linters, formatters, type checking*
-*Auto-fixes what can be fixed*
-*Reports any manual fixes needed*
-```
-
----
-
-### ❌ Anti-Pattern: Ignoring Manual Quality Issues
-
-**Wrong approach:**
-```
-Type error: Property 'value' doesn't exist on type '{}'
-Assistant: *commits code with type error anyway*
-```
-
-**Why wrong:**
-- Type errors indicate bugs or inconsistencies
-- Will fail in production
-- Other developers can't use the code safely
-- Violates type safety contract
-
-**Correct approach:** Block on quality failures
-```
-Type error: Property 'value' doesn't exist
-Assistant: "Cannot commit - Type error in parser.ts:42"
-Assistant: "Fix: Add 'value' property to type definition"
-*STOPS commit until type error fixed*
-```
-
----
-
-### ❌ Anti-Pattern: Not Running Deep Audits
-
-**Wrong approach:**
-```
-User: "Commit these changes"
-Assistant: *runs standard linting and formatting*
-Assistant: *commits without running control-flow-check or error-handling-audit*
-```
-
-**Why wrong:**
-- Control flow issues remain hidden (nesting, complexity)
-- Error handling problems go undetected
-- Type safety issues not caught
-- Performance problems (N+1 queries) missed
-
-**Correct approach:** Run all applicable audits
-```
-User: "Commit these changes"
-Assistant: *runs linters and formatters*
-Assistant: *invokes control-flow-check for Go*
-Assistant: *invokes error-handling-audit for Go*
-Assistant: *invokes type-safety-audit for TypeScript*
-Assistant: *reports and blocks on CRITICAL issues*
-```
-
----
-
-## References
-
-**Based on:**
-- CLAUDE.md Section 1 (Core Policies - Code Quality Requirements)
-- CLAUDE.md Section 3 (Available Skills Reference - quality-check)
-- CLAUDE.md Section 3 (Available Skills Reference - language-specific audits)
-
-**Related skills:**
-- `security-scan` - Runs before quality-check
-- `run-tests` - Runs after quality-check
-- `eslint-master` - Language-specific audit (JavaScript/TypeScript)
-- `react-hooks-optimizer` - Language-specific audit (React)
-- `control-flow-check` - Language-specific audit (Go)
-- `error-handling-audit` - Language-specific audit (Go)
-- `type-safety-audit` - Language-specific audit (TypeScript)
-- `n-plus-one-detection` - Language-specific audit (TypeScript + GraphQL)
-- `safe-commit` - Invokes this skill before all commits

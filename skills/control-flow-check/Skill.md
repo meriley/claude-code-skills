@@ -1,49 +1,10 @@
 ---
 name: Go Control Flow Check
-description: Audits Go code for control flow excellence: early returns, minimal nesting, small blocks, happy path readability, guard clauses. For Go code reviews.
+description: Audits Go code for control flow excellence - early returns, minimal nesting, small blocks. Checks for happy path readability, guard clauses, and refactoring opportunities. Use before committing Go code or during refactoring.
 version: 1.0.0
 ---
 
-# ⚠️ MANDATORY: Go Control Flow Check Skill
-
-## 🚨 WHEN YOU MUST USE THIS SKILL
-
-**Mandatory triggers:**
-1. Before committing Go code (as part of quality-check)
-2. During code refactoring phases
-3. When reviewing complex functions
-4. Before creating pull requests with Go changes
-5. When code feels difficult to understand
-
-**This skill is MANDATORY because:**
-- Prevents complex control flow from degrading codebase
-- Ensures high readability through early returns and minimal nesting
-- Makes functions easier to test and maintain
-- Catches violation of RMS Go standards (CRITICAL)
-- Improves code quality before merging
-
-**ENFORCEMENT:**
-
-**P1 Violations (High - Quality Failure):**
-- Nesting depth > 3 levels (CRITICAL readability issue)
-- If/else blocks > 10 lines (should be extracted)
-- Missing guard clauses at function start
-- Happy path nested > 1 level
-- Unnecessary else after return statements
-- Complex control flow without refactoring suggestions
-
-**P2 Violations (Medium - Efficiency Loss):**
-- Not identifying all nesting violations
-- Unclear refactoring suggestions
-- Missing line numbers in report
-- Not showing specific code patterns
-
-**Blocking Conditions:**
-- Functions with nesting > 3 levels should be flagged for refactoring
-- Functions with large blocks (> 10 lines) should have extraction suggestions
-- Missing guard clauses at function start should be noted
-
----
+# Go Control Flow Check Skill
 
 ## Purpose
 
@@ -260,62 +221,25 @@ This skill is invoked by:
 - **`safe-commit`** skill (via quality-check)
 - Directly when refactoring Go code
 
-## Anti-Patterns
+## Exit Criteria
 
-### ❌ Anti-Pattern: Deep Nesting Without Refactoring
+- All Go functions analyzed
+- Report generated with line-specific issues
+- Refactoring suggestions provided for all issues
+- Summary statistics calculated
 
-**Wrong approach:**
-```go
-func ProcessTask(task *Task) error {
-    if task != nil {
-        if task.IsValid() {
-            if !task.IsProcessed() {
-                if task.MeetsRequirements() {
-                    // Deep nesting - hard to understand
-                    // ... 20 lines of logic ...
-                }
-            }
-        }
-    }
-    return nil
-}
+## Example Usage
+
+```bash
+# Manual invocation
+/skill control-flow-check
+
+# Automatic invocation via quality-check
+/skill quality-check  # Detects Go project, invokes control-flow-check
 ```
-
-**Why wrong:**
-- Difficult to understand the happy path
-- Hard to maintain and test
-- Violates RMS Go standards
-- Nesting depth 4 levels (too deep)
-
-**Correct approach:** Extract to helpers with early returns
-```go
-func ProcessTask(task *Task) error {
-    if task == nil {
-        return errors.New("task is nil")
-    }
-    if !task.IsValid() {
-        return errors.New("invalid task")
-    }
-    if task.IsProcessed() {
-        return errors.New("task already processed")
-    }
-    if !task.MeetsRequirements() {
-        return errors.New("requirements not met")
-    }
-
-    // Happy path at top level - clear and maintainable
-    return executeProcessing(task)
-}
-```
-
----
 
 ## References
 
-**Based on:**
-- CLAUDE.md Section 3 (Available Skills Reference - control-flow-check)
 - RMS Go Coding Standards: Control Flow Excellence
-
-**Related skills:**
-- `quality-check` - Invokes this skill for Go projects
-- `error-handling-audit` - Companion skill for error patterns
+- Go Code Reviewer Agent: Golden Rules
+- Early Return Pattern: https://medium.com/@matryer/line-of-sight-in-code-186dd7cdea88

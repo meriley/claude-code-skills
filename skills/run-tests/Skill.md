@@ -1,67 +1,18 @@
 ---
 name: Run Tests
-description: Executes comprehensive testing suite including unit tests (minimum 90% coverage), integration tests, and E2E tests (100% pass required). Reports coverage and failures. MUST pass before commit.
-version: 1.0.0
+description: ⚠️ MANDATORY - Automatically invoked by safe-commit. Executes comprehensive testing suite including unit tests (minimum 90% coverage), integration tests, and E2E tests (100% pass required). Reports coverage and failures. MUST pass before commit. NEVER run tests manually before commit.
+version: 1.0.1
 dependencies: Language-specific test frameworks (pytest, jest, go test, cargo test, etc.)
 ---
 
-# ⚠️ MANDATORY: Run Tests Skill
+# Run Tests Skill
 
-## 🚨 WHEN YOU MUST USE THIS SKILL
-
-**Mandatory triggers:**
-1. Before EVERY single commit (ZERO EXCEPTIONS)
-2. During refinement phase
-3. After implementing new features
-4. After bug fixes (verify fix + prevent regression)
-5. Before creating pull requests
-6. When user requests "run tests"
-
-**This skill is MANDATORY because:**
-- Prevents broken code from entering repository (CRITICAL)
-- Ensures 90%+ unit test coverage (non-negotiable)
-- Guarantees 100% E2E test pass rate (no production failures)
-- Catches regressions early before merging
-- Maintains code reliability and safety
-- Prevents introducing bugs that break existing functionality
-
-**ENFORCEMENT:**
-
-**P0 Violations (Critical - Immediate Failure):**
-- Running commit WITHOUT invoking run-tests (test failure risk)
-- Committing with ANY failing tests (ZERO TOLERANCE)
-- Committing with coverage < 90% (coverage requirement violation)
-- Committing with E2E test failures (functionality risk)
-- Skipping any test category (unit/integration/E2E)
-- Using mocks in E2E tests (E2E must use real dependencies)
-
-**P1 Violations (High - Quality Failure):**
-- Not reporting specific failing test names and errors
-- Failing to measure/report coverage percentage
-- Not identifying coverage gaps and uncovered code
-- Missing integration test execution
-- Not parsing test output for pass/fail status
-- Unclear error messages about test failures
-
-**P2 Violations (Medium - Efficiency Loss):**
-- Running tests sequentially instead of parallel when possible
-- Not suggesting which code needs test additions
-- Failing to re-run tests after code fixes
-- Not generating coverage reports
-
-**Blocking Conditions:**
-- ALL unit tests must PASS
-- Unit test coverage must be ≥ 90% for ALL metrics
-- ALL integration tests must PASS
-- ALL E2E tests must PASS (100% pass rate)
-- Coverage below 90% → MUST add tests before committing
-- Any failing test → MUST fix before committing
-- Code without tests → MUST add tests before committing
-
----
+## ⚠️ MANDATORY SKILL - AUTO-INVOKED BY SAFE-COMMIT
 
 ## Purpose
 Execute comprehensive testing to ensure code correctness, prevent regressions, and maintain quality standards before committing.
+
+**CRITICAL:** This skill is automatically invoked by safe-commit. NEVER run tests manually before commit.
 
 ## Testing Requirements
 
@@ -77,11 +28,55 @@ Execute comprehensive testing to ensure code correctness, prevent regressions, a
 - E2E tests use real dependencies, never mocks
 
 ## When to Use
-- **REQUIRED** before every commit
-- During refinement phase
-- After implementing new features
-- After bug fixes (to verify fix + prevent regression)
+- **AUTOMATICALLY** invoked by safe-commit before every commit
+- During refinement phase (manual invocation allowed)
+- After implementing new features (manual invocation allowed)
+- After bug fixes to verify fix + prevent regression (manual invocation allowed)
 - When user requests "run tests"
+
+## 🚫 NEVER DO THIS
+- ❌ Running `npm test` or `jest` manually before commit
+- ❌ Running `go test ./...` manually before commit
+- ❌ Running `pytest` manually before commit
+- ❌ Running tests outside of this skill during commit workflow
+
+**Let safe-commit invoke this skill automatically. Manual testing before commit is REDUNDANT and FORBIDDEN.**
+
+---
+
+## ⚠️ SKILL GUARD - READ BEFORE RUNNING TESTS MANUALLY
+
+**Before using Bash tool to run tests, answer these questions:**
+
+### ❓ Are you about to run `npm test`, `npm run test`, or `jest`?
+→ **STOP.** Are you doing this before commit? If YES, use safe-commit instead (it invokes this skill).
+
+### ❓ Are you about to run `go test ./...` or `go test -v`?
+→ **STOP.** Are you doing this before commit? If YES, use safe-commit instead (it invokes this skill).
+
+### ❓ Are you about to run `pytest`, `python -m pytest`, or `py.test`?
+→ **STOP.** Are you doing this before commit? If YES, use safe-commit instead (it invokes this skill).
+
+### ❓ Are you about to run `cargo test` or `yarn test`?
+→ **STOP.** Are you doing this before commit? If YES, use safe-commit instead (it invokes this skill).
+
+### ❓ Are you checking test coverage before committing?
+→ **STOP.** Invoke safe-commit skill (it will invoke this skill automatically).
+
+**IF YOU RUN TESTS MANUALLY BEFORE COMMIT, YOU ARE CREATING REDUNDANCY AND WASTING TIME.**
+
+When to run tests manually:
+- ✅ During development/debugging (TDD workflow)
+- ✅ After implementing features (to verify locally)
+- ✅ When user explicitly requests "run tests"
+
+When NOT to run tests manually:
+- ❌ Before commit (use safe-commit instead)
+- ❌ As part of commit workflow (use safe-commit instead)
+
+**Safe-commit invokes this skill automatically with full coverage reporting. Don't duplicate the work.**
+
+---
 
 ## Workflow
 
@@ -470,121 +465,3 @@ If user explicitly states "skip tests" or "tests are broken but commit anyway":
 5. Note in commit message: "Tests skipped - see #TICKET"
 
 **This should be EXTREMELY RARE and only with explicit approval.**
-
----
-
-## Anti-Patterns
-
-### ❌ Anti-Pattern: Skipping Test Execution
-
-**Wrong approach:**
-```
-User: "Commit these changes"
-Assistant: *skips run-tests or assumes tests pass without running*
-```
-
-**Why wrong:**
-- Code with failing tests gets committed
-- Regressions introduced without detection
-- Coverage requirements not verified
-- Broken code reaches production
-
-**Correct approach:** Always run tests
-```
-User: "Commit these changes"
-Assistant: "Let me run all tests..."
-*Invokes run-tests skill*
-*Executes unit, integration, E2E tests*
-*Verifies 90%+ coverage*
-*Reports any failures before committing*
-```
-
----
-
-### ❌ Anti-Pattern: Accepting Low Coverage
-
-**Wrong approach:**
-```
-Coverage: 87.3% (below 90% threshold)
-Assistant: *commits anyway without adding tests*
-```
-
-**Why wrong:**
-- Code quality degrades over time
-- Untested code paths cause bugs
-- Integration/edge cases not covered
-- Violates 90% coverage requirement
-
-**Correct approach:** Block on coverage threshold
-```
-Coverage: 87.3% (below 90%)
-Assistant: "Cannot commit - coverage below threshold"
-Assistant: "Uncovered: validator.go:45-62 (error handling)"
-Assistant: "Add tests to cover these paths"
-*STOPS commit until coverage reaches 90%*
-```
-
----
-
-### ❌ Anti-Pattern: Using Mocks in E2E Tests
-
-**Wrong approach:**
-```
-E2E test mocks database instead of using real database
-Assistant: *accepts mocked E2E test*
-```
-
-**Why wrong:**
-- E2E tests don't verify real behavior
-- Database interactions not tested
-- Mocks hide real issues
-- Violates E2E principle (test production-like environment)
-
-**Correct approach:** Real dependencies only
-```
-E2E test setup:
-- Use real database (test instance)
-- Use real external services
-- No mocks allowed
-- Verify actual user workflows
-```
-
----
-
-### ❌ Anti-Pattern: Not Investigating Test Failures
-
-**Wrong approach:**
-```
-E2E test fails (payment timeout)
-Assistant: *reports failure but doesn't investigate root cause*
-```
-
-**Why wrong:**
-- User doesn't know how to fix it
-- Blame is misplaced (code vs environment)
-- Same issue happens again
-- Wastes time on wrong investigation
-
-**Correct approach:** Investigate and categorize
-```
-E2E test fails
-Assistant: "Analyzing failure..."
-Assistant: "Root cause: Payment service timeout (environment)"
-Assistant: "Fix: Verify payment service is running and accessible"
-Assistant: "OR: Increase timeout if service is slow"
-*Helps user resolve actual issue*
-```
-
----
-
-## References
-
-**Based on:**
-- CLAUDE.md Section 1 (Core Policies - Testing Coverage Thresholds)
-- CLAUDE.md Section 3 (Available Skills Reference - run-tests)
-- Project instructions: 90% unit test coverage + 100% E2E pass rate required
-
-**Related skills:**
-- `security-scan` - Runs before run-tests
-- `quality-check` - Runs before run-tests
-- `safe-commit` - Invokes this skill before all commits

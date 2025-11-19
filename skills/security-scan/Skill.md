@@ -1,66 +1,67 @@
 ---
 name: Security Scan
-description: Comprehensive security scanning before commits: checks for secrets (API keys, passwords, tokens), dependency vulnerabilities, code injection risks. MUST pass before commit.
-version: 1.0.0
+description: ⚠️ MANDATORY - Automatically invoked by safe-commit. Performs comprehensive security scanning before commits. Checks for secrets (API keys, passwords, tokens), dependency vulnerabilities, code injection risks, and authentication issues. MUST pass before any commit. NEVER run security scans manually.
+version: 1.0.1
 ---
 
-# ⚠️ MANDATORY: Security Scan Skill
+# Security Scan Skill
 
-## 🚨 WHEN YOU MUST USE THIS SKILL
-
-**Mandatory triggers:**
-1. Before EVERY single commit (ZERO EXCEPTIONS)
-2. Before creating pull requests
-3. When adding new dependencies
-4. After modifying authentication/authorization code
-5. When user requests security review
-
-**This skill is MANDATORY because:**
-- Prevents committing secrets to repository (PERMANENT and IRREVERSIBLE)
-- Stops code with known vulnerabilities from entering codebase
-- Detects injection vectors that could compromise security
-- Protects sensitive authentication/authorization logic
-- First line of defense in security pipeline (CRITICAL)
-
-**ENFORCEMENT:**
-
-**P0 Violations (Critical - Immediate Failure):**
-- Running commit WITHOUT invoking security-scan (security risk)
-- Committing code with secrets (API keys, passwords, tokens) - PERMANENT DAMAGE
-- Committing known HIGH/CRITICAL vulnerabilities (compliance violation)
-- Ignoring detected secrets without explicit investigation (negligence)
-- Adding hardcoded credentials to authentication code (CRITICAL RISK)
-
-**P1 Violations (High - Quality Failure):**
-- Not scanning for all secret patterns (incomplete)
-- Failing to audit dependencies (vulnerabilities missed)
-- Not checking for code injection risks (input validation missed)
-- Missing hardcoded credential detection
-- Not reporting specific file:line for issues
-
-**P2 Violations (Medium - Efficiency Loss):**
-- Running security checks sequentially instead of parallel
-- Not suggesting remediation steps
-- Failing to verify false positives
-
-**Blocking Conditions:**
-- ANY HIGH or CRITICAL vulnerabilities found → MUST FIX or STOP
-- ANY secrets detected in files → MUST REMOVE
-- ANY hardcoded credentials → MUST REMOVE or STOP
-- Code injection risks → MUST VERIFY or STOP
-- Weak cryptography detected → MUST FIX or STOP
-
----
+## ⚠️ MANDATORY SKILL - AUTO-INVOKED BY SAFE-COMMIT
 
 ## Purpose
 Comprehensive security verification to ensure no secrets, vulnerabilities, or security issues are committed to the repository.
 
+**CRITICAL:** This skill is automatically invoked by safe-commit. NEVER run security scans manually.
+
 ## When to Use
-- **REQUIRED** before every commit
-- Before creating pull requests
-- When adding new dependencies
-- After modifying authentication/authorization code
+- **AUTOMATICALLY** invoked by safe-commit before every commit
+- Before creating pull requests (via safe-commit)
+- When adding new dependencies (manual invocation allowed)
+- After modifying authentication/authorization code (manual invocation allowed)
 - When user requests security review
+
+## 🚫 NEVER DO THIS
+- ❌ Running `grep` for secrets manually before commit
+- ❌ Running `npm audit` or `go mod audit` manually before commit
+- ❌ Checking for security issues outside of this skill during commit workflow
+
+**Let safe-commit invoke this skill automatically. Manual security scanning before commit is REDUNDANT and FORBIDDEN.**
+
+---
+
+## ⚠️ SKILL GUARD - READ BEFORE RUNNING SECURITY SCANS MANUALLY
+
+**Before using Bash/Grep tools for security checks, answer these questions:**
+
+### ❓ Are you about to run `grep` to search for secrets/API keys?
+→ **STOP.** Are you doing this before commit? If YES, use safe-commit instead (it invokes this skill).
+
+### ❓ Are you about to run `npm audit` or `go mod audit`?
+→ **STOP.** Are you doing this before commit? If YES, use safe-commit instead (it invokes this skill).
+
+### ❓ Are you checking for secrets, passwords, or tokens in code?
+→ **STOP.** Are you doing this before commit? If YES, use safe-commit instead (it invokes this skill).
+
+### ❓ Are you scanning for dependency vulnerabilities?
+→ **STOP.** Are you doing this before commit? If YES, use safe-commit instead (it invokes this skill).
+
+### ❓ Are you verifying security before committing?
+→ **STOP.** Invoke safe-commit skill (it will invoke this skill automatically).
+
+**IF YOU RUN SECURITY SCANS MANUALLY BEFORE COMMIT, YOU ARE CREATING REDUNDANCY AND WASTING TIME.**
+
+When to run security scans manually:
+- ✅ When adding new dependencies (outside commit flow)
+- ✅ After modifying auth/security code (during development)
+- ✅ When user explicitly requests security review
+
+When NOT to run security scans manually:
+- ❌ Before commit (use safe-commit instead)
+- ❌ As part of commit workflow (use safe-commit instead)
+
+**Safe-commit invokes this skill automatically. Don't duplicate the work.**
+
+---
 
 ## Security Checklist
 
@@ -278,92 +279,3 @@ If user explicitly states "I have reviewed and approved these security findings"
 1. Document the user's explicit approval
 2. List what was approved in commit message
 3. Suggest creating follow-up ticket for remediation
-
----
-
-## Anti-Patterns
-
-### ❌ Anti-Pattern: Skipping Security Scan
-
-**Wrong approach:**
-```
-User: "Commit these changes"
-Assistant: *immediately runs `git commit` without invoking security-scan*
-```
-
-**Why wrong:**
-- Secrets can be committed permanently to history
-- Vulnerabilities go undetected until deployment
-- Hardcoded credentials expose authentication
-- Once pushed, secret removal is very difficult
-
-**Correct approach:** Always run security-scan first
-```
-User: "Commit these changes"
-Assistant: "Let me scan for security issues first..."
-*Invokes security-scan skill*
-*Checks for secrets, vulnerabilities, injection risks*
-*Reports any issues before proceeding*
-```
-
----
-
-### ❌ Anti-Pattern: Accepting Secrets as "False Positives"
-
-**Wrong approach:**
-```
-Security scan finds: api_key = 'sk_live_12345' in config.js
-Assistant: *determines it's likely a real secret but commits anyway*
-```
-
-**Why wrong:**
-- Better safe than sorry with security
-- Real secrets get committed to permanent history
-- Secret removal requires force push and history rewrite
-- Compromises entire system if leaked
-
-**Correct approach:** Always investigate and remove
-```
-Security scan finds: api_key = 'sk_live_12345'
-Assistant: "Found potential secret in config.js:45"
-Assistant: "This looks like a real secret. Recommend: Use .env instead"
-*STOPS commit until user removes secret*
-```
-
----
-
-### ❌ Anti-Pattern: Ignoring Vulnerabilities
-
-**Wrong approach:**
-```
-Dependency audit finds: HIGH severity vulnerability in lodash
-Assistant: *commits anyway without updating*
-```
-
-**Why wrong:**
-- Known vulnerabilities are attack vectors
-- Compliance issues (security policies violated)
-- Users/data at risk
-- Difficult to fix after deployment
-
-**Correct approach:** Block on vulnerabilities
-```
-Dependency audit finds: HIGH vulnerability in lodash
-Assistant: "Cannot commit - HIGH severity vulnerability detected"
-Assistant: "Action: Run 'npm update lodash' to fix"
-*STOPS commit until vulnerability fixed*
-```
-
----
-
-## References
-
-**Based on:**
-- CLAUDE.md Section 1 (Core Policies - Security Requirements)
-- CLAUDE.md Section 3 (Available Skills Reference - security-scan)
-- OWASP security principles
-
-**Related skills:**
-- `quality-check` - Runs after security-scan
-- `run-tests` - Verifies security with test coverage
-- `safe-commit` - Invokes this skill before all commits
