@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(npm run lint)",
+      "Bash(npm run test:*)",
+      "Read(~/.zshrc)"
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "printf '\\033[32m%s@%s\\033[0m:\\033[34m%s\\033[0m' \"$(whoami)\" \"$(hostname -s)\" \"$(pwd)\""
+  },
+  "alwaysThinkingEnabled": true,
+  "feedbackSurveyState": {
+    "lastShownTime": 1754078382179
+  }
+}
