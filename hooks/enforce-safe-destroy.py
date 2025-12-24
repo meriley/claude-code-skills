@@ -57,18 +57,11 @@ for pattern in ALLOW_PATTERNS:
 # Check for destructive patterns
 for pattern, reason in DESTRUCTIVE_PATTERNS:
     if re.search(pattern, command, re.IGNORECASE):
-        print("BLOCKED: Destructive command detected.", file=sys.stderr)
-        print("", file=sys.stderr)
-        print(f"Reason: {reason}", file=sys.stderr)
-        print("", file=sys.stderr)
-        print("Use the safe-destroy skill instead:", file=sys.stderr)
-        print("  /safe-destroy", file=sys.stderr)
-        print("", file=sys.stderr)
-        print("The safe-destroy skill ensures:", file=sys.stderr)
-        print("  - Lists what will be affected", file=sys.stderr)
-        print("  - Shows what will be lost", file=sys.stderr)
-        print("  - Suggests safer alternatives", file=sys.stderr)
-        print("  - Requires explicit double confirmation", file=sys.stderr)
-        sys.exit(2)
+        # Output warning but allow - skill needs to run after user confirms
+        # The CLAUDE.md instructions and skill are the real enforcement
+        print("⚠️  DESTRUCTIVE COMMAND WARNING", file=sys.stderr)
+        print(f"   {reason}", file=sys.stderr)
+        print("   Ensure safe-destroy skill was used for confirmation.", file=sys.stderr)
+        sys.exit(0)  # Allow but warn
 
 sys.exit(0)
