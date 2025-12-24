@@ -7,9 +7,46 @@
       "Read(~/.zshrc)"
     ]
   },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {"type": "command", "command": "uv run ~/.claude/hooks/enforce-safe-commit.py"},
+          {"type": "command", "command": "uv run ~/.claude/hooks/enforce-safe-destroy.py"},
+          {"type": "command", "command": "uv run ~/.claude/hooks/enforce-branch-prefix.py"}
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {"type": "command", "command": "uv run ~/.claude/hooks/protect-files.py"}
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {"type": "command", "command": "uv run ~/.claude/hooks/auto-format.py"}
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {"type": "command", "command": "~/.claude/hooks/session-context.sh"}
+        ]
+      }
+    ]
+  },
   "statusLine": {
     "type": "command",
     "command": "printf '\\033[32m%s@%s\\033[0m:\\033[34m%s\\033[0m' \"$(whoami)\" \"$(hostname -s)\" \"$(pwd)\""
+  },
+  "enabledPlugins": {
+    "gopls-lsp@claude-plugins-official": true,
+    "playwright-skill@playwright-skill": true
   },
   "alwaysThinkingEnabled": true,
   "feedbackSurveyState": {

@@ -65,6 +65,8 @@ Before ANY action, you MUST verify which skill to invoke:
 | Starting work on Go project | **`setup-go`** | ❌ Run setup commands manually |
 | Starting work on Node project | **`setup-node`** | ❌ Run npm/yarn manually |
 | Starting work on Python project | **`setup-python`** | ❌ Run pip/venv manually |
+| Writing Playwright E2E tests | **`playwright-writing`** | ❌ Write tests without best practices |
+| Reviewing Playwright tests | **`playwright-reviewing`** | ❌ Review without checking violations |
 
 ---
 
@@ -97,6 +99,14 @@ BEFORE TAKING ANY ACTION:
 
 □ Am I about to create or switch branches?
   └─> YES → STOP. Use manage-branch skill instead.
+  └─> NO → Continue
+
+□ Am I writing Playwright E2E tests?
+  └─> YES → Reference playwright-writing skill for patterns
+  └─> NO → Continue
+
+□ Am I reviewing Playwright test code?
+  └─> YES → Use playwright-reviewing skill for audit
   └─> NO → Continue
 ```
 
@@ -286,6 +296,18 @@ User provides input
        ├─> Starting work on [language] project?
        │   └─> Invoke setup-[language] skill
        │       └─> Configures environment
+       │
+       ├─> Writing Playwright E2E tests?
+       │   └─> Reference playwright-writing skill
+       │       ├─> Use user-facing locators
+       │       ├─> Use web-first assertions
+       │       ├─> NEVER mock app data
+       │       └─> NEVER use waitForTimeout
+       │
+       ├─> Reviewing Playwright tests?
+       │   └─> Use playwright-reviewing skill
+       │       ├─> Run automated violation checks
+       │       └─> Report by severity
        │
        └─> Other task
            └─> Complete task
@@ -687,6 +709,46 @@ These skills provide deep, language-specific code quality audits. They are autom
 
 ---
 
+### E2E Testing Skills
+
+These skills ensure high-quality, reliable Playwright E2E tests.
+
+#### `playwright-writing` - Playwright Test Writing
+**When to use:** Writing new Playwright E2E tests
+
+**What it does:**
+- Enforces user-facing locators (`getByRole`, `getByText`, `getByTestId`)
+- Requires web-first assertions (auto-wait, auto-retry)
+- FORBIDS mocking application data (external APIs ok)
+- FORBIDS explicit timeouts (`waitForTimeout`)
+- FORBIDS CSS class selectors
+- FORBIDS skipping tests (`.skip()`)
+- Special patterns for Mantine components
+
+**Key rules:**
+- Tests MUST hit real API endpoints
+- Use `data-testid` only when semantic locators insufficient
+- Mantine Select requires click pattern, not `selectOption()`
+
+---
+
+#### `playwright-reviewing` - Playwright Test Review
+**When to use:** Reviewing Playwright PRs or auditing test quality
+
+**What it does:**
+- Automated grep commands to detect violations
+- Severity classification (CRITICAL → HIGH → MEDIUM → LOW)
+- Structured review output template
+- Cross-references `playwright-writing` rules
+
+**Detection patterns:**
+- `waitForTimeout` → HIGH violation
+- `page.route('/api` → CRITICAL violation
+- `.locator('.'` → HIGH violation
+- `test.skip` → CRITICAL violation
+
+---
+
 ## Planning & Safety Skills (Phase 3)
 
 ### `sparc-plan` - Implementation Planning
@@ -902,6 +964,13 @@ Documentation Skills (work together):
     ↓ verified by ↓
   api-documentation-verify
     (audits all docs for accuracy)
+
+E2E Testing Skills (complementary pair):
+  playwright-writing
+    (guides writing new tests)
+    ↓ enforces same rules as ↓
+  playwright-reviewing
+    (audits existing tests for violations)
 ```
 
 ---
