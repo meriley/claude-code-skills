@@ -2,15 +2,22 @@
 .credentials.json
 *.key
 *.pem
+*.env
+*.env.*
 
 # Runtime data
 history.jsonl
+stats-cache.json
 debug/
 file-history/
 session-env/
 shell-snapshots/
 todos/
 statsig/
+telemetry/
+
+# Claude Code temporary plans (auto-generated per session)
+plans/
 
 # Project-specific (not global config)
 projects/
@@ -28,9 +35,16 @@ docs/**/.prompts/
 **/.plans/
 **/.prompts/
 
+# Local settings (user-specific overrides)
+settings.local.json
+*.local.json
+
 # OS files
 .DS_Store
 Thumbs.db
+desktop.ini
+.Spotlight-V100
+.Trashes
 
 # IDE files
 ide/
@@ -39,6 +53,12 @@ ide/
 *.swp
 *.swo
 *~
+.*.swp
+\#*\#
+.#*
 
 # Plugin runtime
 plugins/
+
+# Tool results cache
+tool-results/
