@@ -1,15 +1,28 @@
 ---
 name: Python Development Setup
-description: Sets up Python development environment with virtual environment, dependencies, testing framework (pytest), linting (flake8, black), and type checking (mypy). Ensures consistent development environment.
-version: 1.0.0
+description: Sets up Python development environment using UV for fast dependency management. Configures virtual environment, dependencies, testing (pytest), linting/formatting (ruff), and type checking (mypy). ALWAYS use UV - NEVER use pip directly.
+version: 2.0.0
 ---
 
 # Python Development Setup Skill
 
 ## Purpose
-Quickly set up and verify a Python development environment with all necessary tooling.
+
+Quickly set up and verify a Python development environment using **UV** for fast, reliable dependency management.
+
+## CRITICAL: Always Use UV
+
+**NEVER use pip directly. ALWAYS use UV for Python dependency management.**
+
+UV is 10-100x faster than pip and provides:
+
+- Deterministic dependency resolution
+- Lockfile support
+- Virtual environment management
+- Drop-in pip replacement
 
 ## When to Use
+
 - Starting work on a Python project
 - After cloning a Python repository
 - When setting up CI/CD for Python
@@ -17,107 +30,133 @@ Quickly set up and verify a Python development environment with all necessary to
 
 ## Workflow
 
-### Step 1: Verify Python Installation
+### Step 1: Verify UV Installation
+
+```bash
+uv --version
+```
+
+**Expected**: uv 0.4.0 or higher
+
+**If not installed:**
+
+```bash
+# macOS/Linux
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Or with pip (one-time exception)
+pip install uv
+
+# Or with Homebrew
+brew install uv
+```
+
+**Verify:**
+
+```bash
+uv --version
+```
+
+### Step 2: Verify Python Installation
 
 ```bash
 python3 --version
+# or let UV manage Python:
+uv python list
 ```
 
 **Expected**: Python 3.9 or higher
 
-**If not installed:**
-```
-❌ Python3 not found
+**If not installed, UV can install it:**
 
-Install Python:
-- macOS: brew install python@3.11
-- Linux: sudo apt install python3.11 python3.11-venv
-- Windows: https://python.org/downloads
-
-After installing, verify: python3 --version
+```bash
+uv python install 3.12
 ```
 
-### Step 2: Create Virtual Environment
+### Step 3: Create Virtual Environment
 
 **Check if venv exists:**
+
 ```bash
-ls venv/ .venv/ 2>/dev/null
+ls .venv/ 2>/dev/null
 ```
 
-**If doesn't exist, create:**
+**Create with UV:**
+
 ```bash
-python3 -m venv venv
+uv venv
 ```
+
+This creates `.venv/` in the current directory.
 
 **Activate virtual environment:**
+
 ```bash
 # macOS/Linux
-source venv/bin/activate
+source .venv/bin/activate
 
 # Windows
-venv\Scripts\activate
+.venv\Scripts\activate
 ```
 
 **Verify activation:**
+
 ```bash
-which python  # Should point to venv/bin/python
+which python  # Should point to .venv/bin/python
 ```
 
 **Report:**
+
 ```
-✅ Virtual environment activated
+✅ Virtual environment created with UV
 
-Python location: venv/bin/python
-Python version: 3.11.5
-```
-
-### Step 3: Upgrade pip
-
-```bash
-pip install --upgrade pip setuptools wheel
+Python location: .venv/bin/python
+Python version: 3.12.0
 ```
 
 ### Step 4: Install Project Dependencies
 
-**Check for requirements file:**
+**Check for dependency files:**
+
 ```bash
-ls requirements.txt requirements-dev.txt setup.py pyproject.toml
+ls pyproject.toml requirements.txt requirements-dev.txt setup.py 2>/dev/null
 ```
 
-**Install dependencies:**
+**Install dependencies with UV:**
+
+**If `pyproject.toml` exists (preferred):**
+
+```bash
+# Install project with dependencies
+uv pip install -e ".[dev]"
+# or
+uv sync  # If using uv.lock
+```
 
 **If `requirements.txt` exists:**
+
 ```bash
-pip install -r requirements.txt
+uv pip install -r requirements.txt
 ```
 
 **If `requirements-dev.txt` exists:**
-```bash
-pip install -r requirements-dev.txt
-```
 
-**If `setup.py` exists:**
 ```bash
-pip install -e .
-```
-
-**If `pyproject.toml` exists (modern Python projects):**
-```bash
-pip install -e ".[dev]"
-# or
-pip install .
+uv pip install -r requirements-dev.txt
 ```
 
 **Report installed packages:**
+
 ```bash
-pip list
+uv pip list
 ```
 
 ### Step 5: Setup Testing (pytest)
 
 **Install pytest if not installed:**
+
 ```bash
-pip install pytest pytest-cov pytest-mock
+uv pip install pytest pytest-cov pytest-mock
 ```
 
 **Create pytest.ini if doesn't exist:**
@@ -128,7 +167,7 @@ testpaths = tests
 python_files = test_*.py *_test.py
 python_classes = Test*
 python_functions = test_*
-addopts = 
+addopts =
     -v
     --strict-markers
     --tb=short
@@ -138,16 +177,19 @@ addopts =
 ```
 
 **Run tests:**
+
 ```bash
 pytest
 ```
 
 **Run with coverage:**
+
 ```bash
 pytest --cov=. --cov-report=term-missing --cov-report=html
 ```
 
 **Report:**
+
 ```
 ✅ Tests completed
 
@@ -159,160 +201,115 @@ Coverage: Z%
 Coverage report: htmlcov/index.html
 ```
 
-### Step 6: Setup Linting (flake8)
+### Step 6: Setup Linting & Formatting (Ruff)
 
-**Install flake8:**
+**Ruff replaces flake8, black, isort, and more - all in one fast tool.**
+
+**Install ruff:**
+
 ```bash
-pip install flake8
-```
-
-**Create .flake8 config if doesn't exist:**
-
-```ini
-[flake8]
-max-line-length = 88
-extend-ignore = E203, W503
-exclude = 
-    .git,
-    __pycache__,
-    venv,
-    .venv,
-    build,
-    dist,
-    *.egg-info
-per-file-ignores =
-    __init__.py:F401
-```
-
-**Run flake8:**
-```bash
-flake8 .
-```
-
-**Report:**
-```
-✅ Linting passed
-
-No style violations found.
-```
-
-**If violations found:**
-```
-❌ Linting issues found
-
-[Show violations]
-
-Run 'black .' to auto-format code.
-```
-
-### Step 7: Setup Code Formatting (black)
-
-**Install black:**
-```bash
-pip install black
-```
-
-**Create pyproject.toml config (if doesn't exist):**
-
-```toml
-[tool.black]
-line-length = 88
-target-version = ['py39', 'py310', 'py311']
-include = '\.pyi?$'
-extend-exclude = '''
-/(
-  # directories
-  \.eggs
-  | \.git
-  | \.venv
-  | venv
-  | build
-  | dist
-)/
-'''
-```
-
-**Check formatting:**
-```bash
-black --check .
-```
-
-**Auto-format:**
-```bash
-black .
-```
-
-**Report:**
-```
-✅ Code formatted
-
-Formatted X files
-Left Y files unchanged
-```
-
-### Step 8: Setup Import Sorting (isort)
-
-**Install isort:**
-```bash
-pip install isort
+uv pip install ruff
 ```
 
 **Add to pyproject.toml:**
 
 ```toml
-[tool.isort]
-profile = "black"
-line_length = 88
-multi_line_output = 3
-include_trailing_comma = true
-force_grid_wrap = 0
-use_parentheses = true
-ensure_newline_before_comments = true
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+
+[tool.ruff.lint]
+select = [
+    "E",      # pycodestyle errors
+    "W",      # pycodestyle warnings
+    "F",      # Pyflakes
+    "I",      # isort
+    "B",      # flake8-bugbear
+    "C4",     # flake8-comprehensions
+    "UP",     # pyupgrade
+    "ARG",    # flake8-unused-arguments
+    "SIM",    # flake8-simplify
+]
+ignore = ["E501"]  # Line too long (handled by formatter)
+
+[tool.ruff.lint.isort]
+known-first-party = ["your_package"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
 ```
 
-**Run isort:**
+**Run ruff check:**
+
 ```bash
-isort --check-only .
+ruff check .
 ```
 
-**Auto-fix imports:**
+**Auto-fix issues:**
+
 ```bash
-isort .
+ruff check --fix .
 ```
 
-### Step 9: Setup Type Checking (mypy)
+**Format code:**
+
+```bash
+ruff format .
+```
+
+**Check formatting:**
+
+```bash
+ruff format --check .
+```
+
+**Report:**
+
+```
+✅ Linting and formatting passed
+
+No style violations found.
+Code properly formatted.
+```
+
+### Step 7: Setup Type Checking (mypy)
 
 **Install mypy:**
+
 ```bash
-pip install mypy
+uv pip install mypy
 ```
 
-**Create mypy.ini config:**
+**Add to pyproject.toml:**
 
-```ini
-[mypy]
-python_version = 3.11
-warn_return_any = True
-warn_unused_configs = True
-disallow_untyped_defs = True
-disallow_incomplete_defs = True
-check_untyped_defs = True
-no_implicit_optional = True
-warn_redundant_casts = True
-warn_unused_ignores = True
-warn_no_return = True
-strict_equality = True
+```toml
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+strict_equality = true
 
-[mypy-tests.*]
-disallow_untyped_defs = False
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false
 ```
 
 **Run mypy:**
+
 ```bash
 mypy .
 ```
 
 **Report:**
+
 ```
 ✅ Type checking passed
 
@@ -320,15 +317,56 @@ Checked X files
 No type errors found
 ```
 
-### Step 10: Create/Verify Makefile
+### Step 8: Create/Verify pyproject.toml
+
+**Modern Python projects should use pyproject.toml:**
+
+```toml
+[project]
+name = "my-project"
+version = "0.1.0"
+description = "My Python project"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "requests>=2.31.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "ruff>=0.1.0",
+    "mypy>=1.8.0",
+    "pre-commit>=3.6.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "B", "C4", "UP"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+```
+
+### Step 9: Create/Verify Makefile
 
 ```makefile
 .PHONY: install test lint format type-check clean all
 
 install:
-	pip install --upgrade pip
-	pip install -r requirements-dev.txt
-	pip install -e .
+	uv pip install -e ".[dev]"
+
+sync:
+	uv sync
 
 test:
 	pytest -v
@@ -337,22 +375,23 @@ coverage:
 	pytest --cov=. --cov-report=term-missing --cov-report=html
 
 lint:
-	flake8 .
+	ruff check .
+
+lint-fix:
+	ruff check --fix .
 
 format:
-	black .
-	isort .
+	ruff format .
 
 format-check:
-	black --check .
-	isort --check-only .
+	ruff format --check .
 
 type-check:
 	mypy .
 
 clean:
 	rm -rf build dist *.egg-info
-	rm -rf .pytest_cache .mypy_cache .coverage htmlcov
+	rm -rf .pytest_cache .mypy_cache .ruff_cache .coverage htmlcov
 	find . -type d -name __pycache__ -exec rm -rf {} +
 	find . -type f -name '*.pyc' -delete
 
@@ -360,15 +399,17 @@ all: format lint type-check test
 ```
 
 **Verify Makefile:**
+
 ```bash
 make all
 ```
 
-### Step 11: Setup Pre-commit Hooks
+### Step 10: Setup Pre-commit Hooks
 
 **Install pre-commit:**
+
 ```bash
-pip install pre-commit
+uv pip install pre-commit
 ```
 
 **Create .pre-commit-config.yaml:**
@@ -385,20 +426,12 @@ repos:
       - id: check-json
       - id: check-merge-conflict
 
-  - repo: https://github.com/psf/black
-    rev: 23.12.1
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.1.9
     hooks:
-      - id: black
-
-  - repo: https://github.com/pycqa/isort
-    rev: 5.13.2
-    hooks:
-      - id: isort
-
-  - repo: https://github.com/pycqa/flake8
-    rev: 7.0.0
-    hooks:
-      - id: flake8
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
 
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v1.8.0
@@ -408,182 +441,202 @@ repos:
 ```
 
 **Install git hooks:**
+
 ```bash
 pre-commit install
 ```
 
 **Test hooks:**
+
 ```bash
 pre-commit run --all-files
 ```
 
-### Step 12: Create requirements files
+### Step 11: Generate Lock File (Optional)
 
-**Generate requirements.txt from current environment:**
+**For reproducible builds:**
+
 ```bash
-pip freeze > requirements.txt
+uv pip compile pyproject.toml -o requirements.lock
 ```
 
-**Split into dev and prod:**
+**Or use UV's native lock:**
 
-**requirements.txt** (production):
-```
-flask==3.0.0
-requests==2.31.0
-psycopg2-binary==2.9.9
+```bash
+uv lock
 ```
 
-**requirements-dev.txt** (development):
-```
--r requirements.txt
-pytest==7.4.3
-pytest-cov==4.1.0
-black==23.12.1
-flake8==7.0.0
-isort==5.13.2
-mypy==1.8.0
-pre-commit==3.6.0
+**Install from lock:**
+
+```bash
+uv sync
 ```
 
-### Step 13: Summary Report
+### Step 12: Summary Report
 
 ```
-✅ Python Development Environment Setup Complete
+✅ Python Development Environment Setup Complete (UV)
 
-Python version: 3.11.5
-Virtual environment: venv/
+Python version: 3.12.0
+Virtual environment: .venv/
+Package manager: UV
 
 Dependencies:
-✅ requirements.txt - X packages installed
-✅ requirements-dev.txt - Y packages installed
+✅ pyproject.toml - X packages installed
+✅ Dev dependencies - Y packages installed
 
 Tooling:
 ✅ pytest - Tests passing (Z% coverage)
-✅ black - Code formatted
-✅ isort - Imports sorted
-✅ flake8 - No style violations
+✅ ruff - Linting and formatting configured
 ✅ mypy - Type checking passed
 ✅ pre-commit - Git hooks installed
 ✅ Makefile - Created with common targets
 
 Quick Commands:
+- Install: uv pip install -e ".[dev]"
 - Test: make test OR pytest
 - Coverage: make coverage
-- Lint: make lint OR flake8 .
-- Format: make format OR black . && isort .
+- Lint: make lint OR ruff check .
+- Format: make format OR ruff format .
 - Type check: make type-check OR mypy .
 - Run all checks: make all
 
 Ready to start development!
 
-Don't forget to activate venv: source venv/bin/activate
+Don't forget to activate venv: source .venv/bin/activate
 ```
 
 ---
 
-## Common Python Commands Reference
+## UV Commands Reference
 
 ### Virtual Environment
+
 ```bash
-python3 -m venv venv          # Create venv
-source venv/bin/activate      # Activate (macOS/Linux)
-venv\Scripts\activate         # Activate (Windows)
+uv venv                       # Create .venv
+uv venv --python 3.12         # Create with specific Python
+source .venv/bin/activate     # Activate (macOS/Linux)
+.venv\Scripts\activate        # Activate (Windows)
 deactivate                    # Deactivate
 ```
 
 ### Package Management
+
 ```bash
-pip install <package>         # Install package
-pip install -r requirements.txt  # Install from file
-pip install -e .              # Install in editable mode
-pip uninstall <package>       # Uninstall package
-pip list                      # List installed packages
-pip freeze                    # Generate requirements
-pip install --upgrade <package>  # Update package
+uv pip install <package>      # Install package
+uv pip install -r requirements.txt  # Install from file
+uv pip install -e .           # Install in editable mode
+uv pip install -e ".[dev]"    # Install with dev extras
+uv pip uninstall <package>    # Uninstall package
+uv pip list                   # List installed packages
+uv pip freeze                 # Generate requirements
+uv pip compile pyproject.toml -o requirements.lock  # Lock deps
+uv sync                       # Sync from lock file
 ```
 
-### Testing
+### Python Management
+
 ```bash
-pytest                        # Run all tests
-pytest tests/test_file.py     # Run specific file
-pytest -v                     # Verbose output
-pytest -k "test_name"         # Run tests matching name
-pytest --cov=.                # With coverage
-pytest --cov-report=html      # HTML coverage report
-pytest -x                     # Stop on first failure
-pytest --pdb                  # Drop into debugger on failure
+uv python list                # List available Pythons
+uv python install 3.12        # Install Python version
+uv python pin 3.12            # Pin Python version for project
 ```
 
-### Code Quality
+---
+
+## Ruff Commands Reference
+
 ```bash
-black .                       # Format code
-black --check .               # Check formatting
-isort .                       # Sort imports
-flake8 .                      # Lint code
-mypy .                        # Type check
+ruff check .                  # Lint code
+ruff check --fix .            # Lint and auto-fix
+ruff check --watch .          # Watch mode
+ruff format .                 # Format code
+ruff format --check .         # Check formatting
+ruff rule E501                # Explain a rule
 ```
 
 ---
 
 ## Troubleshooting
 
-### Issue: "command not found: python3"
-**Solution**: Python not installed or not in PATH
-```bash
-# macOS
-brew install python@3.11
+### Issue: "uv: command not found"
 
-# Ubuntu/Debian
-sudo apt install python3.11
+**Solution**: UV not installed
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+# Then restart shell or source profile
 ```
 
-### Issue: "No module named 'venv'"
-**Solution**: venv module not installed
+### Issue: "No Python found"
+
+**Solution**: Install Python with UV
+
 ```bash
-# Ubuntu/Debian
-sudo apt install python3.11-venv
+uv python install 3.12
 ```
 
-### Issue: "pip: command not found" (inside venv)
-**Solution**: venv not activated or corrupted
+### Issue: "Resolution failed"
+
+**Solution**: Dependency conflict
+
 ```bash
-deactivate
-rm -rf venv
-python3 -m venv venv
-source venv/bin/activate
+# Show what's conflicting
+uv pip install --dry-run -r requirements.txt
+
+# Try with looser constraints
+uv pip install --resolution=lowest .
 ```
 
 ### Issue: "ModuleNotFoundError: No module named 'X'"
-**Solution**: Dependency not installed
-```bash
-pip install -r requirements.txt
-# or
-pip install <module-name>
-```
 
-### Issue: "pytest: command not found"
-**Solution**: pytest not installed
+**Solution**: Dependency not installed
+
 ```bash
-pip install pytest
+uv pip install -e ".[dev]"
+# or
+uv pip install <module-name>
 ```
 
 ---
 
 ## Best Practices
 
-1. **Always use virtual environments** - Never install packages globally
-2. **Pin dependency versions** - Use `==` in requirements.txt
-3. **Separate dev dependencies** - Use requirements-dev.txt
-4. **Run black + isort** - Before committing
-5. **Enable mypy** - Catch type errors early
-6. **Use pre-commit hooks** - Automate checks
-7. **Target 90%+ coverage** - Comprehensive testing
-8. **Keep requirements updated** - Regularly check for security updates
+1. **Always use UV** - Never use pip directly
+2. **Use pyproject.toml** - Modern Python standard
+3. **Use Ruff** - Replaces flake8, black, isort (faster)
+4. **Lock dependencies** - Use `uv lock` or `uv pip compile`
+5. **Pin Python version** - Use `uv python pin`
+6. **Enable mypy strict mode** - Catch type errors early
+7. **Use pre-commit hooks** - Automate checks
+8. **Target 90%+ coverage** - Comprehensive testing
+
+---
+
+## Migration from pip
+
+If you have an existing project using pip:
+
+```bash
+# Create new venv with UV
+rm -rf venv .venv
+uv venv
+
+# Activate
+source .venv/bin/activate
+
+# Install existing requirements
+uv pip install -r requirements.txt
+
+# Generate lock file
+uv pip compile requirements.txt -o requirements.lock
+```
 
 ---
 
 ## Integration with Other Skills
 
 This skill may be invoked by:
+
 - **`quality-check`** - When checking Python code quality
 - **`run-tests`** - When running Python tests

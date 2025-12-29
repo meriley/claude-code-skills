@@ -348,7 +348,7 @@ User provides input
 
 - ❌ Running `go mod tidy && golangci-lint install` → **Use `setup-go` skill**
 - ❌ Running `npm install && npm init -y` → **Use `setup-node` skill**
-- ❌ Running `python -m venv .venv && pip install` → **Use `setup-python` skill**
+- ❌ Running `pip install` or `python -m venv` → **Use `uv` and `setup-python` skill**
 
 ### Documentation
 
@@ -952,13 +952,16 @@ Skills for developing Vendure e-commerce plugins, extending GraphQL APIs, buildi
 
 **When to use:** Starting work on Python project
 
+**CRITICAL: Always use `uv` for Python dependency management - NEVER use pip directly.**
+
 **What it does:**
 
-- Creates virtual environment
-- Installs dependencies
-- Sets up pytest, black, flake8, mypy
+- Uses `uv` for fast, reliable dependency management
+- Creates virtual environment with `uv venv`
+- Installs dependencies with `uv pip install` or `uv sync`
+- Sets up pytest, ruff (replaces black/flake8), mypy
 - Configures pre-commit hooks
-- Creates requirements files
+- Creates pyproject.toml (preferred) or requirements files
 
 ---
 
