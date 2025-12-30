@@ -1,64 +1,19 @@
-# Sensitive files
-.credentials.json
-*.key
-*.pem
-*.env
-*.env.*
+# Ignore everything
+*
 
-# Runtime data
-history.jsonl
-stats-cache.json
-debug/
-file-history/
-session-env/
-shell-snapshots/
-todos/
-statsig/
-telemetry/
+# Except these
+!.gitignore
+!CLAUDE.md
+!README.md
 
-# Claude Code temporary plans (auto-generated per session)
-plans/
+# Keep skills directory
+!skills/
+!skills/**
 
-# Project-specific (not global config)
-projects/
+# Keep commands directory
+!commands/
+!commands/**
 
-# Node modules and local packages
-local/
-node_modules/
-
-# Internal Claude directory
-.claude/
-
-# Plans and prompts (per CLAUDE.md instructions)
-docs/**/.plans/
-docs/**/.prompts/
-**/.plans/
-**/.prompts/
-
-# Local settings (user-specific overrides)
-settings.local.json
-*.local.json
-
-# OS files
-.DS_Store
-Thumbs.db
-desktop.ini
-.Spotlight-V100
-.Trashes
-
-# IDE files
-ide/
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-.*.swp
-\#*\#
-.#*
-
-# Plugin runtime
-plugins/
-
-# Tool results cache
-tool-results/
+# Keep agents directory
+!agents/
+!agents/**
