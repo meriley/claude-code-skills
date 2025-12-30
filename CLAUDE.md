@@ -57,18 +57,19 @@ Use the **`safe-destroy`** skill before ANY destructive operation.
 
 Before ANY action, you MUST verify which skill to invoke:
 
-| User Action/Context               | MANDATORY Skill            | NEVER Do This                                  |
-| --------------------------------- | -------------------------- | ---------------------------------------------- |
-| Starting ANY task/request         | **`check-history`**        | ❌ Run git commands manually                   |
-| User says "commit"                | **`safe-commit`**          | ❌ Run `git commit` directly                   |
-| User says "raise/create/draft PR" | **`create-pr`**            | ❌ Push & create PR manually                   |
-| Destructive command needed        | **`safe-destroy`**         | ❌ Run `git reset --hard`, `rm -rf` directly   |
-| Creating/switching branches       | **`manage-branch`**        | ❌ Run `git branch` or `git checkout` directly |
-| Starting work on Go project       | **`setup-go`**             | ❌ Run setup commands manually                 |
-| Starting work on Node project     | **`setup-node`**           | ❌ Run npm/yarn manually                       |
-| Starting work on Python project   | **`setup-python`**         | ❌ Run pip/venv manually                       |
-| Writing Playwright E2E tests      | **`playwright-writing`**   | ❌ Write tests without best practices          |
-| Reviewing Playwright tests        | **`playwright-reviewing`** | ❌ Review without checking violations          |
+| User Action/Context               | MANDATORY Skill                | NEVER Do This                                  |
+| --------------------------------- | ------------------------------ | ---------------------------------------------- |
+| Starting ANY task/request         | **`check-history`**            | ❌ Run git commands manually                   |
+| User says "commit"                | **`safe-commit`**              | ❌ Run `git commit` directly                   |
+| User says "raise/create/draft PR" | **`create-pr`**                | ❌ Push & create PR manually                   |
+| Destructive command needed        | **`safe-destroy`**             | ❌ Run `git reset --hard`, `rm -rf` directly   |
+| Creating/switching branches       | **`manage-branch`**            | ❌ Run `git branch` or `git checkout` directly |
+| Starting work on Go project       | **`setup-go`**                 | ❌ Run setup commands manually                 |
+| Starting work on Node project     | **`setup-node`**               | ❌ Run npm/yarn manually                       |
+| Starting work on Python project   | **`setup-python`**             | ❌ Run pip/venv manually                       |
+| Writing Playwright E2E tests      | **`playwright-writing`**       | ❌ Write tests without best practices          |
+| Reviewing Playwright tests        | **`playwright-reviewing`**     | ❌ Review without checking violations          |
+| Creating Grafana dashboards       | **`grafana-telemetry-expert`** | ❌ Write dashboards without best practices     |
 
 ---
 
@@ -109,6 +110,10 @@ BEFORE TAKING ANY ACTION:
 
 □ Am I reviewing Playwright test code?
   └─> YES → Use playwright-reviewing skill for audit
+  └─> NO → Continue
+
+□ Am I creating or modifying Grafana dashboards?
+  └─> YES → Use grafana-telemetry-expert agent for patterns
   └─> NO → Continue
 ```
 
@@ -1075,6 +1080,54 @@ These skills create different types of technical documentation following the Di�
 - Two modes: Create (generate new) and Verify (audit existing)
 
 **Based on:** Technical Documentation Expert verification patterns
+
+---
+
+## Grafana & Monitoring Skills
+
+### `grafana-telemetry-expert` - Grafana Dashboard Development Agent
+
+**When to use:** Creating or modifying Grafana dashboards in grafana-telemetry repository
+
+**What it does:**
+
+- Coordinates specialized dashboard skills (TRON, RMS, etc.)
+- Routes requests to appropriate skill based on team/domain
+- Provides dashboard architecture patterns (grafanalib, axon_helpers)
+- Enforces best practices (health overview, alert annotations, thresholds)
+- Panel selection guide (stat panels, graphs, bar gauges)
+- Common issue resolution (Kafka metrics, deployment types)
+
+**Coordinated Skills:**
+
+- `tron-dashboard-creating` - TRON team consumer dashboards
+- _(Future)_ `rms-dashboard-creating` - General RMS dashboards
+- _(Future)_ `alert-template-creating` - Prometheus alert rules
+
+**Based on:** Grafana docs, KubeCon "Foolproof K8s Dashboards", USE/RED methods
+
+---
+
+### `tron-dashboard-creating` - TRON Consumer Dashboards
+
+**When to use:** Creating dashboards for TRON team (task metadata, RQ rules manager, Kafka consumers)
+
+**What it does:**
+
+- Health overview panels for on-call triage (6 stat panels + timeline)
+- ConsumerMetrics class for Kafka consumer dashboards
+- Service-specific alert annotations (NOT generic patterns)
+- Internal vs Customer deployment type separation
+- Kafka lag queries (handles missing axon_cluster label)
+- Threshold integration with alert rules
+
+**Key patterns:**
+
+- Uses `axon_helpers.rms_helpers.ConsumerMetrics` class
+- Separates internal/customer with filter tags
+- Alert pattern: `RMS.*TaskMetadataSvc.*|RMS.*RQ.*Rule.*Manager.*`
+
+**Related Agent:** Use `grafana-telemetry-expert` for routing
 
 ---
 

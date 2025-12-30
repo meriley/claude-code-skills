@@ -39,6 +39,7 @@ Execute this command to detect the project type:
 ```
 
 Based on the detected files:
+
 - `package.json` → TypeScript/JavaScript project
 - `go.mod` → Go project
 - `requirements.txt` or `setup.py` → Python project
@@ -73,6 +74,12 @@ echo "$CHANGED_FILES" | grep -E "charts/|helm/|Chart\.yaml|values\.yaml|template
 
 # Check for Claude Code skill files
 echo "$CHANGED_FILES" | grep -E "skills/.*\.(md|MD)$" && echo "SKILL_FILES_FOUND=true"
+
+# Check for Claude Code agent files
+echo "$CHANGED_FILES" | grep -E "agents/.*\.md$" && echo "AGENT_FILES_FOUND=true"
+
+# Check for Grafana dashboard files
+echo "$CHANGED_FILES" | grep -E "\.dashboard\.py$" && echo "GRAFANA_DASHBOARDS_FOUND=true"
 
 # Check for Casbin authorization files
 echo "$CHANGED_FILES" | grep -E "casbin|policy\.csv|model\.conf" && echo "CASBIN_FILES_FOUND=true"
@@ -286,6 +293,37 @@ Review Claude Code skills for:
 - Testing/verification guidance
 ```
 
+### If Agent Files Found (`AGENT_FILES_FOUND`):
+
+Invoke the `skill-review` skill for ALL changed agent files (agents follow similar patterns to skills):
+
+```
+Review Claude Code agents for:
+- Frontmatter completeness (name, description, model)
+- Description with example invocations
+- Decision tree for routing to skills
+- Workflow patterns documented
+- Coordinated skills listed
+- When to use / when not to use sections
+```
+
+### If Grafana Dashboard Files Found (`GRAFANA_DASHBOARDS_FOUND`):
+
+Use the Task tool with `subagent_type=grafana-telemetry-expert`:
+
+```
+Review Grafana dashboard files for:
+- CRITICAL: Generic alert patterns (.*[Ll]ag.* instead of service-specific)
+- CRITICAL: Missing axon_cluster filter on alert annotations
+- HIGH: Kafka metrics with axon_cluster filter (Kafka metrics don't have this label)
+- HIGH: Missing health overview row for on-call triage
+- HIGH: Hardcoded thresholds (should use SLO constants)
+- MEDIUM: Internal/Customer not separated into distinct rows
+- MEDIUM: Missing ConsumerMetrics class usage for consumer dashboards
+- Check panel selection (stat for health, graph for trends)
+- Verify threshold integration with alert rules
+```
+
 ### If Casbin Files Found (`CASBIN_FILES_FOUND`):
 
 Invoke the `reviewing-casbin` skill for ALL changed Casbin files:
@@ -371,6 +409,12 @@ For EACH specialized review that was invoked, include a separate section:
 
 ## Claude Code Skill Review (if invoked)
 [Output from skill-review skill]
+
+## Claude Code Agent Review (if invoked)
+[Output from skill-review skill for agent files]
+
+## Grafana Dashboard Review (if invoked)
+[Output from grafana-telemetry-expert agent]
 
 ## Casbin Authorization Review (if invoked)
 [Output from reviewing-casbin skill]
