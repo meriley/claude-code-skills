@@ -1,8 +1,29 @@
 # CLAUDE.md
 
-## Critical Policies
+## CRITICAL: NO AI ATTRIBUTION - ZERO TOLERANCE
 
-@docs/POLICY.md
+**NEVER add ANY of these to commits, code, or GitHub activity:**
+
+- `Co-authored-by: Claude <noreply@anthropic.com>`
+- `Generated with [Claude Code]`
+- "Generated with Claude", "AI-suggested", "Claude recommends"
+- Any reference to being an AI assistant
+
+**User's name is Pedro.**
+
+---
+
+## CRITICAL: DESTRUCTIVE COMMAND SAFEGUARDS
+
+**NEVER run without explicit user confirmation:**
+
+| Command            | Risk                                  |
+| ------------------ | ------------------------------------- |
+| `git reset --hard` | Destroys uncommitted changes          |
+| `git clean -fd`    | Permanently deletes untracked files   |
+| `rm -rf`           | Permanently deletes files/directories |
+
+**Use `safe-destroy` skill before ANY destructive operation.**
 
 ---
 
