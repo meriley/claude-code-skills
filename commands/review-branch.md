@@ -89,6 +89,9 @@ echo "$CHANGED_FILES" | grep -E "\.mdc$" && echo "CURSOR_RULES_FOUND=true"
 
 # Check for PRD/spec documentation files
 echo "$CHANGED_FILES" | grep -iE "prd|spec|requirements" | grep -E "\.md$" && echo "SPEC_DOCS_FOUND=true"
+
+# Check for OBS plugin files (C/C++ with OBS patterns)
+echo "$CHANGED_FILES" | grep -E "\.(c|h|cpp|hpp)$" && ls -1 CMakeLists.txt 2>/dev/null | grep -q . && grep -l "obs-module\|obs_module\|OBS_DECLARE_MODULE" *.c *.h 2>/dev/null && echo "OBS_PLUGIN_FOUND=true"
 ```
 
 Track which specialized reviews are needed based on the detection results.
@@ -350,6 +353,25 @@ Review Cursor rules for:
 - File length and organization
 ```
 
+### If OBS Plugin Files Found (`OBS_PLUGIN_FOUND`):
+
+Invoke the `obs-plugin-reviewing` skill for ALL changed C/C++ files:
+
+```
+Review OBS plugin code for:
+- CRITICAL: Memory leaks (missing bfree, obs_data_release, etc.)
+- CRITICAL: Thread safety violations (UI calls from non-UI thread)
+- CRITICAL: Missing null checks on OBS API returns
+- HIGH: Incorrect obs_source_info callback signatures
+- HIGH: Missing cleanup in destroy callbacks
+- HIGH: Audio buffer handling issues (sample alignment, format)
+- MEDIUM: Property callback patterns
+- MEDIUM: Settings persistence (defaults, get/set)
+- Check module registration (OBS_DECLARE_MODULE, obs_module_load)
+- Verify source/filter lifecycle management
+- Review real-time audio processing (obs_audio_data handling)
+```
+
 ### If Spec/PRD Docs Found (`SPEC_DOCS_FOUND`):
 
 Invoke the appropriate documentation review skill:
@@ -421,6 +443,9 @@ For EACH specialized review that was invoked, include a separate section:
 
 ## Cursor Rules Review (if invoked)
 [Output from cursor-rules-review skill]
+
+## OBS Plugin Review (if invoked)
+[Output from obs-plugin-reviewing skill]
 
 ## Documentation Review (if invoked)
 [Output from prd-reviewing / feature-spec-reviewing / technical-spec-reviewing]
