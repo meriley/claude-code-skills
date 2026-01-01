@@ -17,3 +17,7 @@
 # Keep agents directory
 !agents/
 !agents/**
+
+# Keep docs directory (modular CLAUDE.md components)
+!docs/
+!docs/**
