@@ -34,6 +34,7 @@ Read the entire PRD and assess structural completeness:
 
 ```markdown
 Initial Assessment Checklist:
+
 - [ ] Document has clear title and metadata
 - [ ] Problem statement section exists
 - [ ] User stories are present
@@ -44,6 +45,7 @@ Initial Assessment Checklist:
 ```
 
 **Red Flags:**
+
 - Document is mostly implementation details
 - No user-focused problem statement
 - Missing "out of scope" section
@@ -55,6 +57,7 @@ Evaluate the problem statement:
 
 ```markdown
 Problem Validation Questions:
+
 1. Is this a real user problem (not a solution in disguise)?
 2. Who experiences this problem? (Specific personas)
 3. Is the impact quantified or explained?
@@ -77,6 +80,7 @@ Evaluate each user story against INVEST criteria:
 
 ```markdown
 User Story Checklist:
+
 - [ ] Follows "As a... I want... So that..." format
 - [ ] User type is specific (not just "user")
 - [ ] Goal is achievable and clear
@@ -101,6 +105,7 @@ Evaluate acceptance criteria for testability:
 
 ```markdown
 Criteria Quality Checklist:
+
 - [ ] Uses Given/When/Then or clear checklist format
 - [ ] Covers happy path scenario
 - [ ] Covers error/edge cases
@@ -130,6 +135,7 @@ Evaluate scope boundaries:
 
 ```markdown
 Scope Validation:
+
 - [ ] In-scope items are clearly listed
 - [ ] Out-of-scope items are explicitly stated
 - [ ] Each exclusion has a reason
@@ -139,6 +145,7 @@ Scope Validation:
 ```
 
 **Scope Smell Test:**
+
 - If in-scope list seems endless → Scope creep risk
 - If out-of-scope is empty → Boundaries not thought through
 - If dependencies have no status → Delivery risk
@@ -150,6 +157,7 @@ Evaluate implementation feasibility:
 
 ```markdown
 Feasibility Questions:
+
 1. Are the technical dependencies realistic?
 2. Is the timeline achievable given scope?
 3. Are there obvious technical blockers?
@@ -159,6 +167,7 @@ Feasibility Questions:
 ```
 
 **Red Flags:**
+
 - No engineering input on timeline
 - Dependencies on unavailable APIs
 - Compliance requirements not addressed
@@ -170,6 +179,7 @@ Evaluate success metrics:
 
 ```markdown
 Metrics Checklist:
+
 - [ ] Metrics are measurable (not subjective)
 - [ ] Current baseline is provided
 - [ ] Target is specific and timebound
@@ -193,6 +203,7 @@ Identify what could go wrong:
 
 ```markdown
 Risk Categories to Consider:
+
 1. Technical: Can we build it?
 2. Timeline: Can we build it in time?
 3. Resource: Do we have the people?
@@ -206,36 +217,58 @@ Risk Categories to Consider:
 
 Compile findings into structured report (see template below).
 
+### Step 10: Implementation Plan Review (Optional)
+
+If PRD includes an Implementation Plan section (added by `prd-implementation-planning` skill):
+
+```markdown
+Implementation Plan Validation:
+
+- [ ] Skill Requirements table covers all technical domains
+- [ ] Tasks map to user stories (US-1, US-2, etc.)
+- [ ] Each task has assigned skill
+- [ ] Dependencies form valid DAG (no cycles)
+- [ ] Estimates are reasonable (no XL tasks - should be split)
+- [ ] P0 tasks form minimal critical path
+- [ ] Progress tracker initialized with all tasks
+```
+
+**Note:** This step is only applicable for PRDs that have gone through the `prd-implementation-planning` skill. Skip if no Implementation Plan section exists.
+
 ## Severity Levels
 
-| Level | Definition | Action |
-|-------|------------|--------|
-| **BLOCKER** | Cannot approve PRD | Must fix before any approval |
-| **CRITICAL** | Significant gaps | Should fix before implementation |
-| **MAJOR** | Notable issues | Should fix soon, can start work |
-| **MINOR** | Small improvements | Nice to have, low priority |
+| Level        | Definition         | Action                           |
+| ------------ | ------------------ | -------------------------------- |
+| **BLOCKER**  | Cannot approve PRD | Must fix before any approval     |
+| **CRITICAL** | Significant gaps   | Should fix before implementation |
+| **MAJOR**    | Notable issues     | Should fix soon, can start work  |
+| **MINOR**    | Small improvements | Nice to have, low priority       |
 
 ### Severity Examples
 
 **BLOCKER:**
+
 - No problem statement (or it's actually a solution)
 - No user stories
 - Contradictory requirements
 - Missing critical stakeholder sign-off
 
 **CRITICAL:**
+
 - Ambiguous acceptance criteria
 - Missing key user stories for core flow
 - No success metrics
 - Unrealistic timeline without rationale
 
 **MAJOR:**
+
 - Vague problem statement (exists but unclear)
 - Missing edge case handling
 - Incomplete out-of-scope section
 - Dependencies without owners
 
 **MINOR:**
+
 - Formatting inconsistencies
 - Could add more detail to some areas
 - Missing mockups (when not blocking)
@@ -265,42 +298,49 @@ Compile findings into structured report (see template below).
 ## Findings by Severity
 
 ### Blockers (Must Fix Before Approval)
+
 - [ ] [Location] [Issue description] → [Recommendation]
 
 ### Critical (Should Fix Before Implementation)
+
 - [ ] [Location] [Issue description] → [Recommendation]
 
 ### Major (Fix Soon)
+
 - [ ] [Location] [Issue description] → [Recommendation]
 
 ### Minor (Nice to Have)
+
 - [ ] [Location] [Issue description] → [Recommendation]
 
 ---
 
 ## Section Ratings
 
-| Section | Rating | Notes |
-|---------|--------|-------|
-| Problem Statement | [Strong/Adequate/Weak/Missing] | [Brief note] |
-| User Stories | [Strong/Adequate/Weak/Missing] | [Brief note] |
+| Section             | Rating                         | Notes        |
+| ------------------- | ------------------------------ | ------------ |
+| Problem Statement   | [Strong/Adequate/Weak/Missing] | [Brief note] |
+| User Stories        | [Strong/Adequate/Weak/Missing] | [Brief note] |
 | Acceptance Criteria | [Strong/Adequate/Weak/Missing] | [Brief note] |
-| Scope | [Strong/Adequate/Weak/Missing] | [Brief note] |
-| Success Metrics | [Strong/Adequate/Weak/Missing] | [Brief note] |
+| Scope               | [Strong/Adequate/Weak/Missing] | [Brief note] |
+| Success Metrics     | [Strong/Adequate/Weak/Missing] | [Brief note] |
 
 ---
 
 ## Strengths
+
 - [What the PRD does well]
 - [What the PRD does well]
 
 ## Risks Identified
+
 1. [Risk description] - Mitigation: [Suggestion]
 2. [Risk description] - Mitigation: [Suggestion]
 
 ---
 
 ## Questions for Author
+
 1. [Clarifying question]
 2. [Clarifying question]
 
@@ -321,10 +361,12 @@ Compile findings into structured report (see template below).
 Well-structured PRD with clear problem statement and comprehensive user stories. Minor gaps in edge case coverage for acceptance criteria. Ready for engineering review after addressing minor items.
 
 **Findings:**
+
 - MINOR: US-3 acceptance criteria could specify timeout behavior
 - MINOR: Consider adding "forgot password" to explicit out-of-scope
 
 **Strengths:**
+
 - Clear, quantified problem statement
 - User stories follow INVEST criteria
 - Good scope boundaries
@@ -339,6 +381,7 @@ Well-structured PRD with clear problem statement and comprehensive user stories.
 PRD has good structure but several critical gaps that would cause implementation ambiguity. Recommend revision and re-review before approval.
 
 **Findings:**
+
 - BLOCKER: No acceptance criteria for any user stories
 - CRITICAL: "Make search faster" is not testable - needs specific targets
 - CRITICAL: No success metrics defined
@@ -357,6 +400,7 @@ PRD has good structure but several critical gaps that would cause implementation
 Document describes a solution rather than a user problem. Recommending restart from problem discovery phase.
 
 **Findings:**
+
 - BLOCKER: "We need a new dashboard" is a solution, not a problem
 - BLOCKER: No user stories - only implementation requirements
 - CRITICAL: Success metrics are vanity metrics (page views)
@@ -367,18 +411,20 @@ Document describes a solution rather than a user problem. Recommending restart f
 ## Integration with Other Skills
 
 **Works With:**
+
 - `prd-writing` - Review output from PRD creation
 - `check-history` - Gather context before reviewing
 
 **Leads To:**
-- `sparc-planning` - After PRD approved
+
+- `prd-implementation-planning` - Map PRD to skills and create task list
+- `sparc-planning` - After PRD approved (for complex tasks)
 - `feature-spec-writing` - Break approved PRD into features
 
 ## Resources
 
 - See CHECKLIST.md for comprehensive review checklist
 - See EXAMPLES.md for detailed review examples
-
 
 ---
 

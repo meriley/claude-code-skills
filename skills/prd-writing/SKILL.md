@@ -34,6 +34,7 @@ Invoke `check-history` to understand project context, then ask clarifying questi
 
 ```markdown
 Questions to ask:
+
 1. What problem are we solving? (Focus on user pain, not solution)
 2. Who experiences this problem? (Target users/personas)
 3. What's the business impact? (Revenue, retention, efficiency)
@@ -46,12 +47,14 @@ Questions to ask:
 Define the user problem clearly. Focus on the problem, not the solution.
 
 **Good problem statement:**
+
 ```
 Users abandon checkout when shipping costs are unclear,
 resulting in 23% cart abandonment rate.
 ```
 
 **Bad problem statement:**
+
 ```
 We need to add a shipping calculator widget.
 (This is a solution, not a problem)
@@ -66,6 +69,7 @@ Write user stories following the standard format and INVEST criteria:
 As a [user type], I want [goal], so that [benefit]
 
 **INVEST Criteria:**
+
 - Independent: Can be delivered separately
 - Negotiable: Details can be discussed
 - Valuable: Delivers user value
@@ -75,6 +79,7 @@ As a [user type], I want [goal], so that [benefit]
 ```
 
 **Example:**
+
 ```markdown
 As a **shopper**,
 I want **to see shipping costs before checkout**,
@@ -95,6 +100,7 @@ And I can proceed to checkout with the selected option
 ```
 
 **Include edge cases:**
+
 - What happens if address is invalid?
 - What if shipping is unavailable to that location?
 - What about free shipping thresholds?
@@ -105,26 +111,31 @@ Explicitly define scope boundaries:
 
 ```markdown
 ## In Scope
+
 - Real-time shipping cost calculation on product page
 - Integration with 3 carriers (UPS, FedEx, USPS)
 - Address validation before calculation
 
 ## Out of Scope (v1)
+
 - International shipping (future consideration)
 - Shipping insurance options (nice to have)
 - Multiple package calculations (complexity)
 
 ## Dependencies
+
 - Carrier API integrations (external)
 - Address validation service (internal)
 - Cart service updates (internal)
 
 ## Assumptions
+
 - Carriers provide real-time API access
 - 95% of orders are domestic
 - Users have valid US addresses
 
 ## Open Questions
+
 - [ ] Should we cache shipping rates? For how long?
 - [ ] What's the fallback if carrier API is down?
 ```
@@ -136,18 +147,20 @@ Define measurable success criteria with leading and lagging indicators:
 ```markdown
 ## Key Results
 
-| Metric | Current | Target | Measurement |
-|--------|---------|--------|-------------|
-| Cart abandonment | 23% | 18% | Analytics |
-| Shipping page views | 0 | 50K/month | Analytics |
-| Support tickets (shipping) | 200/week | 100/week | Zendesk |
+| Metric                     | Current  | Target    | Measurement |
+| -------------------------- | -------- | --------- | ----------- |
+| Cart abandonment           | 23%      | 18%       | Analytics   |
+| Shipping page views        | 0        | 50K/month | Analytics   |
+| Support tickets (shipping) | 200/week | 100/week  | Zendesk     |
 
 ## Leading Indicators (measure early)
+
 - Shipping calculator usage rate
 - Address validation success rate
 - Time to calculate shipping
 
 ## Guardrails (don't break these)
+
 - Page load time < 3s
 - Checkout conversion rate >= current
 - Error rate < 1%
@@ -172,6 +185,7 @@ Generate the PRD using the template in TEMPLATE.md. Ensure:
 **Input:** "Users are abandoning checkout because they don't know shipping costs"
 
 **Problem Statement:**
+
 ```
 Users abandon checkout when shipping costs are unclear, resulting in
 23% cart abandonment at the shipping step. User research shows 67%
@@ -179,6 +193,7 @@ want to see costs before reaching checkout.
 ```
 
 **User Stories:**
+
 ```
 US-1: As a shopper, I want to see shipping costs on the product page,
       so that I know total cost before adding to cart.
@@ -191,6 +206,7 @@ US-3: As a shopper, I want to save my shipping preference,
 ```
 
 **Acceptance Criteria (US-1):**
+
 ```gherkin
 Given I am on a product page
 And I enter my zip code
@@ -206,6 +222,7 @@ And each option shows carrier, price, and delivery estimate
 **Input:** "Admins need to control what team members can access"
 
 **Problem Statement:**
+
 ```
 Organizations cannot control access granularly, forcing all-or-nothing
 permissions. This blocks enterprise sales where security compliance
@@ -213,6 +230,7 @@ requires role-based access. 15 deals ($2.4M) blocked by this gap.
 ```
 
 **User Stories:**
+
 ```
 US-1: As an admin, I want to create custom roles,
       so that I can match our organization's structure.
@@ -225,6 +243,7 @@ US-3: As an admin, I want to audit role changes,
 ```
 
 **Scope:**
+
 ```
 In Scope:
 - Role creation with granular permissions
@@ -244,6 +263,7 @@ Out of Scope:
 **Input:** "Users want to know immediately when money moves"
 
 **Problem Statement:**
+
 ```
 Users discover unauthorized transactions too late, averaging 3 days
 to notice fraudulent charges. Real-time alerts could reduce fraud
@@ -251,6 +271,7 @@ losses by 40% based on industry benchmarks.
 ```
 
 **User Stories:**
+
 ```
 US-1: As a cardholder, I want instant notifications for transactions,
       so that I can spot fraud immediately.
@@ -263,6 +284,7 @@ US-3: As a cardholder, I want to dispute directly from alerts,
 ```
 
 **Success Metrics:**
+
 ```
 | Metric | Current | Target |
 |--------|---------|--------|
@@ -274,30 +296,35 @@ US-3: As a cardholder, I want to dispute directly from alerts,
 ## Anti-Patterns to Avoid
 
 ### Solution-First Thinking
+
 ```
 ❌ "We need to build a widget that shows shipping"
 ✅ "Users abandon checkout when shipping costs are unclear"
 ```
 
 ### Epic-Sized Stories
+
 ```
 ❌ "As a user, I want a complete shipping experience"
 ✅ "As a user, I want to see shipping costs before checkout"
 ```
 
 ### Vague Acceptance Criteria
+
 ```
 ❌ "Shipping should be fast"
 ✅ "Shipping calculation completes within 2 seconds (p95)"
 ```
 
 ### Missing Scope Boundaries
+
 ```
 ❌ [No out-of-scope section]
 ✅ "Out of Scope: International shipping, insurance options"
 ```
 
 ### Vanity Metrics
+
 ```
 ❌ "Increase page views"
 ✅ "Reduce cart abandonment from 23% to 18%"
@@ -306,14 +333,18 @@ US-3: As a cardholder, I want to dispute directly from alerts,
 ## Integration with Other Skills
 
 **Invokes:**
+
 - `check-history` - Gather project context before writing
 
 **Works With:**
+
 - `prd-reviewing` - Review and validate completed PRDs
 - `feature-spec-writing` - Break PRD into detailed feature specs
 
 **Followed By:**
-- `sparc-planning` - Create technical implementation plan
+
+- `prd-implementation-planning` - Map PRD to skills and create task list
+- `sparc-planning` - Create technical implementation plan (for complex tasks)
 - `technical-spec-writing` - Design system architecture
 
 ## Output Validation
@@ -332,7 +363,6 @@ Before finalizing the PRD:
 
 - See TEMPLATE.md for the complete PRD output format
 - See REFERENCE.md for detailed guidance and examples
-
 
 ---
 

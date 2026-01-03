@@ -11,35 +11,32 @@ import os
 # Protected file patterns
 PROTECTED_PATTERNS = [
     # Environment files
-    (r'\.env($|\.)', "Environment files contain secrets"),
-    (r'\.env\.local$', "Local environment files contain secrets"),
-    (r'\.env\..*$', "Environment files contain secrets"),
-
+    (r"\.env($|\.)", "Environment files contain secrets"),
+    (r"\.env\.local$", "Local environment files contain secrets"),
+    (r"\.env\..*$", "Environment files contain secrets"),
     # Lock files (auto-generated)
-    (r'package-lock\.json$', "Lock file is auto-generated"),
-    (r'yarn\.lock$', "Lock file is auto-generated"),
-    (r'pnpm-lock\.yaml$', "Lock file is auto-generated"),
-    (r'Cargo\.lock$', "Lock file is auto-generated"),
-    (r'poetry\.lock$', "Lock file is auto-generated"),
-    (r'go\.sum$', "Lock file is auto-generated"),
-    (r'Gemfile\.lock$', "Lock file is auto-generated"),
-
+    (r"package-lock\.json$", "Lock file is auto-generated"),
+    (r"yarn\.lock$", "Lock file is auto-generated"),
+    (r"pnpm-lock\.yaml$", "Lock file is auto-generated"),
+    (r"Cargo\.lock$", "Lock file is auto-generated"),
+    (r"poetry\.lock$", "Lock file is auto-generated"),
+    (r"go\.sum$", "Lock file is auto-generated"),
+    (r"Gemfile\.lock$", "Lock file is auto-generated"),
     # Git internals
-    (r'\.git/', "Git internal files should not be edited"),
-    (r'\.git$', "Git internal files should not be edited"),
-
+    (r"\.git/", "Git internal files should not be edited"),
+    (r"\.git$", "Git internal files should not be edited"),
     # Other sensitive files
-    (r'\.ssh/', "SSH keys are sensitive"),
-    (r'id_rsa', "SSH private keys are sensitive"),
-    (r'\.pem$', "Certificate files are sensitive"),
-    (r'\.key$', "Key files are sensitive"),
+    (r"\.ssh/", "SSH keys are sensitive"),
+    (r"id_rsa", "SSH private keys are sensitive"),
+    (r"\.pem$", "Certificate files are sensitive"),
+    (r"\.key$", "Key files are sensitive"),
 ]
 
 # Exceptions (patterns that are allowed despite matching above)
 ALLOWED_PATTERNS = [
-    r'\.env\.example$',
-    r'\.env\.sample$',
-    r'\.env\.template$',
+    r"\.env\.example$",
+    r"\.env\.sample$",
+    r"\.env\.template$",
 ]
 
 try:
@@ -67,7 +64,9 @@ for pattern in ALLOWED_PATTERNS:
 
 # Check protected patterns
 for pattern, reason in PROTECTED_PATTERNS:
-    if re.search(pattern, file_name, re.IGNORECASE) or re.search(pattern, file_path, re.IGNORECASE):
+    if re.search(pattern, file_name, re.IGNORECASE) or re.search(
+        pattern, file_path, re.IGNORECASE
+    ):
         print("BLOCKED: Protected file modification.", file=sys.stderr)
         print("", file=sys.stderr)
         print(f"File: {file_path}", file=sys.stderr)
