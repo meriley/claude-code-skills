@@ -1,5 +1,5 @@
 ---
-name: Go Development Setup
+name: setup-go
 description: Sets up Go development environment with proper tooling, linting, testing, and dependencies. Runs go mod tidy, configures golangci-lint, sets up testing framework, and verifies build.
 version: 1.0.0
 ---
@@ -7,9 +7,11 @@ version: 1.0.0
 # Go Development Setup Skill
 
 ## Purpose
+
 Quickly set up and verify a Go development environment with all necessary tooling.
 
 ## When to Use
+
 - Starting work on a Go project
 - After cloning a Go repository
 - When setting up CI/CD for Go
@@ -26,6 +28,7 @@ go version
 **Expected**: Go 1.20 or higher
 
 **If not installed:**
+
 ```
 ❌ Go not found
 
@@ -46,6 +49,7 @@ ls go.mod
 ```
 
 **If doesn't exist:**
+
 ```
 No go.mod found. Initialize Go module:
 
@@ -63,10 +67,12 @@ go mod tidy
 ```
 
 **Explanation:**
+
 - `go mod download`: Downloads all dependencies
 - `go mod tidy`: Removes unused dependencies, adds missing ones
 
 **Report:**
+
 ```
 ✅ Dependencies installed
 
@@ -78,11 +84,13 @@ Go version: 1.21
 ### Step 4: Setup golangci-lint
 
 **Check if installed:**
+
 ```bash
 golangci-lint version
 ```
 
 **If not installed:**
+
 ```bash
 # macOS/Linux
 brew install golangci-lint
@@ -108,7 +116,7 @@ linters:
     - misspell
     - gocritic
     - unparam
-    
+
 linters-settings:
   errcheck:
     check-blank: true
@@ -116,17 +124,18 @@ linters-settings:
     check-shadowing: true
   revive:
     severity: warning
-  
+
 issues:
   exclude-use-default: false
   max-same-issues: 0
-  
+
 run:
   timeout: 5m
   tests: true
 ```
 
 **Run linter to verify:**
+
 ```bash
 golangci-lint run
 ```
@@ -134,26 +143,31 @@ golangci-lint run
 ### Step 5: Setup Testing
 
 **Run existing tests:**
+
 ```bash
 go test ./... -v
 ```
 
 **Setup test coverage:**
+
 ```bash
 go test ./... -cover -coverprofile=coverage.out
 ```
 
 **View coverage:**
+
 ```bash
 go tool cover -func=coverage.out
 ```
 
 **Generate HTML coverage report:**
+
 ```bash
 go tool cover -html=coverage.out -o coverage.html
 ```
 
 **Report:**
+
 ```
 ✅ Tests completed
 
@@ -170,6 +184,7 @@ go build ./...
 ```
 
 **Report:**
+
 ```
 ✅ Build successful
 
@@ -177,6 +192,7 @@ All packages compile without errors.
 ```
 
 **If build fails:**
+
 ```
 ❌ Build failed
 
@@ -191,11 +207,13 @@ Common issues:
 ### Step 7: Setup Code Generation (if needed)
 
 **Check for generate directives:**
+
 ```bash
 grep -r "//go:generate" . --include="*.go"
 ```
 
 **If found, run:**
+
 ```bash
 go generate ./...
 ```
@@ -203,6 +221,7 @@ go generate ./...
 ### Step 8: Setup Makefile (Optional but Recommended)
 
 **Check if Makefile exists:**
+
 ```bash
 ls Makefile
 ```
@@ -240,6 +259,7 @@ all: fmt lint test build
 ```
 
 **Verify Makefile:**
+
 ```bash
 make all
 ```
@@ -304,6 +324,7 @@ Ready to start development!
 ## Common Go Commands Reference
 
 ### Dependency Management
+
 ```bash
 go mod init <module>        # Initialize new module
 go mod download             # Download dependencies
@@ -315,6 +336,7 @@ go get -u <package>         # Update dependency
 ```
 
 ### Building
+
 ```bash
 go build                    # Build current package
 go build ./...              # Build all packages
@@ -323,6 +345,7 @@ go install                  # Build and install binary
 ```
 
 ### Testing
+
 ```bash
 go test ./...               # Run all tests
 go test -v ./...            # Verbose output
@@ -333,6 +356,7 @@ go test -run TestName       # Run specific test
 ```
 
 ### Code Quality
+
 ```bash
 go fmt ./...                # Format code
 goimports -w .              # Fix imports
@@ -342,6 +366,7 @@ go mod tidy                 # Clean dependencies
 ```
 
 ### Debugging
+
 ```bash
 go build -gcflags="-m"      # Escape analysis
 go build -race              # Race detector
@@ -355,7 +380,9 @@ go tool pprof cpu.prof      # Analyze profile
 ## Troubleshooting
 
 ### Issue: "go: command not found"
+
 **Solution**: Go not installed or not in PATH
+
 ```bash
 # macOS
 brew install go
@@ -365,20 +392,26 @@ echo $PATH | grep go
 ```
 
 ### Issue: "cannot find package"
+
 **Solution**: Missing dependency
+
 ```bash
 go mod download
 go mod tidy
 ```
 
 ### Issue: "import cycle not allowed"
+
 **Solution**: Circular dependency between packages
+
 - Review package dependencies
 - Refactor to break the cycle
 - Consider extracting shared code to new package
 
 ### Issue: "golangci-lint: command not found"
+
 **Solution**: Linter not installed
+
 ```bash
 go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 
@@ -387,7 +420,9 @@ export PATH=$PATH:$(go env GOPATH)/bin
 ```
 
 ### Issue: Tests failing with "race condition detected"
+
 **Solution**: Concurrent access to shared data
+
 ```bash
 # Run with race detector to identify issue
 go test -race ./...
@@ -413,5 +448,6 @@ go test -race ./...
 ## Integration with Other Skills
 
 This skill may be invoked by:
+
 - **`quality-check`** - When checking Go code quality
 - **`run-tests`** - When running Go tests

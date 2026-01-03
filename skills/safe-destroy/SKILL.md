@@ -1,5 +1,5 @@
 ---
-name: Safe Destructive Operations
+name: safe-destroy
 description: ⚠️ MANDATORY - YOU MUST invoke this skill before ANY destructive operation. Safety protocol for destructive git/file operations. Lists affected files, warns about data loss, suggests safe alternatives, requires explicit double confirmation. NEVER run destructive commands without invoking this skill.
 version: 1.0.1
 ---
@@ -9,11 +9,13 @@ version: 1.0.1
 ## ⚠️ MANDATORY SKILL - YOU MUST INVOKE THIS
 
 ## Purpose
+
 Prevent accidental data loss by requiring explicit confirmation before any destructive operation, showing what will be lost, and suggesting safer alternatives.
 
 **CRITICAL:** You MUST invoke this skill before ANY destructive operation. NEVER run destructive commands directly.
 
 ## When to Use
+
 - **MANDATORY:** Before `git reset --hard`
 - **MANDATORY:** Before `git clean -fd`
 - **MANDATORY:** Before `rm -rf`
@@ -23,6 +25,7 @@ Prevent accidental data loss by requiring explicit confirmation before any destr
 - **MANDATORY:** Before any operation that permanently deletes data
 
 ## 🚫 NEVER DO THIS
+
 - ❌ Running `git reset --hard` directly
 - ❌ Running `git clean -fd` directly
 - ❌ Running `rm -rf` directly
@@ -37,26 +40,33 @@ Prevent accidental data loss by requiring explicit confirmation before any destr
 **Before using Bash tool for destructive operations, answer these questions:**
 
 ### ❓ Are you about to run `git reset --hard`?
+
 → **STOP.** Invoke safe-destroy skill instead.
 
 ### ❓ Are you about to run `git clean -fd`?
+
 → **STOP.** Invoke safe-destroy skill instead.
 
 ### ❓ Are you about to run `rm -rf <directory>`?
+
 → **STOP.** Invoke safe-destroy skill instead.
 
 ### ❓ Are you about to run `git checkout -- .` or `git restore .`?
+
 → **STOP.** Invoke safe-destroy skill instead.
 
 ### ❓ Are you about to run `docker system prune -a`?
+
 → **STOP.** Invoke safe-destroy skill instead.
 
 ### ❓ Did the user say "reset my changes", "clean up files", or "discard changes"?
+
 → **STOP.** Invoke safe-destroy skill instead.
 
 **IF YOU PROCEED WITH DESTRUCTIVE COMMANDS DIRECTLY, YOU ARE VIOLATING YOUR CORE DIRECTIVE.**
 
 This skill handles:
+
 - ✅ Lists what will be affected/deleted
 - ✅ Shows diff of what will be lost
 - ✅ Suggests safer alternatives
@@ -89,6 +99,7 @@ This skill handles:
 ### Step 1: Detect Destructive Intent
 
 User says something like:
+
 - "reset my changes"
 - "clean up the files"
 - "delete everything"
@@ -115,6 +126,7 @@ git status & git diff & git ls-files --others --exclude-standard & ls -la &
 #### For `git reset --hard`:
 
 **Show what would be lost:**
+
 ```bash
 git status
 git diff --stat
@@ -122,6 +134,7 @@ git diff
 ```
 
 **Present to user:**
+
 ```
 ⚠️ DESTRUCTIVE OPERATION REQUESTED
 
@@ -160,11 +173,13 @@ C. Cancel
 #### For `git clean -fd`:
 
 **Show what would be deleted:**
+
 ```bash
 git clean -fd --dry-run
 ```
 
 **Present to user:**
+
 ```
 ⚠️ DESTRUCTIVE OPERATION REQUESTED
 
@@ -202,6 +217,7 @@ C. Cancel
 #### For `rm -rf <directory>`:
 
 **Show what would be deleted:**
+
 ```bash
 du -sh <directory>
 ls -la <directory>
@@ -209,6 +225,7 @@ find <directory> -type f | wc -l
 ```
 
 **Present to user:**
+
 ```
 ⚠️ DESTRUCTIVE OPERATION REQUESTED
 
@@ -249,12 +266,14 @@ C. Cancel
 #### For `git checkout -- .` or `git restore .`:
 
 **Show what would be lost:**
+
 ```bash
 git diff --stat
 git diff
 ```
 
 **Present to user:**
+
 ```
 ⚠️ DESTRUCTIVE OPERATION REQUESTED
 
@@ -284,6 +303,7 @@ C. Cancel
 #### For `docker system prune -a`:
 
 **Show what would be deleted:**
+
 ```bash
 docker system df
 docker images
@@ -291,6 +311,7 @@ docker ps -a
 ```
 
 **Present to user:**
+
 ```
 ⚠️ DESTRUCTIVE OPERATION REQUESTED
 
@@ -324,22 +345,26 @@ C. Cancel
 ### Step 4: ASK - Get Explicit Confirmation
 
 **Required response:**
+
 - User MUST type the specific command they want to execute
 - OR explicitly say "proceed with [operation]"
 - OR choose option B from the menu
 
 **Examples of VALID confirmation:**
+
 - "yes, run git reset --hard"
 - "proceed with permanent deletion"
 - "I understand, delete the files"
 - "B" (from the menu)
 
 **Examples of INVALID confirmation:**
+
 - "ok" (too vague)
 - "do it" (unclear what 'it' is)
 - "sure" (not explicit enough)
 
 **If confirmation ambiguous:**
+
 ```
 Please explicitly confirm by typing:
 "I want to run git reset --hard"
@@ -354,6 +379,7 @@ or select option B from the menu.
 **STOP all processing until user responds.**
 
 Do not:
+
 - Assume silence means approval
 - Interpret "looks good" as approval
 - Proceed after timeout
@@ -387,6 +413,7 @@ git reset --hard
 ```
 
 **Report result:**
+
 ```
 ✅ Operation completed
 
@@ -404,6 +431,7 @@ All uncommitted changes have been discarded.
 ### Instead of `git reset --hard`:
 
 **Option 1: Stash**
+
 ```bash
 git stash push -m "Saved before reset"
 # To recover later:
@@ -411,6 +439,7 @@ git stash pop
 ```
 
 **Option 2: Commit as WIP**
+
 ```bash
 git add .
 git commit -m "wip: save current work"
@@ -419,6 +448,7 @@ git reset HEAD~1
 ```
 
 **Option 3: Create backup branch**
+
 ```bash
 git branch backup-$(date +%s)
 git reset --hard
@@ -427,6 +457,7 @@ git reset --hard
 ### Instead of `git clean -fd`:
 
 **Option 1: Selective deletion**
+
 ```bash
 # Review first
 git clean -fd --dry-run
@@ -435,6 +466,7 @@ rm <specific-file>
 ```
 
 **Option 2: Move to backup**
+
 ```bash
 mkdir -p ../backup-$(date +%s)
 git ls-files --others --exclude-standard | xargs -I {} mv {} ../backup-$(date +%s)/
@@ -443,12 +475,14 @@ git ls-files --others --exclude-standard | xargs -I {} mv {} ../backup-$(date +%
 ### Instead of `rm -rf`:
 
 **Option 1: Move to trash**
+
 ```bash
 mkdir -p ~/.trash/$(date +%s)
 mv <directory> ~/.trash/$(date +%s)/
 ```
 
 **Option 2: Archive first**
+
 ```bash
 tar -czf backup-$(date +%s).tar.gz <directory>
 rm -rf <directory>
@@ -478,6 +512,7 @@ git cherry-pick <commit-hash>
 **No automatic recovery available.**
 
 Possibly recover from:
+
 - File system backups (Time Machine, etc.)
 - IDE local history
 - OS-level file recovery tools
@@ -485,6 +520,7 @@ Possibly recover from:
 ### For `rm -rf`:
 
 **Check if system has undelete:**
+
 ```bash
 # macOS Time Machine
 # Linux: check if trash-cli used
@@ -510,6 +546,7 @@ trash-list
 ## Quick Reference
 
 **Destructive command requested**
+
 1. STOP - Don't execute
 2. LIST - Show what will be lost
 3. ASK - Suggest safer alternatives

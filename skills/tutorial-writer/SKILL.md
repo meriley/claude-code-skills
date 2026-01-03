@@ -1,5 +1,5 @@
 ---
-name: Tutorial Writer
+name: tutorial-writer
 description: Creates beginner-friendly, learning-oriented tutorials following Diátaxis Tutorial pattern. Step-by-step guides with success criteria, time estimates, and complete working examples. Zero tolerance for fabricated APIs - all code verified against source.
 version: 1.0.0
 ---
@@ -23,6 +23,7 @@ Create comprehensive, beginner-friendly tutorials that take learners from zero t
 ## Diátaxis Framework: Tutorial
 
 **Tutorial Type Characteristics:**
+
 - **Learning-oriented** - Teaching, not just documenting
 - **Beginner-focused** - Takes learner from zero to working result
 - **Step-by-step** - Explicit, numbered steps with clear progression
@@ -33,6 +34,7 @@ Create comprehensive, beginner-friendly tutorials that take learners from zero t
 - **Complete examples** - Everything needed to succeed included
 
 **What NOT to Include:**
+
 - ❌ Complete API reference - Link to api-doc-writer docs
 - ❌ Problem-solving patterns - That's migration-guide-writer territory
 - ❌ Deep explanations of WHY - Link to explanation docs
@@ -41,6 +43,7 @@ Create comprehensive, beginner-friendly tutorials that take learners from zero t
 ## Critical Rules (Zero Tolerance)
 
 ### P0 - CRITICAL Violations (Must Fix)
+
 1. **Fabricated APIs** - Methods that don't exist in source code
 2. **Wrong Signatures** - Incorrect parameter types or names
 3. **Invalid Code** - Examples that won't compile or run
@@ -48,12 +51,14 @@ Create comprehensive, beginner-friendly tutorials that take learners from zero t
 5. **Untested Examples** - Code you haven't actually run
 
 ### P1 - HIGH Violations (Should Fix)
+
 6. **Too Advanced** - Assumes knowledge beginner doesn't have
 7. **No Prerequisites** - Doesn't state what's needed before starting
 8. **Missing Expected Output** - Doesn't show what success looks like
 9. **No Time Estimates** - Learner doesn't know how long it takes
 
 ### P2 - MEDIUM Violations
+
 10. **Too Much Explanation** - Getting into WHY when should focus on WHAT
 11. **Marketing Language** - Buzzwords instead of clear instructions
 
@@ -69,12 +74,14 @@ Create comprehensive, beginner-friendly tutorials that take learners from zero t
 **What they'll learn**: [Specific skill or capability]
 
 **Target audience**:
+
 - Experience level: [Complete beginner | Some experience | etc.]
 - Prerequisites: [What they need to know already]
 - Time to complete: [Realistic estimate]
 
 **Success criteria**:
 By the end, learner will be able to:
+
 - ✅ [Specific concrete outcome 1]
 - ✅ [Specific concrete outcome 2]
 - ✅ [Specific concrete outcome 3]
@@ -98,6 +105,7 @@ Read [source_files_for_apis]
 ```
 
 **Create API verification checklist:**
+
 ```markdown
 ## APIs to Use in Tutorial
 
@@ -111,6 +119,7 @@ All imports verified ✅
 ```
 
 **Test the example yourself:**
+
 ```bash
 # Create a test file with your tutorial code
 # Actually run it
@@ -123,6 +132,7 @@ All imports verified ✅
 **Break working example into logical steps:**
 
 **Principles for step breakdown:**
+
 1. **Start absurdly simple** - First step should be trivial (builds confidence)
 2. **One concept per step** - Don't introduce multiple new things at once
 3. **Clear success criteria** - Each step has verifiable outcome
@@ -130,26 +140,32 @@ All imports verified ✅
 5. **Progressive complexity** - Each step slightly harder than previous
 
 **Example step breakdown:**
+
 ```markdown
 ## Step Breakdown
 
 **Step 1**: Install and verify installation (5 min)
+
 - Success: See version number output
 - Introduces: Installation command
 
 **Step 2**: Create project structure (3 min)
+
 - Success: See project files created
 - Introduces: Project initialization
 
 **Step 3**: Write "Hello World" (5 min)
+
 - Success: See "Hello World" output
 - Introduces: Basic API usage
 
 **Step 4**: Add basic configuration (7 min)
+
 - Success: See configuration applied
 - Introduces: Config file
 
 **Step 5**: Add error handling (10 min)
+
 - Success: See graceful error message
 - Introduces: Error patterns
 
@@ -160,7 +176,7 @@ All imports verified ✅
 
 **Tutorial structure:**
 
-```markdown
+````markdown
 # Getting Started with [System/Feature]
 
 [Brief introduction - what they'll accomplish in 2-3 sentences]
@@ -175,12 +191,14 @@ All imports verified ✅
 - [Any other requirements]
 
 **Check your setup:**
+
 ```bash
 # Verify installations
 [command to check version]
 # Expected output:
 [what they should see]
 ```
+````
 
 ## What You'll Build
 
@@ -206,11 +224,13 @@ import "[actual/import/path]"
 ```
 
 **Run it:**
+
 ```bash
 [exact command to run the code]
 ```
 
 **Expected output:**
+
 ```
 [EXACT output they should see - copy from when you tested it]
 ```
@@ -230,11 +250,13 @@ import "[actual/import/path]"
 [Code example with verified APIs]
 
 **Run it:**
+
 ```bash
 [command]
 ```
 
 **Expected output:**
+
 ```
 [output]
 ```
@@ -261,11 +283,13 @@ import "[all/real/imports]"
 ```
 
 **Run the complete example:**
+
 ```bash
 [command to run]
 ```
 
 **Expected output:**
+
 ```
 [complete output]
 ```
@@ -296,11 +320,13 @@ Now that you have the basics:
 ### Problem: [Common Issue]
 
 **What you see:**
+
 ```
 [Error message or behavior]
 ```
 
 **Fix:**
+
 ```[language]
 [Solution code]
 ```
@@ -315,6 +341,7 @@ Now that you have the basics:
 **Test Date**: [YYYY-MM-DD]
 
 **Verification**:
+
 - ✅ All code examples tested
 - ✅ All APIs verified against source
 - ✅ Expected outputs confirmed
@@ -322,9 +349,11 @@ Now that you have the basics:
 - ✅ Success criteria clear
 
 **Source files verified**:
+
 - `path/to/source/file1.ext`
 - `path/to/source/file2.ext`
-```
+
+````
 
 ### Step 5: Testing Phase (15-20 minutes)
 
@@ -337,9 +366,10 @@ This is NOT optional. You MUST test the tutorial.
 # Follow your own tutorial exactly
 # Do NOT skip any steps
 # Do NOT assume things work
-```
+````
 
 **As you test, verify:**
+
 - [ ] Each command produces stated output
 - [ ] Success criteria are achievable
 - [ ] Time estimates are realistic (add 50% buffer for beginners)
@@ -351,6 +381,7 @@ This is NOT optional. You MUST test the tutorial.
 - [ ] All APIs work as shown
 
 **If ANY step fails during testing:**
+
 - ❌ Do NOT publish tutorial
 - Fix the step
 - Test again from beginning
@@ -364,6 +395,7 @@ This is NOT optional. You MUST test the tutorial.
 ## Tutorial Verification Checklist
 
 ### Testing (P0 - CRITICAL)
+
 - [ ] Tutorial tested start-to-finish
 - [ ] All commands run successfully
 - [ ] All outputs match documentation
@@ -371,6 +403,7 @@ This is NOT optional. You MUST test the tutorial.
 - [ ] Time estimates verified realistic
 
 ### API Verification (P0 - CRITICAL)
+
 - [ ] All APIs verified against source
 - [ ] All signatures exact
 - [ ] All imports real
@@ -378,6 +411,7 @@ This is NOT optional. You MUST test the tutorial.
 - [ ] Code examples compile/run
 
 ### Learning Structure (P1 - HIGH)
+
 - [ ] Success criteria for each step
 - [ ] Time estimates for each step
 - [ ] Prerequisites clearly stated
@@ -385,6 +419,7 @@ This is NOT optional. You MUST test the tutorial.
 - [ ] Progressive complexity (simple → complex)
 
 ### Quality (P2 - MEDIUM)
+
 - [ ] Minimal explanations (WHAT not WHY)
 - [ ] No marketing language
 - [ ] Clear, simple language
@@ -395,14 +430,17 @@ This is NOT optional. You MUST test the tutorial.
 ## Integration with Other Skills
 
 ### Works With:
+
 - **api-doc-writer** - Link to API reference for deeper info
 - **migration-guide-writer** - After tutorial, guide to migrate existing code
 - **api-documentation-verify** - Verify tutorial code accuracy
 
 ### Invokes:
+
 - None (standalone skill)
 
 ### Invoked By:
+
 - User (manual invocation)
 - When onboarding documentation needed
 - After major feature releases
@@ -412,6 +450,7 @@ This is NOT optional. You MUST test the tutorial.
 **Primary Output**: Markdown file with structured tutorial
 
 **File Location**:
+
 - `docs/tutorials/getting-started-with-[feature].md`
 - `TUTORIAL.md` in project root
 - `docs/getting-started/[feature].md`
@@ -419,18 +458,26 @@ This is NOT optional. You MUST test the tutorial.
 ## Common Pitfalls to Avoid
 
 ### 1. Assuming Too Much Knowledge
-```markdown
+
+````markdown
 ❌ BAD - Assumes knowledge
+
 ## Step 1: Configure the service
+
 Set up your gRPC interceptors and middleware chain
 
 ✅ GOOD - Teaches from zero
+
 ## Step 1: Install the service (5 minutes)
+
 First, install the service package:
+
 ```bash
 npm install @company/service
 ```
-```
+````
+
+````
 
 ### 2. Missing Expected Output
 ```markdown
@@ -438,20 +485,24 @@ npm install @company/service
 Run the program:
 ```bash
 node app.js
-```
+````
 
 ✅ GOOD - Shows exact output
 Run the program:
+
 ```bash
 node app.js
 ```
+
 Expected output:
+
 ```
 Starting service...
 Service ready on port 3000
 Waiting for requests...
 ```
-```
+
+````
 
 ### 3. No Success Verification
 ```markdown
@@ -464,52 +515,69 @@ Waiting for requests...
 [Configuration code]
 
 ✅ **Success check**: Run `npm run db:test`. You should see:
-```
+````
+
 Database connection: OK
 Tables initialized: OK
+
 ```
+
 ```
 
 ### 4. Too Many Concepts Per Step
+
 ```markdown
 ❌ BAD - Multiple new concepts
+
 ## Step 3: Add authentication, logging, and error handling
+
 [Complex code introducing 3 concepts]
 
 ✅ GOOD - One concept at a time
+
 ## Step 3: Add basic authentication (10 minutes)
+
 [Code for auth only]
 
 ## Step 4: Add logging (7 minutes)
+
 [Code for logging only]
 
 ## Step 5: Add error handling (8 minutes)
+
 [Code for errors only]
 ```
 
 ### 5. Fabricated or Untested Code
-```markdown
+
+````markdown
 ❌ BAD - Not tested
+
 ```typescript
 // This should work
-const result = await service.processTask()
+const result = await service.processTask();
 ```
+````
+
 [Code was never actually run - might not work!]
 
 ✅ GOOD - Tested and verified
+
 ```typescript
 // VERIFIED working code
-import { TaskService } from '@company/service'
+import { TaskService } from "@company/service";
 
-const service = new TaskService()
+const service = new TaskService();
 const result = await service.processTask({
-  id: 'task-123',
-  title: 'Example Task'
-})
-console.log('Task processed:', result.id)
+  id: "task-123",
+  title: "Example Task",
+});
+console.log("Task processed:", result.id);
 ```
+
 [This code was actually run and produced expected output]
-```
+
+````
 
 ### 6. Too Much Explanation
 ```markdown
@@ -526,10 +594,11 @@ The service uses a sophisticated dependency injection container based on the inv
 Create a new service instance:
 ```typescript
 const service = new TaskService(config)
-```
+````
 
 This sets up the service with your configuration. [Why this design?](link-to-explanation)
-```
+
+````
 
 ### 7. Unrealistic Time Estimates
 ```markdown
@@ -540,7 +609,7 @@ This sets up the service with your configuration. [Why this design?](link-to-exp
 ✅ GOOD - Realistic for beginners
 ## Complete Tutorial (60-90 minutes)
 [Tested with beginner, added 50% buffer]
-```
+````
 
 ## Time Estimates
 
@@ -568,6 +637,7 @@ Assistant: "I'll create a step-by-step tutorial, test it, and verify all APIs"
 ## Success Criteria
 
 Tutorial is complete when:
+
 - ✅ Tested start-to-finish successfully
 - ✅ All APIs verified against source code
 - ✅ All code examples work
@@ -588,6 +658,7 @@ Tutorial is complete when:
 Tutorials ARE allowed to use structural emojis for clarity:
 
 ✅ **Allowed** (structural/functional):
+
 - ✅ Success checkmarks for verification
 - ❌ Error indicators
 - ⚠️ Warning symbols
@@ -595,6 +666,7 @@ Tutorials ARE allowed to use structural emojis for clarity:
 - 🔧 Configuration steps
 
 ❌ **Not Allowed** (decorative/marketing):
+
 - 🚀 "Blazing fast"
 - 💯 "Perfect"
 - 🔥 "Hot new feature"
@@ -603,11 +675,13 @@ Tutorials ARE allowed to use structural emojis for clarity:
 ### Language Style
 
 **Use clear, direct language:**
+
 - "Create a file" not "Let's create a file"
 - "Run the command" not "Now we'll run the command"
 - "Install the package" not "You need to install the package"
 
 **Be encouraging but factual:**
+
 - ✅ "You've successfully created your first task"
 - ❌ "Amazing! You're doing great!"
 
@@ -628,7 +702,6 @@ Tutorials ARE allowed to use structural emojis for clarity:
 - Technical Documentation Expert Agent
 - API Documentation Writer skill (for linking to API details)
 - Tutorial Theory: https://documentation.divio.com/tutorials/
-
 
 ---
 

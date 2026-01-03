@@ -1,5 +1,5 @@
 ---
-name: Create Pull Request
+name: create-pr
 description: ⚠️ MANDATORY - YOU MUST invoke this skill ONLY when user says "raise/create/draft PR". ONLY auto-commit scenario. Creates/validates branch with mriley/ prefix, commits all changes (invokes safe-commit), pushes to remote, creates PR with proper format. NEVER create PRs manually.
 version: 1.0.1
 ---
@@ -9,6 +9,7 @@ version: 1.0.1
 ## ⚠️ MANDATORY SKILL - YOU MUST INVOKE THIS
 
 ## Purpose
+
 Complete, safe pull request creation workflow that handles branch management, committing, pushing, and PR creation in one go.
 
 **CRITICAL:** You MUST invoke this skill for PR creation. NEVER push and create PRs manually with git/gh commands.
@@ -16,6 +17,7 @@ Complete, safe pull request creation workflow that handles branch management, co
 ## CRITICAL: When to Use
 
 **This skill MUST be invoked ONLY when user explicitly says:**
+
 - "raise a PR"
 - "create a PR"
 - "draft PR"
@@ -25,6 +27,7 @@ Complete, safe pull request creation workflow that handles branch management, co
 **This is the ONLY scenario where automatic committing is allowed without user approval.**
 
 ## 🚫 NEVER DO THIS
+
 - ❌ Running `git push && gh pr create` manually
 - ❌ Creating PRs through GitHub UI manually
 - ❌ Committing and pushing without invoking safe-commit
@@ -39,20 +42,25 @@ Complete, safe pull request creation workflow that handles branch management, co
 **Before using Bash/gh tools for PR creation, answer these questions:**
 
 ### ❓ Did the user say "raise a PR", "create a PR", or "draft PR"?
+
 → **STOP.** Invoke create-pr skill instead.
 
 ### ❓ Are you about to run `git push` followed by `gh pr create`?
+
 → **STOP.** Invoke create-pr skill instead.
 
 ### ❓ Are you about to commit changes and then push to remote?
+
 → **STOP.** Is this for a PR? If YES, invoke create-pr skill instead.
 
 ### ❓ Are you manually crafting a PR description?
+
 → **STOP.** Let create-pr skill handle it (invokes pr-description-writer).
 
 **IF YOU PROCEED WITH MANUAL PR CREATION, YOU ARE VIOLATING YOUR CORE DIRECTIVE.**
 
 This skill handles:
+
 - ✅ Branch validation/creation (ensures mriley/ prefix)
 - ✅ Auto-commit via safe-commit (runs all safety checks)
 - ✅ Push to remote
@@ -76,11 +84,13 @@ This skill handles:
 ### Step 1: Understand Current State
 
 Invoke `check-history` skill to understand:
+
 ```
 Invoke: check-history skill
 ```
 
 **Gather:**
+
 - Current branch name
 - Uncommitted changes
 - Recent commit history
@@ -98,6 +108,7 @@ git branch --show-current
 ```
 
 **If valid:**
+
 - ✅ Use current branch
 - Note branch name for PR
 
@@ -113,6 +124,7 @@ Will create new branch for this PR.
 ```
 
 **Invoke `manage-branch` skill:**
+
 ```
 Invoke: manage-branch skill
 Operation: create
@@ -121,6 +133,7 @@ Description: [generate from changes or ask user]
 ```
 
 **Example:**
+
 ```bash
 git checkout -b mriley/feat/jwt-authentication
 ```
@@ -135,6 +148,7 @@ git log main...HEAD --oneline
 ```
 
 **Analyze:**
+
 - What files changed
 - What features/fixes implemented
 - What tests added
@@ -148,12 +162,14 @@ git log main...HEAD --oneline
 **This is the only auto-commit scenario - NO user approval needed**
 
 Invoke `safe-commit` skill with auto-commit flag:
+
 ```
 Invoke: safe-commit skill
 Mode: auto-commit (skip user approval)
 ```
 
 **The safe-commit skill will:**
+
 - Run security-scan
 - Run quality-check
 - Run run-tests
@@ -161,6 +177,7 @@ Mode: auto-commit (skip user approval)
 - No user approval required (PR creation exception)
 
 **If safe-commit fails (security/quality/tests):**
+
 - STOP the PR creation
 - Report failures to user
 - User must fix issues
@@ -176,16 +193,19 @@ git ls-remote --heads origin mriley/feat/jwt-authentication
 ```
 
 **If branch doesn't exist on remote:**
+
 ```bash
 git push -u origin mriley/feat/jwt-authentication
 ```
 
 **If branch exists on remote:**
+
 ```bash
 git push origin mriley/feat/jwt-authentication
 ```
 
 **If push fails (e.g., not up to date):**
+
 ```
 ❌ Push failed: Remote has changes
 
@@ -210,6 +230,7 @@ What would you like to do?
 ```
 
 **What the skill does:**
+
 1. Discovers project PR template in `.github/` directory
 2. Analyzes git diff and commit history for this branch
 3. Generates description following template structure
@@ -218,51 +239,63 @@ What would you like to do?
 6. Returns verified PR description markdown
 
 **Input provided to skill:**
+
 - Base branch (e.g., `main`)
 - Current branch (e.g., `mriley/feat/jwt-authentication`)
 - Commit range for analysis
 - PR template (if found)
 
 **Output received from skill:**
+
 - Complete PR description in markdown format
 - All template sections populated
 - All claims verified against git diff
 - Ready for use in `gh pr create --body`
 
 **Example output from pr-description-writer:**
+
 ```markdown
 ## Summary
+
 - Add JWT token validation middleware
 - Implement token refresh logic
 - Add comprehensive unit and integration tests
 
 ## Changes
+
 Implements JWT-based authentication with proper token validation,
 expiry checking, and refresh token support.
 
 **Files Modified**:
+
 - `src/middleware/auth.ts` - JWT validation middleware
 - `src/services/token.ts` - Token refresh logic
 - `tests/auth.test.ts` - Unit and integration tests
 
 ## Testing
+
 **Unit Tests**:
+
 - Coverage: 96.4%
 - New tests: 42 tests added
 - All tests passing
 
 **Integration Tests**:
+
 - 8 tests for full auth flow
 - All tests passing
 
 **Manual Testing**:
+
 - Verified with Postman collection
 - Tested token refresh flow
 
 ## Related Issues
+
 Closes #156
 
 ## Checklist
+
 - [x] Tests passing (coverage: 96.4%)
 - [x] Linters passing
 - [x] Security scan passing
@@ -270,6 +303,7 @@ Closes #156
 ```
 
 **Note**: The pr-description-writer skill ensures:
+
 - ✅ No fabricated features or claims
 - ✅ All files mentioned exist in git diff
 - ✅ Test coverage numbers verified
@@ -281,6 +315,7 @@ Closes #156
 Use GitHub CLI to create PR:
 
 **For draft PR:**
+
 ```bash
 gh pr create --draft --title "<title>" --body "$(cat <<'EOF'
 [PR description from Step 6]
@@ -289,6 +324,7 @@ EOF
 ```
 
 **For final PR:**
+
 ```bash
 gh pr create --title "<title>" --body "$(cat <<'EOF'
 [PR description from Step 6]
@@ -298,6 +334,7 @@ EOF
 
 **Title format:**
 Use the commit message subject as PR title:
+
 ```
 feat(auth): add JWT token validation
 ```
@@ -310,6 +347,7 @@ gh pr view --web
 ```
 
 **Report to user:**
+
 ```
 ✅ Pull Request created successfully
 
@@ -333,9 +371,11 @@ You can view and edit the PR at the URL above.
 **Use commit message as PR title:**
 
 If single commit:
+
 - Use commit subject as-is
 
 If multiple commits:
+
 - Analyze all commit subjects
 - Generate title that encompasses all changes
 - Follow conventional commit format
@@ -344,12 +384,14 @@ If multiple commits:
 **Examples:**
 
 Single commit:
+
 ```
 Commit: feat(auth): add JWT validation
 PR Title: feat(auth): add JWT validation
 ```
 
 Multiple related commits:
+
 ```
 Commits:
 - feat(auth): add JWT validation
@@ -360,6 +402,7 @@ PR Title: feat(auth): implement JWT authentication system
 ```
 
 Mixed commit types (use most significant):
+
 ```
 Commits:
 - feat(auth): add JWT validation
@@ -374,6 +417,7 @@ PR Title: feat(auth): add JWT authentication with token handling
 ## Error Handling
 
 ### Error: gh CLI not installed
+
 ```
 ❌ GitHub CLI not found
 
@@ -389,6 +433,7 @@ gh auth login
 ```
 
 ### Error: Not authenticated with gh
+
 ```
 ❌ Not authenticated with GitHub
 
@@ -399,6 +444,7 @@ Then retry PR creation.
 ```
 
 ### Error: No commits to PR
+
 ```
 ❌ No commits to create PR from
 
@@ -408,6 +454,7 @@ Please make changes and commit them first, then create PR.
 ```
 
 ### Error: Commit failed (security/quality/tests)
+
 ```
 ❌ Cannot create PR: Pre-commit checks failed
 
@@ -419,6 +466,7 @@ Please fix the issues and try again:
 ```
 
 ### Error: Push failed
+
 ```
 ❌ Push failed: [error message]
 
@@ -435,6 +483,7 @@ Common solutions:
 ## Integration with Other Skills
 
 This skill invokes:
+
 - **`check-history`** - Step 1 (understand current state)
 - **`manage-branch`** - Step 2 (if branch invalid)
 - **`safe-commit`** - Step 4 (auto-commit mode)
@@ -445,13 +494,13 @@ This skill invokes:
 
 **Default to draft PR unless user specifies final:**
 
-User says | Action
-----------|--------
-"draft PR" | Create draft (`--draft`)
-"create PR" | Create draft (`--draft`)
-"raise PR" | Create draft (`--draft`)
-"final PR" | Create final (no `--draft`)
-"ready PR" | Create final (no `--draft`)
+| User says   | Action                      |
+| ----------- | --------------------------- |
+| "draft PR"  | Create draft (`--draft`)    |
+| "create PR" | Create draft (`--draft`)    |
+| "raise PR"  | Create draft (`--draft`)    |
+| "final PR"  | Create final (no `--draft`) |
+| "ready PR"  | Create final (no `--draft`) |
 
 **Draft PRs are safer** - allows for review/CI before marking ready.
 
@@ -467,11 +516,13 @@ If branch already has commits:
 4. **Create PR with all commits**
 
 **Check for clean state:**
+
 ```bash
 git status
 ```
 
 If clean and commits exist:
+
 - Skip to Step 5 (push)
 - Use all commits in PR description
 
@@ -491,6 +542,7 @@ If clean and commits exist:
 ## After PR Creation
 
 **Suggest next steps:**
+
 ```
 PR created successfully!
 
@@ -527,11 +579,13 @@ If user needs to cancel during PR creation:
 ## Quick Reference
 
 **Trigger phrase:**
+
 ```
 User: "raise a PR"
 ```
 
 **What happens:**
+
 1. Check/create valid branch (mriley/ prefix)
 2. Auto-commit all changes (with full safety checks)
 3. Push to remote

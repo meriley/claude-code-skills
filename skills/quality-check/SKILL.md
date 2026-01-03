@@ -1,5 +1,5 @@
 ---
-name: Code Quality Check
+name: quality-check
 description: ⚠️ MANDATORY - Automatically invoked by safe-commit. Runs language-specific linting, formatting, static analysis, and type checking. Treats linter issues as build failures that MUST be fixed before commit. Auto-fixes when possible. NEVER run linters manually.
 version: 1.0.1
 ---
@@ -9,17 +9,20 @@ version: 1.0.1
 ## ⚠️ MANDATORY SKILL - AUTO-INVOKED BY SAFE-COMMIT
 
 ## Purpose
+
 Enforce code quality standards through automated linting, formatting, and static analysis. Ensures code meets project conventions before committing.
 
 **CRITICAL:** This skill is automatically invoked by safe-commit. NEVER run linters manually.
 
 ## When to Use
+
 - **AUTOMATICALLY** invoked by safe-commit before every commit
 - During code refinement phase (manual invocation allowed)
 - After making code changes (manual invocation allowed)
 - When user requests code quality review
 
 ## 🚫 NEVER DO THIS
+
 - ❌ Running `eslint` or `npm run lint` manually before commit
 - ❌ Running `golangci-lint run` manually before commit
 - ❌ Running `flake8` or `black` manually before commit
@@ -34,27 +37,34 @@ Enforce code quality standards through automated linting, formatting, and static
 **Before using Bash tool to run linters, answer these questions:**
 
 ### ❓ Are you about to run `npm run lint` or `eslint`?
+
 → **STOP.** Are you doing this before commit? If YES, use safe-commit instead (it invokes this skill).
 
 ### ❓ Are you about to run `golangci-lint run`?
+
 → **STOP.** Are you doing this before commit? If YES, use safe-commit instead (it invokes this skill).
 
 ### ❓ Are you about to run `flake8`, `black`, or `mypy`?
+
 → **STOP.** Are you doing this before commit? If YES, use safe-commit instead (it invokes this skill).
 
 ### ❓ Are you about to run `prettier --check` or formatting tools?
+
 → **STOP.** Are you doing this before commit? If YES, use safe-commit instead (it invokes this skill).
 
 ### ❓ Are you checking code quality before committing?
+
 → **STOP.** Invoke safe-commit skill (it will invoke this skill automatically).
 
 **IF YOU RUN LINTERS MANUALLY BEFORE COMMIT, YOU ARE CREATING REDUNDANCY AND WASTING TIME.**
 
 When to run linters manually:
+
 - ✅ During development/refinement (not for commit)
 - ✅ When user explicitly requests quality check
 
 When NOT to run linters manually:
+
 - ❌ Before commit (use safe-commit instead)
 - ❌ As part of commit workflow (use safe-commit instead)
 
@@ -65,6 +75,7 @@ When NOT to run linters manually:
 ## Philosophy
 
 **CRITICAL: Treat linter issues as syntax errors, not warnings.**
+
 - All linter issues MUST be fixed before commit
 - No exceptions unless explicitly approved by user
 - Auto-fix when tools support it
@@ -81,6 +92,7 @@ ls package.json go.mod requirements.txt Cargo.toml setup.py pyproject.toml 2>/de
 ```
 
 **Language Detection Rules:**
+
 - `package.json` → Node.js/TypeScript
 - `go.mod` or `*.go` files → Go
 - `requirements.txt`, `Pipfile`, or `pyproject.toml` → Python
@@ -98,6 +110,7 @@ Run all applicable checks in parallel when possible.
 ## Node.js / TypeScript
 
 ### Check 2.1: ESLint (Linting)
+
 ```bash
 npm run lint
 # OR if direct eslint:
@@ -105,21 +118,25 @@ npx eslint . --ext .js,.jsx,.ts,.tsx
 ```
 
 **If issues found:**
+
 ```bash
 npx eslint . --ext .js,.jsx,.ts,.tsx --fix
 ```
 
 ### Check 2.2: Prettier (Formatting)
+
 ```bash
 npx prettier --check "**/*.{js,jsx,ts,tsx,json,css,md}"
 ```
 
 **If issues found:**
+
 ```bash
 npx prettier --write "**/*.{js,jsx,ts,tsx,json,css,md}"
 ```
 
 ### Check 2.3: TypeScript Type Checking (if TypeScript)
+
 ```bash
 npm run type-check
 # OR if direct tsc:
@@ -129,6 +146,7 @@ npx tsc --noEmit
 **No auto-fix available** - must fix type errors manually.
 
 ### Check 2.4: Package Audit (bonus)
+
 ```bash
 npm audit --audit-level=moderate
 ```
@@ -138,16 +156,19 @@ npm audit --audit-level=moderate
 ## Go
 
 ### Check 2.1: go fmt (Formatting)
+
 ```bash
 gofmt -l .
 ```
 
 **If files listed (not formatted):**
+
 ```bash
 gofmt -w .
 ```
 
 ### Check 2.2: go vet (Static Analysis)
+
 ```bash
 go vet ./...
 ```
@@ -155,16 +176,19 @@ go vet ./...
 **No auto-fix** - must address issues manually.
 
 ### Check 2.3: golangci-lint (Comprehensive Linting)
+
 ```bash
 golangci-lint run
 ```
 
 **If auto-fix supported:**
+
 ```bash
 golangci-lint run --fix
 ```
 
 ### Check 2.4: go mod tidy (Dependency Cleanup)
+
 ```bash
 go mod tidy
 ```
@@ -176,16 +200,19 @@ Auto-fixes dependency issues.
 ## Python
 
 ### Check 2.1: black (Formatting)
+
 ```bash
 black --check .
 ```
 
 **If issues found:**
+
 ```bash
 black .
 ```
 
 ### Check 2.2: flake8 (Linting)
+
 ```bash
 flake8 .
 ```
@@ -193,6 +220,7 @@ flake8 .
 **No auto-fix** - must address issues manually.
 
 ### Check 2.3: mypy (Type Checking)
+
 ```bash
 mypy .
 ```
@@ -200,11 +228,13 @@ mypy .
 **No auto-fix** - must add type hints manually.
 
 ### Check 2.4: isort (Import Sorting)
+
 ```bash
 isort --check-only .
 ```
 
 **If issues found:**
+
 ```bash
 isort .
 ```
@@ -214,21 +244,25 @@ isort .
 ## Rust
 
 ### Check 2.1: rustfmt (Formatting)
+
 ```bash
 cargo fmt --check
 ```
 
 **If issues found:**
+
 ```bash
 cargo fmt
 ```
 
 ### Check 2.2: clippy (Linting)
+
 ```bash
 cargo clippy -- -D warnings
 ```
 
 **If auto-fix available:**
+
 ```bash
 cargo clippy --fix --allow-dirty --allow-staged
 ```
@@ -238,6 +272,7 @@ cargo clippy --fix --allow-dirty --allow-staged
 ## Java
 
 ### Check 2.1: Maven/Gradle Formatting
+
 ```bash
 # Maven:
 mvn spotless:check
@@ -247,6 +282,7 @@ gradle spotlessCheck
 ```
 
 **If issues found:**
+
 ```bash
 # Maven:
 mvn spotless:apply
@@ -256,6 +292,7 @@ gradle spotlessApply
 ```
 
 ### Check 2.2: Maven/Gradle Linting
+
 ```bash
 # Maven:
 mvn checkstyle:check
@@ -273,11 +310,13 @@ After standard linting/formatting, run specialized audits based on detected lang
 ### For Go Projects
 
 #### Invoke `control-flow-check` Skill
+
 ```bash
 /skill control-flow-check
 ```
 
 **What it audits:**
+
 - Early return pattern usage
 - Excessive nesting (> 2-3 levels)
 - Large if/else blocks (> 10 lines)
@@ -285,11 +324,13 @@ After standard linting/formatting, run specialized audits based on detected lang
 - Complex control flow refactoring opportunities
 
 #### Invoke `error-handling-audit` Skill
+
 ```bash
 /skill error-handling-audit
 ```
 
 **What it audits:**
+
 - Error wrapping with `%w` vs `%v`
 - Error context sufficiency
 - Error message formatting
@@ -304,11 +345,13 @@ After standard linting/formatting, run specialized audits based on detected lang
 ### For TypeScript Projects
 
 #### Invoke `type-safety-audit` Skill
+
 ```bash
 /skill type-safety-audit
 ```
 
 **What it audits:**
+
 - `any` type usage (zero tolerance)
 - Branded types for IDs
 - Runtime validation at API boundaries
@@ -324,11 +367,13 @@ After standard linting/formatting, run specialized audits based on detected lang
 ### For TypeScript + GraphQL Projects
 
 #### Invoke `n-plus-one-detection` Skill (in addition to type-safety-audit)
+
 ```bash
 /skill n-plus-one-detection
 ```
 
 **What it audits:**
+
 - N+1 query problems in resolvers
 - Missing DataLoader usage
 - Sequential queries in loops
@@ -349,6 +394,7 @@ After running language-specific audits:
 4. **Report HIGH/MEDIUM issues as warnings**
 
 Example combined output:
+
 ```
 📊 Quality Check Summary:
 
@@ -373,6 +419,7 @@ RESULT: ❌ FAILED - Must fix 2 CRITICAL control flow issues before commit
 ## Step 3: Handle Check Results
 
 ### If All Checks Pass:
+
 ```
 ✅ Code Quality PASSED
 
@@ -386,21 +433,25 @@ Code quality verified. Safe to commit.
 ```
 
 ### If Auto-Fixable Issues:
+
 1. Run auto-fix commands
 2. Show what was fixed:
+
    ```
    🔧 Auto-fixed code quality issues:
-   
+
    - Formatted 5 files with prettier
    - Fixed 3 linting issues with eslint --fix
    - Sorted imports in 2 Python files
-   
+
    Changes have been applied. Please review the fixes.
    ```
+
 3. Re-run checks to verify
 4. If still failing after auto-fix, report manual issues
 
 ### If Manual Fixes Required:
+
 ```
 ❌ Code Quality FAILED
 
@@ -443,6 +494,7 @@ Cannot proceed - TypeScript checks must pass.
 ## Integration with Other Skills
 
 This skill is invoked by:
+
 - **`safe-commit`** - Before committing changes
 - **`create-pr`** - Before creating pull requests
 
@@ -468,6 +520,7 @@ fi
 ```
 
 **If tool missing:**
+
 - Report missing tool
 - Provide installation command
 - Ask user to install or use project's package.json scripts
@@ -475,6 +528,7 @@ fi
 ## Configuration Detection
 
 Check for project-specific configuration:
+
 - `.eslintrc.js`, `.eslintrc.json` (ESLint)
 - `.prettierrc`, `prettier.config.js` (Prettier)
 - `.golangci.yml` (golangci-lint)
@@ -502,6 +556,7 @@ npm run format
 ## Emergency Override
 
 Only if user explicitly states "skip quality checks" or "I acknowledge quality issues":
+
 1. Document the override in output
 2. List specific issues being ignored
 3. Suggest creating follow-up ticket

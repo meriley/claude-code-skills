@@ -1,5 +1,5 @@
 ---
-name: Safe Commit
+name: safe-commit
 description: ⚠️ MANDATORY - YOU MUST invoke this skill when committing. Complete commit workflow with all safety checks. Invokes security-scan, quality-check, and run-tests skills. Shows diff, gets user approval, creates commit with conventional format. NO AI attribution. User approval REQUIRED except during PR creation. NEVER commit manually.
 version: 1.0.1
 ---

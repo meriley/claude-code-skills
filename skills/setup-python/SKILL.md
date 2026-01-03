@@ -1,5 +1,5 @@
 ---
-name: Python Development Setup
+name: setup-python
 description: Sets up Python development environment using UV for fast dependency management. Configures virtual environment, dependencies, testing (pytest), linting/formatting (ruff), and type checking (mypy). ALWAYS use UV - NEVER use pip directly.
 version: 2.0.0
 ---

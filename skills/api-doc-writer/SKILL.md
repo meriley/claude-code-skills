@@ -1,5 +1,5 @@
 ---
-name: API Documentation Writer
+name: api-doc-writer
 description: Creates comprehensive API reference documentation following Diátaxis Reference pattern. Reads source code to verify every method signature, creates structured API docs with zero fabrication tolerance. Use when documenting APIs, packages, or public interfaces.
 version: 1.0.0
 ---
@@ -22,6 +22,7 @@ Create comprehensive, accurate API reference documentation by reading source cod
 ## Diátaxis Framework: Reference Documentation
 
 **Reference Type Characteristics:**
+
 - **Information-oriented** - Describes the machinery, not how to use it
 - **Technical descriptions** - Facts about APIs, parameters, return types
 - **Complete coverage** - Every public method and type documented
@@ -30,6 +31,7 @@ Create comprehensive, accurate API reference documentation by reading source cod
 - **Minimal examples** - Usage demonstrations, not step-by-step tutorials
 
 **What NOT to Include:**
+
 - ❌ Tutorials (learning-oriented) - Use tutorial-writer skill
 - ❌ How-To guides (problem-oriented) - Use migration-guide-writer skill
 - ❌ Explanations (understanding-oriented) - Link to separate explanation docs
@@ -38,17 +40,20 @@ Create comprehensive, accurate API reference documentation by reading source cod
 ## Critical Rules (Zero Tolerance)
 
 ### P0 - CRITICAL Violations (Must Fix)
+
 1. **Fabricated Methods** - Methods that don't exist in source code
 2. **Wrong Signatures** - Parameter types, names, or order don't match source
 3. **Invalid Examples** - Code that won't compile or uses fake imports
 4. **Unverified Performance Claims** - Numbers without benchmark evidence
 
 ### P1 - HIGH Violations (Should Fix)
+
 5. **Missing Source References** - Not citing which file/method documented
 6. **Incomplete Coverage** - Missing public methods
 7. **Marketing Language** - Buzzwords instead of technical descriptions
 
 ### P2 - MEDIUM Violations
+
 8. **Structural Issues** - Not following template consistently
 9. **Redundancy** - Repeating information unnecessarily
 
@@ -74,8 +79,10 @@ grep -rn "^(class|def) [A-Z]" [package_path]/
 ```
 
 **Create discovery checklist:**
+
 ```markdown
 ## Discovery Checklist
+
 - [ ] Package name and purpose identified
 - [ ] All public types/interfaces found
 - [ ] All public functions/methods found
@@ -92,6 +99,7 @@ For each public API element:
 
 1. **Read the complete source file** using Read tool
 2. **Copy exact signature** - Do NOT paraphrase or simplify:
+
    ```go
    // ✅ CORRECT - Exact signature
    func (s *TaskService) Create(ctx rms.Ctx, params *CreateTaskParams) (*entity.Task, error)
@@ -106,20 +114,26 @@ For each public API element:
 6. **Record source location** - File path and method name (NOT line numbers)
 
 **Example Extraction:**
-```markdown
+
+````markdown
 ### Extracted from: services/task_service.go
 
 **Method**: TaskService.Create
 **Signature**:
+
 ```go
 func (s *TaskService) Create(ctx rms.Ctx, params *CreateTaskParams) (*entity.Task, error)
 ```
+````
+
 **Source comment**: "Create creates a new task with the given parameters"
 **Error conditions** (from code):
+
 - Returns error if params.Title is empty (line 45 validates)
 - Returns error if params.PartnerId is empty (line 48 validates)
 - Returns database error if insert fails (line 62)
-```
+
+````
 
 ### Step 3: Documentation Phase (15-30 minutes)
 
@@ -138,16 +152,18 @@ type TypeName struct {
     Field1 Type1 `tags:"if,any"`  // Description of Field1
     Field2 Type2                   // Description of Field2
 }
-```
+````
 
 **Purpose**: [What this type represents]
 
 **Fields**:
+
 - `Field1` (Type1): [Detailed description, constraints, default values]
 - `Field2` (Type2): [Detailed description]
 
 **Source**: `path/to/file.go` (TypeName type)
-```
+
+````
 
 #### Functions/Methods
 
@@ -157,15 +173,17 @@ type TypeName struct {
 ```go
 // EXACT signature from [source file:MethodName]
 func (t *TypeName) MethodName(param1 Type1, param2 Type2) (ReturnType, error)
-```
+````
 
 **Description**: [What this method does - one clear sentence]
 
 **Parameters**:
+
 - `param1` (Type1): [Description, constraints, valid values]
 - `param2` (Type2): [Description, nil handling if applicable]
 
 **Returns**:
+
 - `ReturnType`: [Description of return value]
 - `error`: [Error conditions - when does it return error?]
   - Returns error if [condition 1]
@@ -173,6 +191,7 @@ func (t *TypeName) MethodName(param1 Type1, param2 Type2) (ReturnType, error)
   - Returns database error if [condition 3]
 
 **Example**:
+
 ```go
 // VERIFIED usage from test file or real usage
 service := NewTaskService(db)
@@ -184,7 +203,8 @@ if err != nil {
 ```
 
 **Source**: `path/to/file.go` (MethodName method)
-```
+
+````
 
 #### Constants/Enums
 
@@ -197,16 +217,18 @@ const (
     ConstantName1 = "value1"  // Description
     ConstantName2 = "value2"  // Description
 )
-```
+````
 
 **Purpose**: [What these constants represent]
 
 **Values**:
+
 - `ConstantName1`: [When to use this value]
 - `ConstantName2`: [When to use this value]
 
 **Source**: `path/to/file.go` (constants)
-```
+
+````
 
 ### Step 4: Example Creation (10-15 minutes)
 
@@ -218,9 +240,10 @@ const (
    find [package_path] -name "*_test.go" -o -name "*.test.ts" -o -name "test_*.py"
 
    # Read test files for real usage patterns
-   ```
+````
 
 2. **Verify imports are correct**:
+
    ```go
    // ✅ CORRECT - Real imports
    import "github.com/yourorg/yourproject/pkg/services"
@@ -230,6 +253,7 @@ const (
    ```
 
 3. **Include complete context**:
+
    ```go
    // ✅ GOOD - Complete example
    import (
@@ -264,6 +288,7 @@ const (
 ## API Documentation Verification Checklist
 
 ### Source Code Verification (P0 - CRITICAL)
+
 - [ ] Every documented method exists in source code
 - [ ] All method signatures exactly match source
 - [ ] All parameter types match source
@@ -272,12 +297,14 @@ const (
 - [ ] All type definitions exactly match source
 
 ### Example Verification (P0 - CRITICAL)
+
 - [ ] All code examples use real imports
 - [ ] All code examples use verified API signatures
 - [ ] No fabricated methods in examples
 - [ ] Examples would compile (tested if possible)
 
 ### Completeness (P1 - HIGH)
+
 - [ ] All public methods documented
 - [ ] All public types documented
 - [ ] All public constants documented
@@ -285,6 +312,7 @@ const (
 - [ ] Error conditions documented
 
 ### Quality (P2 - MEDIUM)
+
 - [ ] No marketing language ("blazing fast", "enterprise-grade")
 - [ ] No decorative emojis
 - [ ] Consistent structure across entries
@@ -295,6 +323,7 @@ const (
 **Cross-check against source:**
 
 For each documented method, open the source file and verify:
+
 1. Method name matches exactly
 2. Parameter count matches
 3. Parameter types match exactly
@@ -312,48 +341,63 @@ For each documented method, open the source file and verify:
 # [Package Name] API Reference
 
 ## Overview
+
 [Brief description of package purpose - 1-2 sentences]
 
 ## Installation
+
 [How to import/install - if relevant]
 
 ## Core Types
+
 [Document main types/interfaces first]
 
 ### Type: MainType
+
 ...
 
 ### Type: SupportingType
+
 ...
 
 ## Primary Functions
+
 [Document main API functions]
 
 ### Function: MainFunction
+
 ...
 
 ## Utility Functions
+
 [Document helper/utility functions]
 
 ### Function: HelperFunction
+
 ...
 
 ## Constants
+
 [Document constants and enums]
 
 ### Constants: GroupName
+
 ...
 
 ## Error Types
+
 [Document custom errors]
 
 ### Type: CustomError
+
 ...
 
 ## Examples
+
 [Comprehensive usage examples]
 
 ### Example: Common Use Case
+
 ...
 
 ---
@@ -365,14 +409,17 @@ For each documented method, open the source file and verify:
 ## Integration with Other Skills
 
 ### Works With:
+
 - **api-documentation-verify** - Verify reference docs for accuracy
 - **migration-guide-writer** - Reference docs show new API signatures
 - **tutorial-writer** - Tutorials link to reference for detailed API info
 
 ### Invokes:
+
 - None (standalone skill, but uses Read tool extensively)
 
 ### Invoked By:
+
 - User (manual invocation)
 - As part of documentation workflow
 
@@ -381,6 +428,7 @@ For each documented method, open the source file and verify:
 **Primary Output**: Markdown file with structured API reference
 
 **File Location**:
+
 - `docs/api/[package-name].md` for package documentation
 - `API.md` in project root for main API
 - `docs/reference/[module-name].md` for module documentation
@@ -396,10 +444,12 @@ For each documented method, open the source file and verify:
 **Source Code Version**: [Commit SHA or version]
 **Verification Status**: ✅ All APIs verified against source code
 **Source Files**:
+
 - `path/to/file1.go`
 - `path/to/file2.go`
 
 ## Verification Checklist Completed:
+
 - ✅ All methods verified against source
 - ✅ All signatures exactly match
 - ✅ All examples use real imports
@@ -411,18 +461,22 @@ For each documented method, open the source file and verify:
 ## Common Pitfalls to Avoid
 
 ### 1. Paraphrasing Signatures
+
 ```markdown
 ❌ BAD - Simplified signature
 func Create(params CreateParams) (Task, error)
 
 ✅ GOOD - Exact signature from source
-func (s *TaskService) Create(ctx rms.Ctx, params *CreateTaskParams) (*entity.Task, error)
+func (s *TaskService) Create(ctx rms.Ctx, params *CreateTaskParams) (\*entity.Task, error)
 ```
 
 ### 2. Fabricating Methods
+
 ```markdown
 ❌ BAD - Method doesn't exist
+
 ### Method: TaskService.UpdateStatus
+
 Updates the status of a task
 [This method was never in the source code!]
 
@@ -431,34 +485,43 @@ Updates the status of a task
 ```
 
 ### 3. Wrong Parameter Types
+
 ```markdown
 ❌ BAD - Wrong type
+
 - `taskId` (string): Task identifier
 
 ✅ GOOD - Correct type from source
+
 - `taskId` (TaskId): Task identifier (branded type)
 ```
 
 ### 4. Missing Error Conditions
+
 ```markdown
 ❌ BAD - Vague error description
 Returns error if operation fails
 
 ✅ GOOD - Specific error conditions from code
 Returns error if:
+
 - taskId is empty string
 - task not found in database
 - user lacks permission (PermissionError)
 ```
 
 ### 5. Invalid Examples
-```markdown
+
+````markdown
 ❌ BAD - Won't compile
+
 ```go
 task := CreateTask(params)
 ```
+````
 
 ✅ GOOD - Complete, working example
+
 ```go
 import "github.com/org/pkg/services"
 
@@ -470,6 +533,7 @@ if err != nil {
 ```
 
 ### 6. Using Line Numbers
+
 ```markdown
 ❌ BAD - Line numbers become outdated
 **Source**: `services/task.go:145`
@@ -479,6 +543,7 @@ if err != nil {
 ```
 
 ### 7. Marketing Language
+
 ```markdown
 ❌ BAD - Marketing buzzwords
 The TaskService provides blazing-fast, enterprise-grade task management
@@ -511,6 +576,7 @@ Assistant: "I'll use the api-doc-writer skill to create comprehensive API docume
 ## Success Criteria
 
 Documentation is complete when:
+
 - ✅ All public APIs discovered and documented
 - ✅ All signatures verified against source code
 - ✅ All examples use real imports and verified APIs
@@ -526,7 +592,6 @@ Documentation is complete when:
 - Diátaxis Framework: https://diataxis.fr/reference/
 - Technical Documentation Expert Agent
 - REFERENCE.md template in this skill directory
-
 
 ---
 

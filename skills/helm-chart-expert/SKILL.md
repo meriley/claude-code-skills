@@ -1,5 +1,5 @@
 ---
-name: Helm Chart Expert
+name: helm-chart-expert
 description: Comprehensive guide for writing production-ready Helm charts and conducting thorough chart reviews. Covers ArgoCD integration, GitOps workflows, security best practices, and deployment patterns.
 version: 1.0.0
 ---
@@ -24,6 +24,7 @@ Provide comprehensive guidance for creating production-ready Helm charts and con
 ## Quick Start Checklist
 
 ### New Chart Creation
+
 ```bash
 # 1. Create chart structure
 helm create mychart
@@ -41,13 +42,14 @@ helm install test ./mychart --dry-run --debug
 ## Chart Writing Guidelines
 
 ### 1. Chart.yaml Essentials
+
 ```yaml
 apiVersion: v2
 name: mychart
 description: A production-ready Helm chart
 type: application
-version: 1.0.0  # Chart version (SemVer2)
-appVersion: "1.16.0"  # Application version
+version: 1.0.0 # Chart version (SemVer2)
+appVersion: "1.16.0" # Application version
 keywords:
   - mychart
   - kubernetes
@@ -65,6 +67,7 @@ dependencies:
 ```
 
 ### 2. Values.yaml Template
+
 ```yaml
 # Default values for mychart
 # This is a YAML-formatted file
@@ -76,7 +79,7 @@ replicaCount: 2
 image:
   repository: myapp
   pullPolicy: IfNotPresent
-  tag: ""  # Overrides the image tag (default is appVersion)
+  tag: "" # Overrides the image tag (default is appVersion)
 
 # imagePullSecrets for private registries
 imagePullSecrets: []
@@ -106,7 +109,7 @@ podSecurityContext:
 securityContext:
   capabilities:
     drop:
-    - ALL
+      - ALL
   readOnlyRootFilesystem: true
   allowPrivilegeEscalation: false
 
@@ -174,7 +177,8 @@ rbac:
   rules: []
 ```
 
-### 3. Template Helpers (_helpers.tpl)
+### 3. Template Helpers (\_helpers.tpl)
+
 ```yaml
 {{/*
 Expand the name of the chart.
@@ -239,6 +243,7 @@ Create the name of the service account to use
 ```
 
 ### 4. Deployment Template
+
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -319,6 +324,7 @@ spec:
 ## Chart Review Checklist
 
 ### Security Review
+
 - [ ] **No hardcoded secrets** in values.yaml or templates
 - [ ] **Image tags are specific** (no `latest`)
 - [ ] **Security contexts** are defined and restrictive
@@ -328,6 +334,7 @@ spec:
 - [ ] **Resource limits** are set for all containers
 
 ### Structure Review
+
 - [ ] **Chart.yaml** has all required fields
 - [ ] **Version follows SemVer2** format
 - [ ] **Dependencies** use version ranges (~)
@@ -336,6 +343,7 @@ spec:
 - [ ] **File naming** follows conventions (lowercase, dashes)
 
 ### Values Review
+
 - [ ] **All values are documented** with clear comments
 - [ ] **Naming is consistent** (camelCase)
 - [ ] **Types are explicit** (strings are quoted)
@@ -344,6 +352,7 @@ spec:
 - [ ] **Environment-specific values** are separated
 
 ### Template Review
+
 - [ ] **Labels are consistent** and follow k8s recommendations
 - [ ] **Nil checks** for nested values
 - [ ] **Whitespace is properly managed** ({{- and -}})
@@ -352,6 +361,7 @@ spec:
 - [ ] **Resources can be disabled** via values
 
 ### Testing Review
+
 - [ ] **helm lint** passes without errors
 - [ ] **helm template** renders correctly
 - [ ] **Dry run** succeeds
@@ -360,6 +370,7 @@ spec:
 - [ ] **Helm test** hooks are defined
 
 ### Documentation Review
+
 - [ ] **README.md** exists with usage examples
 - [ ] **CHANGELOG.md** tracks versions
 - [ ] **values.yaml** is fully documented
@@ -370,35 +381,36 @@ spec:
 ## ArgoCD Integration
 
 ### Application Template
+
 ```yaml
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: {{ .Values.appName }}
+  name: { { .Values.appName } }
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
-  project: {{ .Values.project | default "default" }}
+  project: { { .Values.project | default "default" } }
   source:
-    repoURL: {{ .Values.repoURL }}
-    targetRevision: {{ .Values.targetRevision }}
-    path: {{ .Values.path }}
+    repoURL: { { .Values.repoURL } }
+    targetRevision: { { .Values.targetRevision } }
+    path: { { .Values.path } }
     helm:
-      releaseName: {{ .Values.releaseName }}
+      releaseName: { { .Values.releaseName } }
       valueFiles:
         - values.yaml
         - values-{{ .Values.environment }}.yaml
       parameters:
         - name: image.tag
-          value: {{ .Values.imageTag }}
+          value: { { .Values.imageTag } }
   destination:
-    server: {{ .Values.server | default "https://kubernetes.default.svc" }}
-    namespace: {{ .Values.namespace }}
+    server: { { .Values.server | default "https://kubernetes.default.svc" } }
+    namespace: { { .Values.namespace } }
   syncPolicy:
     automated:
-      prune: {{ .Values.autoPrune | default false }}
-      selfHeal: {{ .Values.autoHeal | default false }}
+      prune: { { .Values.autoPrune | default false } }
+      selfHeal: { { .Values.autoHeal | default false } }
     syncOptions:
       - CreateNamespace=true
       - PruneLast=true
@@ -411,6 +423,7 @@ spec:
 ```
 
 ### ApplicationSet for Multi-Environment
+
 ```yaml
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
@@ -419,20 +432,20 @@ metadata:
   namespace: argocd
 spec:
   generators:
-  - list:
-      elements:
-      - env: dev
-        cluster: https://dev.k8s.local
-        namespace: myapp-dev
-      - env: staging
-        cluster: https://staging.k8s.local
-        namespace: myapp-staging
-      - env: prod
-        cluster: https://prod.k8s.local
-        namespace: myapp-prod
+    - list:
+        elements:
+          - env: dev
+            cluster: https://dev.k8s.local
+            namespace: myapp-dev
+          - env: staging
+            cluster: https://staging.k8s.local
+            namespace: myapp-staging
+          - env: prod
+            cluster: https://prod.k8s.local
+            namespace: myapp-prod
   template:
     metadata:
-      name: 'myapp-{{env}}'
+      name: "myapp-{{env}}"
     spec:
       project: default
       source:
@@ -441,11 +454,11 @@ spec:
         path: charts/myapp
         helm:
           valueFiles:
-          - values.yaml
-          - environments/{{env}}/values.yaml
+            - values.yaml
+            - environments/{{env}}/values.yaml
       destination:
-        server: '{{cluster}}'
-        namespace: '{{namespace}}'
+        server: "{{cluster}}"
+        namespace: "{{namespace}}"
       syncPolicy:
         automated:
           prune: '{{env != "prod"}}'
@@ -455,6 +468,7 @@ spec:
 ## Secrets Management
 
 ### Using Helm Secrets Plugin
+
 ```bash
 # Install plugin
 helm plugin install https://github.com/jkroepke/helm-secrets
@@ -470,6 +484,7 @@ helm secrets upgrade myrelease . -f secrets.yaml
 ```
 
 ### External Secrets Operator Pattern
+
 ```yaml
 apiVersion: external-secrets.io/v1beta1
 kind: SecretStore
@@ -506,6 +521,7 @@ spec:
 ## Testing Templates
 
 ### Unit Test Example (helm-unittest)
+
 ```yaml
 suite: test deployment
 templates:
@@ -534,6 +550,7 @@ tests:
 ```
 
 ### Integration Test (helm test)
+
 ```yaml
 apiVersion: v1
 kind: Pod
@@ -558,6 +575,7 @@ spec:
 ## Production Patterns
 
 ### Multi-Stage Deployment
+
 ```yaml
 # Stage 1: Database Migration Job
 apiVersion: batch/v1
@@ -579,6 +597,7 @@ spec:
 ```
 
 ### Blue-Green Deployment Support
+
 ```yaml
 {{- if .Values.blueGreen.enabled }}
 apiVersion: v1
@@ -597,6 +616,7 @@ spec:
 ```
 
 ### Canary Deployment Support
+
 ```yaml
 {{- if .Values.canary.enabled }}
 apiVersion: flagger.app/v1beta1
@@ -627,6 +647,7 @@ spec:
 ## Common Issues and Solutions
 
 ### Issue: Nil Pointer Errors
+
 ```yaml
 # ❌ Bad - can cause nil pointer
 {{ .Values.nested.value }}
@@ -643,15 +664,21 @@ spec:
 ```
 
 ### Issue: ConfigMap/Secret Changes Not Triggering Pod Restart
+
 ```yaml
 # Solution: Add checksum annotation
 metadata:
   annotations:
-    checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
-    checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+    checksum/config:
+      {
+        { include (print $.Template.BasePath "/configmap.yaml") . | sha256sum },
+      }
+    checksum/secret:
+      { { include (print $.Template.BasePath "/secret.yaml") . | sha256sum } }
 ```
 
 ### Issue: Long Resource Names
+
 ```yaml
 # Use truncation helper
 {{- define "mychart.fullname" -}}
@@ -663,6 +690,7 @@ metadata:
 ## Advanced Techniques
 
 ### Dynamic Resource Generation
+
 ```yaml
 {{- range $key, $value := .Values.configMaps }}
 ---
@@ -676,6 +704,7 @@ data:
 ```
 
 ### Conditional Dependencies
+
 ```yaml
 {{- if .Values.postgresql.enabled }}
 dependencies:
@@ -687,6 +716,7 @@ dependencies:
 ```
 
 ### Environment-Specific Logic
+
 ```yaml
 {{- if eq .Values.environment "production" }}
   replicas: {{ .Values.productionReplicas | default 3 }}
@@ -698,6 +728,7 @@ dependencies:
 ## Quality Gates
 
 ### Pre-Commit Hooks
+
 ```yaml
 # .pre-commit-config.yaml
 repos:
@@ -712,6 +743,7 @@ repos:
 ```
 
 ### CI/CD Pipeline
+
 ```yaml
 # .gitlab-ci.yml or .github/workflows/helm.yml
 helm-lint:
@@ -739,6 +771,7 @@ helm-package:
 ## Monitoring and Observability
 
 ### ServiceMonitor for Prometheus
+
 ```yaml
 {{- if .Values.monitoring.serviceMonitor.enabled }}
 apiVersion: monitoring.coreos.com/v1
@@ -757,6 +790,7 @@ spec:
 ```
 
 ### Grafana Dashboard ConfigMap
+
 ```yaml
 {{- if .Values.monitoring.grafana.enabled }}
 apiVersion: v1
@@ -774,15 +808,17 @@ data:
 ## Upgrade Strategies
 
 ### Rolling Update Configuration
+
 ```yaml
 strategy:
   type: RollingUpdate
   rollingUpdate:
-    maxSurge: {{ .Values.rollingUpdate.maxSurge | default "25%" }}
-    maxUnavailable: {{ .Values.rollingUpdate.maxUnavailable | default "25%" }}
+    maxSurge: { { .Values.rollingUpdate.maxSurge | default "25%" } }
+    maxUnavailable: { { .Values.rollingUpdate.maxUnavailable | default "25%" } }
 ```
 
 ### Pre-Upgrade Backup Job
+
 ```yaml
 apiVersion: batch/v1
 kind: Job
@@ -802,6 +838,7 @@ spec:
 ## Final Review Checklist
 
 ### Before Release
+
 - [ ] All tests pass (lint, unit, integration)
 - [ ] Security scanning completed
 - [ ] Documentation updated
@@ -814,6 +851,7 @@ spec:
 - [ ] Monitoring/alerting configured
 
 ### After Release
+
 - [ ] Smoke tests pass
 - [ ] Metrics flowing
 - [ ] Logs accessible
@@ -824,14 +862,17 @@ spec:
 ## Integration with Other Skills
 
 ### Works With:
+
 - **security-scan** - Scan rendered Helm templates for hardcoded secrets
 - **quality-check** - Lint YAML files for formatting issues
 - Manual invocation for Helm-specific work
 
 ### Invokes:
+
 - None (standalone reference skill)
 
 ### Invoked By:
+
 - User (manual invocation when working with Helm)
 
 ## Example Usage

@@ -1,5 +1,5 @@
 ---
-name: Migration Guide Writer
+name: migration-guide-writer
 description: Creates problem-oriented migration guides following Diátaxis How-To pattern. Maps old APIs to new APIs with before/after examples, documents breaking changes, provides troubleshooting. Zero tolerance for fabricated APIs or unverified performance claims.
 version: 1.0.0
 ---
@@ -23,6 +23,7 @@ Create comprehensive migration guides for moving from old systems/APIs to new on
 ## Diátaxis Framework: How-To Guide
 
 **How-To Type Characteristics:**
+
 - **Problem-oriented** - Focused on specific migration goal
 - **Assumes knowledge** - Not teaching from zero (that's tutorials)
 - **Series of steps** - Path from old to new
@@ -31,6 +32,7 @@ Create comprehensive migration guides for moving from old systems/APIs to new on
 - **Troubleshooting** - Common issues and solutions
 
 **What NOT to Include:**
+
 - ❌ Tutorials (learning from zero) - Use tutorial-writer skill
 - ❌ Complete API reference - Link to api-doc-writer docs
 - ❌ Deep explanations of WHY - Link to explanation docs
@@ -39,6 +41,7 @@ Create comprehensive migration guides for moving from old systems/APIs to new on
 ## Critical Rules (Zero Tolerance)
 
 ### P0 - CRITICAL Violations (Must Fix)
+
 1. **Fabricated Old APIs** - Old methods that never existed
 2. **Fabricated New APIs** - New methods that don't exist in source
 3. **Wrong Signatures** - Before/After code with incorrect APIs
@@ -46,11 +49,13 @@ Create comprehensive migration guides for moving from old systems/APIs to new on
 5. **Invalid Migration Code** - Code that won't compile
 
 ### P1 - HIGH Violations (Should Fix)
+
 6. **Missing Troubleshooting** - No guidance for common errors
 7. **Incomplete Breaking Changes** - Not documenting all changes
 8. **Unverified Timing Claims** - Fabricated latency numbers
 
 ### P2 - MEDIUM Violations
+
 9. **Marketing Language** - Buzzwords instead of technical facts
 10. **Missing Prerequisites** - Not stating version requirements
 
@@ -73,21 +78,25 @@ Read [new_system_source]
 ```
 
 **Create mapping checklist:**
+
 ```markdown
 ## API Mapping Checklist
 
 ### Old System: [OldSystemName]
+
 - [ ] All old APIs identified
 - [ ] Old API signatures verified (if source available)
 - [ ] Old patterns documented
 
 ### New System: [NewSystemName]
+
 - [ ] All new APIs read from source
 - [ ] New API signatures verified
 - [ ] New patterns understood
 - [ ] Breaking changes identified
 
 ### Mapping
+
 - [ ] CRUD operations mapped
 - [ ] Authentication mapped
 - [ ] Error handling mapped
@@ -96,6 +105,7 @@ Read [new_system_source]
 ```
 
 **Search for benchmarks:**
+
 ```bash
 # Look for benchmark files
 find . -name "*bench*" -o -name "*benchmark*"
@@ -118,25 +128,31 @@ find . -name "*bench*" -o -name "*benchmark*"
 8. **State Management** - State pattern changes
 
 **For each pattern:**
+
 ```markdown
 ## Pattern: [PatternName]
 
 ### Old System Approach
+
 [Verified old code]
 
 ### New System Approach
+
 [Verified new code from source]
 
 ### Breaking Changes
+
 - [Specific change 1]
 - [Specific change 2]
 
 ### Migration Steps
+
 1. [Step 1]
 2. [Step 2]
 ```
 
 **Identify breaking changes explicitly:**
+
 - Method renamed
 - Parameter added/removed/reordered
 - Return type changed
@@ -148,7 +164,7 @@ find . -name "*bench*" -o -name "*benchmark*"
 
 **Use this structure:**
 
-```markdown
+````markdown
 # How to Migrate from [Old System] to [New System]
 
 ## Goal
@@ -164,6 +180,7 @@ find . -name "*bench*" -o -name "*benchmark*"
 ## Prerequisites
 
 **Before starting:**
+
 - [Old System] version: [X.Y.Z or range]
 - [New System] version: [A.B.C or range]
 - [Required dependency 1]: version [X.Y]
@@ -171,23 +188,28 @@ find . -name "*bench*" -o -name "*benchmark*"
 - [Required knowledge]: Understanding of [concept]
 
 **Installation:**
+
 ```bash
 # Install new system
 [verified installation command]
 ```
+````
 
 ## Overview of Changes
 
 **Major Breaking Changes:**
+
 1. **[Change 1]**: [What changed and impact]
 2. **[Change 2]**: [What changed and impact]
 3. **[Change 3]**: [What changed and impact]
 
 **New Capabilities:**
+
 - [Feature 1] - [Brief description]
 - [Feature 2] - [Brief description]
 
 **Removed/Deprecated:**
+
 - [Old Feature 1] - [Replacement or workaround]
 - [Old Feature 2] - [Replacement or workaround]
 
@@ -216,6 +238,7 @@ import "[new/import/path]"
 ```
 
 **What changed**:
+
 - [Specific change 1]: [Old approach] → [New approach]
 - [Specific change 2]: [Technical reason if architectural]
 
@@ -236,11 +259,13 @@ import "[new/import/path]"
 ### Step 1: [First Action] ([time estimate])
 
 **What to do:**
+
 ```[language]
 [Specific code or commands]
 ```
 
 **Verification:**
+
 ```bash
 # How to verify this step worked
 [verification command]
@@ -257,14 +282,17 @@ import "[new/import/path]"
 [Only factual architectural statements - no unverified performance claims]
 
 ### Old System Architecture
+
 - [Architectural fact 1]: [e.g., "Network-based RPC calls"]
 - [Architectural fact 2]: [e.g., "Separate process communication"]
 
 ### New System Architecture
+
 - [Architectural fact 1]: [e.g., "In-process function calls"]
 - [Architectural fact 2]: [e.g., "Direct memory access"]
 
 **Implications:**
+
 - ✅ **Factual**: "Eliminates network overhead between processes"
 - ✅ **Factual**: "Reduces database round-trips through batching"
 - ❌ **UNVERIFIED**: "10x faster" [Need benchmarks!]
@@ -278,6 +306,7 @@ import "[new/import/path]"
 ### Issue: [Common Problem 1]
 
 **Symptom**: [What the developer sees/experiences]
+
 ```
 [Error message or behavior]
 ```
@@ -285,6 +314,7 @@ import "[new/import/path]"
 **Cause**: [Why this happens - technical explanation]
 
 **Solution**:
+
 ```[language]
 // How to fix
 [verified solution code]
@@ -303,6 +333,7 @@ import "[new/import/path]"
 **Symptom**: Code doesn't compile after changing imports
 
 **Common Causes**:
+
 1. [Type import changed]: [Old import] → [New import]
 2. [Method signature changed]: [Old signature] → [New signature]
 
@@ -329,6 +360,7 @@ import "[new/import/path]"
 ```
 
 **Mapping**:
+
 - `old.setting1` → `new.setting_one` (renamed)
 - `old.setting2` → `new.setting_two` (type changed: string → number)
 - `old.setting3` → (removed - no longer needed)
@@ -407,6 +439,7 @@ Use this checklist to track your migration:
 **Verification Status**: ✅ All APIs verified against source code
 
 **Source Files Verified**:
+
 - New system: `path/to/new/source/*.ext`
 - Old system: [If source available] `path/to/old/source/*.ext`
 
@@ -415,6 +448,7 @@ Use this checklist to track your migration:
 **Verification Checklist**
 
 ### Source Code Verification (P0 - CRITICAL)
+
 - [ ] All new system APIs verified against source
 - [ ] All new system signatures exact
 - [ ] Old system APIs verified (if source available) or checked against docs
@@ -422,12 +456,14 @@ Use this checklist to track your migration:
 - [ ] Before/After examples use real imports
 
 ### Performance Claims (P0 - CRITICAL)
+
 - [ ] No unverified "Nx faster" claims
 - [ ] No fabricated timing numbers
 - [ ] Any performance claims backed by benchmarks
 - [ ] Only factual architectural statements
 
 ### Completeness (P1 - HIGH)
+
 - [ ] All breaking changes documented
 - [ ] Common migration patterns covered
 - [ ] Troubleshooting for typical issues
@@ -435,11 +471,13 @@ Use this checklist to track your migration:
 - [ ] Prerequisites clearly stated
 
 ### Quality (P2 - MEDIUM)
+
 - [ ] No marketing language
 - [ ] Technical descriptions only
 - [ ] Consistent Before/After structure
 - [ ] Source references included
-```
+
+````
 
 ### Step 4: Troubleshooting Phase (10-15 minutes)
 
@@ -466,7 +504,7 @@ Use this checklist to track your migration:
 **Symptom**: [What appears]
 **Cause**: [Why it happens]
 **Solution**: [How to fix with verified code]
-```
+````
 
 ### Step 5: Verification Phase (5-10 minutes)
 
@@ -489,6 +527,7 @@ find . -name "*bench*"
 ```
 
 **Critical checks:**
+
 - [ ] Every "After" code block verified against source
 - [ ] No fabricated new APIs
 - [ ] No unverified performance claims removed
@@ -499,14 +538,17 @@ find . -name "*bench*"
 ## Integration with Other Skills
 
 ### Works With:
+
 - **api-doc-writer** - Link to new system API reference
 - **tutorial-writer** - Link to getting started with new system
 - **api-documentation-verify** - Verify migration guide accuracy
 
 ### Invokes:
+
 - None (standalone skill)
 
 ### Invoked By:
+
 - User (manual invocation)
 - After major version releases
 - When deprecating old systems
@@ -516,6 +558,7 @@ find . -name "*bench*"
 **Primary Output**: Markdown file with structured migration guide
 
 **File Location**:
+
 - `docs/migrations/[old]-to-[new].md`
 - `MIGRATION.md` in project root
 - `docs/how-to/migrate-from-[old].md`
@@ -523,6 +566,7 @@ find . -name "*bench*"
 ## Common Pitfalls to Avoid
 
 ### 1. Unverified Performance Claims
+
 ```markdown
 ❌ BAD - No benchmark evidence
 The new system is 10x faster than the old system
@@ -533,6 +577,7 @@ The new system eliminates network overhead by using in-process calls
 ```
 
 ### 2. Fabricated New APIs
+
 ```markdown
 ❌ BAD - API doesn't exist
 // After (New System)
@@ -545,12 +590,14 @@ await newSystem.initialize(adapter.transform())
 ```
 
 ### 3. Incomplete Breaking Changes
+
 ```markdown
 ❌ BAD - Missing changes
 Major changes: Method renamed
 
 ✅ GOOD - Complete list
 Breaking Changes:
+
 1. CreateTask() renamed to Create()
 2. Create() now requires ctx parameter
 3. TaskParams.Owner changed from string to UserId type
@@ -559,12 +606,15 @@ Breaking Changes:
 ```
 
 ### 4. Missing Troubleshooting
+
 ```markdown
 ❌ BAD - No troubleshooting section
 [Guide ends after migration patterns]
 
 ✅ GOOD - Comprehensive troubleshooting
+
 ## Troubleshooting
+
 [Multiple common issues with solutions]
 ```
 
@@ -589,6 +639,7 @@ Assistant: "I'll use migration-guide-writer to create a comprehensive migration 
 ## Success Criteria
 
 Migration guide is complete when:
+
 - ✅ All new system APIs verified against source
 - ✅ Before/After examples for all common patterns
 - ✅ All breaking changes documented
@@ -605,7 +656,6 @@ Migration guide is complete when:
 - Diátaxis Framework: https://diataxis.fr/how-to-guides/
 - Technical Documentation Expert Agent
 - API Documentation Writer skill (for referencing APIs)
-
 
 ---
 

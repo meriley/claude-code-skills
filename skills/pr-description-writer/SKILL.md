@@ -1,5 +1,5 @@
 ---
-name: PR Description Writer
+name: pr-description-writer
 description: Writes and verifies GitHub pull request descriptions with zero fabrication tolerance. Discovers project PR templates, generates descriptions from git changes, and applies technical documentation verification standards.
 version: 1.0.0
 ---
@@ -21,14 +21,18 @@ Write and verify GitHub pull request descriptions following project templates wi
 ## Two Modes of Operation
 
 ### Create Mode (Default)
+
 Generate new PR description from git changes:
+
 - Analyze git diff and commit history
 - Follow project PR template if found
 - Verify all claims against actual changes
 - Generate markdown for `gh pr create --body`
 
 ### Verify Mode
+
 Audit existing PR description for accuracy:
+
 - Compare description claims against git changes
 - Flag fabricated features or unverified claims
 - Identify marketing language
@@ -49,6 +53,7 @@ ls docs/pull_request_template.md 2>/dev/null
 ```
 
 **Template locations (priority order)**:
+
 1. `.github/PULL_REQUEST_TEMPLATE.md` (primary)
 2. `.github/pull_request_template.md` (alternative casing)
 3. `.github/PULL_REQUEST_TEMPLATE/*.md` (multiple templates)
@@ -56,6 +61,7 @@ ls docs/pull_request_template.md 2>/dev/null
 5. Use TEMPLATE_DEFAULT.md if none found
 
 **Parse template sections:**
+
 - Identify required sections (Summary, Changes, Testing, etc.)
 - Extract section headers and structure
 - Note any special instructions or checklists
@@ -115,6 +121,7 @@ git diff [base-branch]...HEAD --name-only | grep -E "(test|spec)" || true
 **Generate each template section with verification:**
 
 #### Summary Section
+
 ```markdown
 ## Summary
 
@@ -124,69 +131,85 @@ git diff [base-branch]...HEAD --name-only | grep -E "(test|spec)" || true
 ```
 
 **Verification**:
+
 - [ ] All bullet points backed by commits
 - [ ] No fabricated features not in git diff
 - [ ] Clear, concise technical descriptions
 
 #### Changes Section
+
 ```markdown
 ## Changes
 
 [Technical paragraph explaining modifications]
 
 **Files Modified**:
+
 - `path/to/file1.ext` - [what changed]
 - `path/to/file2.ext` - [what changed]
 
 **Components Affected**:
+
 - [Component 1]: [nature of change]
 - [Component 2]: [nature of change]
 ```
 
 **Verification**:
+
 - [ ] All mentioned files exist in git diff
 - [ ] All components accurately described
 - [ ] No fabricated modifications
 - [ ] Technical descriptions only (no marketing)
 
 #### Testing Section
+
 ```markdown
 ## Testing
 
 **Unit Tests**:
+
 - Coverage: [X%] (if available from test output)
 - New tests: [count] tests added
 - Modified tests: [count] tests updated
 
 **Integration Tests**:
+
 - [Status or N/A]
 
 **Manual Testing**:
+
 - Tested [scenario] in [environment]
 - Verified [behavior]
 
 **Test Files Changed**:
+
 - `path/to/test/file1.test.ext`
 - `path/to/test/file2.spec.ext`
 ```
 
 **Verification**:
+
 - [ ] Coverage numbers from actual test output (not fabricated)
 - [ ] Test files mentioned exist in git diff
 - [ ] Manual testing claims are reasonable
 - [ ] No unverified performance claims
 
 #### Breaking Changes Section (Conditional)
-```markdown
+
+````markdown
 ## Breaking Changes
 
 ### Change 1: [API Signature Change]
+
 **Before**:
+
 ```[language]
 [old signature from git diff]
 ```
+````
 
 **After**:
+
 ```[language]
 [new signature from git diff]
 ```
@@ -194,9 +217,11 @@ git diff [base-branch]...HEAD --name-only | grep -E "(test|spec)" || true
 **Migration**: [How to adapt existing code]
 
 ### Change 2: [Removed Method]
+
 **Removed**: `MethodName()`
 **Replacement**: Use `NewMethodName()` instead
-```
+
+````
 
 **Verification**:
 - [ ] All breaking changes verified in git diff
@@ -211,14 +236,16 @@ git diff [base-branch]...HEAD --name-only | grep -E "(test|spec)" || true
 Closes #123
 Fixes #456
 Relates to #789
-```
+````
 
 **Verification**:
+
 - [ ] Issue numbers extracted from commit messages
 - [ ] Using correct keywords (Closes, Fixes, Relates to)
 - [ ] Issue numbers are valid (optional GitHub API check)
 
 #### Checklist Section
+
 ```markdown
 ## Checklist
 
@@ -232,6 +259,7 @@ Relates to #789
 ```
 
 **Verification**:
+
 - [ ] Checkmarks reflect actual results from safe-commit
 - [ ] Coverage number matches test output
 - [ ] All pre-submission items checked
@@ -245,6 +273,7 @@ Relates to #789
 ## PR Description Verification Checklist
 
 ### P0 - CRITICAL (Must Fix Before PR)
+
 - [ ] All mentioned features exist in git diff
 - [ ] All mentioned files exist in git diff output
 - [ ] No fabricated methods or APIs
@@ -253,6 +282,7 @@ Relates to #789
 - [ ] Coverage numbers match actual test output (or not specified)
 
 ### P1 - HIGH (Should Fix)
+
 - [ ] No marketing buzzwords (enterprise, blazing, advanced, robust)
 - [ ] No decorative emojis in technical text
 - [ ] No sales language ("cutting-edge", "revolutionary")
@@ -260,6 +290,7 @@ Relates to #789
 - [ ] Breaking changes accurately documented
 
 ### P2 - MEDIUM (Consider Fixing)
+
 - [ ] All template sections populated
 - [ ] Related issues correctly linked
 - [ ] Checklist reflects actual status
@@ -278,12 +309,15 @@ Relates to #789
 **Issues Found**: Z issues
 
 **P0 Issues (Must Fix)**:
+
 - None
 
 **P1 Issues (Should Fix)**:
+
 - None
 
 **P2 Issues (Consider)**:
+
 - None
 
 **Verification Date**: [timestamp]
@@ -297,7 +331,9 @@ Relates to #789
 [Populated template with all sections]
 
 ---
+
 <!-- Verification metadata (optional - can be hidden in HTML comment) -->
+
 Verification: All claims verified against git diff [commit-range]
 Verification Date: [timestamp]
 Files Analyzed: X files
@@ -309,6 +345,7 @@ Claims Verified: Y claims
 ### Standard Sections (Industry Best Practices 2025)
 
 #### Required Sections
+
 1. **Summary** - Brief overview (1-3 bullets)
 2. **Changes** - Technical details of modifications
 3. **Testing** - How changes were tested
@@ -316,11 +353,13 @@ Claims Verified: Y claims
 5. **Checklist** - Pre-submission verification
 
 #### Conditional Sections
+
 6. **Breaking Changes** - Only if backwards-incompatible
 7. **Migration Guide** - If breaking changes exist
 8. **Performance Impact** - Only with benchmark evidence
 
 #### Optional Sections
+
 9. **Screenshots** - For UI changes
 10. **Security Considerations** - For security-related changes
 11. **Deployment Notes** - Special deployment instructions
@@ -331,6 +370,7 @@ Claims Verified: Y claims
 ### Zero Fabrication Policy (P0 - CRITICAL)
 
 **NEVER fabricate:**
+
 1. **Features** that don't exist in git diff
 2. **Files** that aren't in the changeset
 3. **Methods/APIs** that weren't modified
@@ -353,12 +393,14 @@ Claims Verified: Y claims
 ### Performance Claims (P0 - CRITICAL)
 
 **NEVER SAY (without benchmarks)**:
+
 - "10x faster"
 - "50ms → 5ms"
 - "90% performance improvement"
 - ANY specific numbers or multipliers
 
 **ALWAYS ACCEPTABLE**:
+
 - "Eliminates network overhead"
 - "In-process execution"
 - "Reduces database round-trips"
@@ -380,6 +422,7 @@ Claims Verified: Y claims
 ### Marketing Language (P1 - HIGH)
 
 **BANNED BUZZWORDS**:
+
 - enterprise, advanced, robust, comprehensive, modern, rich
 - first-class, powerful, seamless, cutting-edge, revolutionary
 - blazing-fast, lightning-fast, world-class, state-of-the-art
@@ -387,6 +430,7 @@ Claims Verified: Y claims
 - next-generation, innovative, sophisticated
 
 **BANNED EMOJIS** (in technical text):
+
 - 🏗️⚡📦🔗🔒📝🧪👉💡📚🔧📖🚀💯🔥🎉
 
 **Example violations:**
@@ -402,6 +446,7 @@ Claims Verified: Y claims
 ### Code Reference Verification (P0 - CRITICAL)
 
 **MUST verify:**
+
 - All file paths mentioned exist in git diff
 - All imports are actual paths (not fabricated)
 - All method names match git diff
@@ -422,24 +467,28 @@ import "git.taservs.net/rcom/taskcore/converters"
 ## Common Issues and Solutions
 
 ### Issue: Nil Pointer in Template Parsing
+
 ```markdown
 Problem: Template has nested YAML front matter
 Solution: Parse only markdown headers, ignore YAML
 ```
 
 ### Issue: Multiple PR Templates
+
 ```markdown
 Problem: .github/PULL_REQUEST_TEMPLATE/ contains multiple files
 Solution: Use default.md or ask user which template
 ```
 
 ### Issue: No Git History Available
+
 ```markdown
 Problem: New repository or shallow clone
 Solution: Require full git history, inform user
 ```
 
 ### Issue: Conflicting Commit Messages
+
 ```markdown
 Problem: Commits say different things about same change
 Solution: Analyze actual code changes, use most recent commit message
@@ -448,13 +497,16 @@ Solution: Analyze actual code changes, use most recent commit message
 ## Integration with Other Skills
 
 ### Invoked By:
+
 - **create-pr** skill (Step 6: Generate PR Description)
 - User (manual invocation)
 
 ### Invokes:
+
 - None (uses git commands via Bash tool)
 
 ### Works With:
+
 - **check-history** - Provides git context
 - **api-documentation-verify** - Verification pattern reference
 - **safe-commit** - Commit messages already verified
@@ -462,11 +514,13 @@ Solution: Analyze actual code changes, use most recent commit message
 ### Integration in create-pr Flow:
 
 **Before** (current):
+
 ```
 create-pr Step 6: Generate PR description (embedded logic)
 ```
 
 **After** (new):
+
 ```
 create-pr Step 6: Invoke pr-description-writer skill
   ├─> Input: base branch, commit range, template
@@ -477,6 +531,7 @@ create-pr Step 6: Invoke pr-description-writer skill
 ## Example Usage
 
 ### Automatic Invocation (via create-pr)
+
 ```bash
 User: "create a PR"
 Assistant: [create-pr invokes pr-description-writer automatically]
@@ -489,6 +544,7 @@ Assistant: [create-pr invokes pr-description-writer automatically]
 ```
 
 ### Manual Creation
+
 ```bash
 User: "write a PR description for my changes"
 Assistant: "I'll use pr-description-writer to create a verified PR description"
@@ -501,6 +557,7 @@ Assistant: "I'll use pr-description-writer to create a verified PR description"
 ```
 
 ### Verification Mode
+
 ```bash
 User: "verify the PR description for #47"
 Assistant: "I'll verify the PR description against actual changes"
@@ -515,11 +572,13 @@ Assistant: "I'll verify the PR description against actual changes"
 ## Time Estimates
 
 **Create Mode**:
+
 - Small PR (1-5 files, 1-3 commits): 10-15 minutes
 - Medium PR (5-15 files, 3-10 commits): 15-25 minutes
 - Large PR (15+ files, 10+ commits): 25-40 minutes
 
 **Verify Mode**:
+
 - Review existing description: 5-10 minutes
 
 ## Success Criteria
@@ -543,6 +602,7 @@ A PR description is complete and verified when:
 ## Output Format
 
 ### Create Mode Output
+
 ```markdown
 [Complete PR description following template]
 
@@ -552,6 +612,7 @@ A PR description is complete and verified when:
 ```
 
 ### Verify Mode Output
+
 ```markdown
 ## PR Description Verification Report
 
@@ -559,16 +620,20 @@ A PR description is complete and verified when:
 **Status**: ✅ PASSED / ⚠️ WARNINGS / ❌ FAILED
 
 ### P0 Issues (Must Fix)
+
 - None
 
 ### P1 Issues (Should Fix)
+
 - Line 15: Marketing buzzword "enterprise-grade"
 - Line 23: Unverified performance claim "10x faster"
 
 ### P2 Issues (Consider)
+
 - Breaking changes section could be more detailed
 
 ### Recommendations
+
 1. Remove marketing language
 2. Replace performance claim with architectural fact
 3. Expand breaking changes documentation

@@ -1,5 +1,5 @@
 ---
-name: Run Tests
+name: run-tests
 description: ⚠️ MANDATORY - Automatically invoked by safe-commit. Executes comprehensive testing suite including unit tests (minimum 90% coverage), integration tests, and E2E tests (100% pass required). Reports coverage and failures. MUST pass before commit. NEVER run tests manually before commit.
 version: 1.0.1
 dependencies: Language-specific test frameworks (pytest, jest, go test, cargo test, etc.)
@@ -10,6 +10,7 @@ dependencies: Language-specific test frameworks (pytest, jest, go test, cargo te
 ## ⚠️ MANDATORY SKILL - AUTO-INVOKED BY SAFE-COMMIT
 
 ## Purpose
+
 Execute comprehensive testing to ensure code correctness, prevent regressions, and maintain quality standards before committing.
 
 **CRITICAL:** This skill is automatically invoked by safe-commit. NEVER run tests manually before commit.
@@ -17,17 +18,20 @@ Execute comprehensive testing to ensure code correctness, prevent regressions, a
 ## Testing Requirements
 
 ### Coverage Thresholds
+
 - **Unit Tests**: Minimum 90% code coverage
 - **Integration Tests**: All integration points tested
 - **End-to-End Tests**: 100% pass rate (no mocks)
 
 ### Philosophy
+
 - Tests are NOT optional
 - Failing tests = failing build
 - Coverage below thresholds = failure
 - E2E tests use real dependencies, never mocks
 
 ## When to Use
+
 - **AUTOMATICALLY** invoked by safe-commit before every commit
 - During refinement phase (manual invocation allowed)
 - After implementing new features (manual invocation allowed)
@@ -35,6 +39,7 @@ Execute comprehensive testing to ensure code correctness, prevent regressions, a
 - When user requests "run tests"
 
 ## 🚫 NEVER DO THIS
+
 - ❌ Running `npm test` or `jest` manually before commit
 - ❌ Running `go test ./...` manually before commit
 - ❌ Running `pytest` manually before commit
@@ -49,28 +54,35 @@ Execute comprehensive testing to ensure code correctness, prevent regressions, a
 **Before using Bash tool to run tests, answer these questions:**
 
 ### ❓ Are you about to run `npm test`, `npm run test`, or `jest`?
+
 → **STOP.** Are you doing this before commit? If YES, use safe-commit instead (it invokes this skill).
 
 ### ❓ Are you about to run `go test ./...` or `go test -v`?
+
 → **STOP.** Are you doing this before commit? If YES, use safe-commit instead (it invokes this skill).
 
 ### ❓ Are you about to run `pytest`, `python -m pytest`, or `py.test`?
+
 → **STOP.** Are you doing this before commit? If YES, use safe-commit instead (it invokes this skill).
 
 ### ❓ Are you about to run `cargo test` or `yarn test`?
+
 → **STOP.** Are you doing this before commit? If YES, use safe-commit instead (it invokes this skill).
 
 ### ❓ Are you checking test coverage before committing?
+
 → **STOP.** Invoke safe-commit skill (it will invoke this skill automatically).
 
 **IF YOU RUN TESTS MANUALLY BEFORE COMMIT, YOU ARE CREATING REDUNDANCY AND WASTING TIME.**
 
 When to run tests manually:
+
 - ✅ During development/debugging (TDD workflow)
 - ✅ After implementing features (to verify locally)
 - ✅ When user explicitly requests "run tests"
 
 When NOT to run tests manually:
+
 - ❌ Before commit (use safe-commit instead)
 - ❌ As part of commit workflow (use safe-commit instead)
 
@@ -90,6 +102,7 @@ ls package.json go.mod requirements.txt Cargo.toml pytest.ini jest.config.js 2>/
 ```
 
 **Test Framework Detection:**
+
 - `package.json` + `jest.config.js` or `"jest"` in package.json → Jest
 - `package.json` + `vitest.config` → Vitest
 - `go.mod` + `*_test.go` files → Go testing
@@ -111,11 +124,13 @@ npx jest --coverage --verbose
 ```
 
 **Parse output for:**
+
 - Test pass/fail counts
 - Coverage percentages (Statements, Branches, Functions, Lines)
 - Specific test failures with file/line numbers
 
 **Success criteria:**
+
 - All tests pass
 - Coverage ≥ 90% for all metrics
 
@@ -132,15 +147,18 @@ go test ./... -v -cover -coverprofile=coverage.out
 ```
 
 **Parse coverage:**
+
 ```bash
 go tool cover -func=coverage.out | tail -1
 ```
 
 **Success criteria:**
+
 - All tests pass (PASS in output)
 - Total coverage ≥ 90%
 
 **For detailed HTML report:**
+
 ```bash
 go tool cover -html=coverage.out -o coverage.html
 ```
@@ -152,6 +170,7 @@ pytest --cov=. --cov-report=term-missing --cov-report=html --verbose
 ```
 
 **Success criteria:**
+
 - All tests pass
 - Coverage ≥ 90%
 
@@ -162,11 +181,13 @@ cargo test --verbose
 ```
 
 **For coverage (requires tarpaulin):**
+
 ```bash
 cargo tarpaulin --out Html --output-dir coverage
 ```
 
 **Success criteria:**
+
 - All tests pass
 - Coverage ≥ 90% (if coverage tool available)
 
@@ -177,6 +198,7 @@ mvn test -Pcoverage
 ```
 
 **Success criteria:**
+
 - BUILD SUCCESS
 - Coverage ≥ 90% (check target/site/jacoco/index.html)
 
@@ -187,7 +209,9 @@ mvn test -Pcoverage
 Integration tests verify service-to-service communication, database interactions, and API contracts.
 
 ### Detection
+
 Look for:
+
 - `*_integration_test.go`
 - `tests/integration/` directory
 - `test_integration_*.py`
@@ -196,21 +220,25 @@ Look for:
 ### Execution
 
 **Go:**
+
 ```bash
 go test ./... -tags=integration -v
 ```
 
 **Python:**
+
 ```bash
 pytest tests/integration/ -v
 ```
 
 **Node.js:**
+
 ```bash
 npm test -- --testPathPattern=integration
 ```
 
 **Success criteria:**
+
 - All integration tests pass
 - Real dependencies used (database, external services)
 - Proper setup/teardown of test data
@@ -222,7 +250,9 @@ npm test -- --testPathPattern=integration
 E2E tests verify complete user workflows against production-like environment.
 
 ### Detection
+
 Look for:
+
 - `tests/e2e/` directory
 - `e2e/` directory
 - `*.e2e.test.ts`
@@ -231,21 +261,25 @@ Look for:
 ### Execution
 
 **Playwright:**
+
 ```bash
 npx playwright test
 ```
 
 **Cypress:**
+
 ```bash
 npx cypress run
 ```
 
 **Go (if using testcontainers):**
+
 ```bash
 go test ./e2e/... -v
 ```
 
 **Success criteria:**
+
 - 100% pass rate (MANDATORY - no failures allowed)
 - Tests use real browser/application
 - Tests verify actual user experience
@@ -320,17 +354,20 @@ Next Steps:
 If user wants detailed coverage report:
 
 **Go:**
+
 ```bash
 go tool cover -html=coverage.out -o coverage.html
 echo "Coverage report: coverage.html"
 ```
 
 **Python:**
+
 ```bash
 echo "Coverage report: htmlcov/index.html"
 ```
 
 **Node.js:**
+
 ```bash
 echo "Coverage report: coverage/lcov-report/index.html"
 ```
@@ -353,17 +390,18 @@ echo "Coverage report: coverage/lcov-report/index.html"
    - Flaky tests (timing/concurrency)
 
 3. **Report to User**
+
    ```
    Test Failure Analysis:
-   
+
    1. parser_test.go:45 - Legitimate bug
       Issue: ParseInvalidInput returns nil instead of error
       Fix needed: Add error handling in parser.go:128
-   
+
    2. handlers.test.ts:128 - Test expectation issue
       Issue: API changed from 404 to 500 for this case
       Fix needed: Update test expectation or API behavior
-   
+
    3. checkout.spec.ts - Environment issue
       Issue: Payment service timeout (external dependency)
       Fix needed: Verify payment service is running, increase timeout, or check network
@@ -381,18 +419,20 @@ echo "Coverage report: coverage/lcov-report/index.html"
 If coverage < 90%:
 
 1. **Identify Uncovered Code**
+
    ```bash
    go tool cover -func=coverage.out | grep -E "[0-9]+\.[0-9]+%" | awk '$3 < 90'
    ```
 
 2. **Report Specific Gaps**
+
    ```
    Coverage Gaps:
-   
+
    - pkg/auth/validator.go: 78.5%
      Missing: Lines 45-62 (error handling)
      Missing: Lines 89-95 (edge case validation)
-   
+
    - src/utils/helpers.ts: 82.1%
      Missing: Lines 34-41 (error path)
      Missing: Function 'formatDate' (no tests)
@@ -408,6 +448,7 @@ If coverage < 90%:
 ## Integration with Other Skills
 
 This skill is invoked by:
+
 - **`safe-commit`** - Before committing changes
 - **`create-pr`** - Before creating pull requests
 
@@ -425,27 +466,35 @@ This skill is invoked by:
 ## Common Issues
 
 ### Issue: Tests not found
-**Solution:** 
+
+**Solution:**
+
 - Verify test files exist
 - Check test file naming conventions
 - Ensure test framework installed
 
 ### Issue: Database connection failed
+
 **Solution:**
+
 - Check database is running
 - Verify connection string
 - Ensure test database exists
 - Check migrations are applied
 
 ### Issue: E2E tests timing out
+
 **Solution:**
+
 - Increase timeout values
 - Check application is running
 - Verify network connectivity
 - Check browser/driver versions
 
 ### Issue: Flaky tests
+
 **Solution:**
+
 - Identify intermittent failures
 - Check for timing issues
 - Review async/await usage
@@ -458,6 +507,7 @@ This skill is invoked by:
 If user explicitly states "skip tests" or "tests are broken but commit anyway":
 
 **YOU MUST:**
+
 1. Warn about the risk
 2. Document which tests were skipped
 3. Get explicit confirmation

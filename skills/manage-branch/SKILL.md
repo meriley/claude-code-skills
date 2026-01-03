@@ -1,5 +1,5 @@
 ---
-name: Manage Branch
+name: manage-branch
 description: Creates and manages git branches with enforced mriley/ prefix naming convention. Validates branch names, switches branches safely, and handles branch creation with proper base branch selection.
 version: 1.0.0
 ---
@@ -7,9 +7,11 @@ version: 1.0.0
 # Manage Branch Skill
 
 ## Purpose
+
 Enforce branch naming conventions and provide safe branch creation/switching operations with proper validation.
 
 ## When to Use
+
 - Creating new feature/fix/refactor branches
 - Switching between branches
 - As part of PR creation workflow
@@ -22,6 +24,7 @@ Enforce branch naming conventions and provide safe branch creation/switching ope
 **ALL branches MUST be prefixed with `mriley/`**
 
 **Valid branch name patterns:**
+
 - `mriley/feat/<descriptive-name>`
 - `mriley/fix/<issue-description>`
 - `mriley/refactor/<component-name>`
@@ -31,12 +34,14 @@ Enforce branch naming conventions and provide safe branch creation/switching ope
 - `mriley/test/<testing-addition>`
 
 **Examples of CORRECT names:**
+
 - ✅ `mriley/feat/user-authentication`
 - ✅ `mriley/fix/parser-null-handling`
 - ✅ `mriley/refactor/api-validation`
 - ✅ `mriley/perf/optimize-query-performance`
 
 **Examples of INCORRECT names:**
+
 - ❌ `feat/user-authentication` (missing mriley/ prefix)
 - ❌ `user-authentication` (missing prefix and type)
 - ❌ `fix-bug` (missing mriley/ prefix)
@@ -49,6 +54,7 @@ Enforce branch naming conventions and provide safe branch creation/switching ope
 #### Step 1.1: Determine Branch Type
 
 Ask user or infer from context:
+
 - **feat**: New feature
 - **fix**: Bug fix
 - **refactor**: Code restructuring
@@ -62,11 +68,13 @@ Ask user or infer from context:
 Based on work description, generate name:
 
 **Format:**
+
 ```
 mriley/<type>/<short-descriptive-name>
 ```
 
 **Naming guidelines:**
+
 - Use kebab-case (lowercase with hyphens)
 - Be descriptive but concise (2-4 words)
 - Focus on WHAT, not HOW
@@ -74,6 +82,7 @@ mriley/<type>/<short-descriptive-name>
 - Max 50 characters total
 
 **Examples:**
+
 ```
 mriley/feat/jwt-authentication
 mriley/fix/memory-leak-parser
@@ -84,6 +93,7 @@ mriley/perf/cache-database-queries
 #### Step 1.3: Validate Branch Name
 
 Check against requirements:
+
 - ✅ Starts with `mriley/`
 - ✅ Has type (feat/fix/refactor/etc)
 - ✅ Has descriptive name
@@ -97,6 +107,7 @@ git status
 ```
 
 **If uncommitted changes exist:**
+
 ```
 ⚠️ Uncommitted changes detected
 
@@ -123,11 +134,13 @@ git branch --show-current
 ```
 
 **Common scenarios:**
+
 - On `main`/`master` → Create from current (typical)
 - On feature branch → Ask if creating from current or from main
 - On `develop` → Create from current (if using gitflow)
 
 **If uncertain, ask user:**
+
 ```
 Create branch from:
 1. Current branch (main)
@@ -141,6 +154,7 @@ git checkout -b mriley/<type>/<name>
 ```
 
 **Or if creating from specific base:**
+
 ```bash
 git checkout -b mriley/<type>/<name> origin/main
 ```
@@ -152,6 +166,7 @@ git branch --show-current
 ```
 
 **Report success:**
+
 ```
 ✅ Branch created successfully
 
@@ -173,6 +188,7 @@ git status
 ```
 
 **If uncommitted changes:**
+
 ```
 ⚠️ Uncommitted changes detected
 
@@ -197,6 +213,7 @@ git branch -v
 ```
 
 Show branches with descriptions:
+
 ```
 Available branches:
 * main                    a1b2c3d Last commit message
@@ -211,6 +228,7 @@ git checkout <branch-name>
 ```
 
 **Or fetch and checkout remote branch:**
+
 ```bash
 git fetch origin
 git checkout -b <branch-name> origin/<branch-name>
@@ -223,6 +241,7 @@ git branch --show-current
 ```
 
 **Report success:**
+
 ```
 ✅ Switched to branch: mriley/feat/auth
 
@@ -248,6 +267,7 @@ git branch --show-current
 Check if matches `mriley/<type>/<name>` pattern.
 
 **If invalid:**
+
 ```
 ⚠️ Branch name doesn't follow convention
 
@@ -280,9 +300,11 @@ git push -u origin mriley/<type>/<name>
 ## Integration with Other Skills
 
 This skill is invoked by:
+
 - **`create-pr`** - When creating pull request
 
 This skill may invoke:
+
 - **`safe-commit`** - If user wants to commit before switching
 
 ---
@@ -290,6 +312,7 @@ This skill may invoke:
 ## Error Handling
 
 ### Error: Branch already exists
+
 ```
 ❌ Branch already exists: mriley/feat/auth
 
@@ -302,6 +325,7 @@ What would you like to do?
 ```
 
 ### Error: Invalid branch name
+
 ```
 ❌ Invalid branch name
 
@@ -314,6 +338,7 @@ Shall I use the corrected name?
 ```
 
 ### Error: Cannot switch (uncommitted changes)
+
 ```
 ❌ Cannot switch branches
 
@@ -325,6 +350,7 @@ Please commit or stash changes first.
 ```
 
 ### Error: Branch doesn't exist
+
 ```
 ❌ Branch doesn't exist: mriley/feat/nonexistent
 
@@ -353,21 +379,25 @@ Did you mean one of these?
 ### Good Examples
 
 **Features:**
+
 - `mriley/feat/oauth-integration`
 - `mriley/feat/real-time-notifications`
 - `mriley/feat/export-to-csv`
 
 **Bug Fixes:**
+
 - `mriley/fix/race-condition-handler`
 - `mriley/fix/memory-leak-cache`
 - `mriley/fix/null-pointer-parser`
 
 **Refactoring:**
+
 - `mriley/refactor/extract-validation-logic`
 - `mriley/refactor/split-large-service`
 - `mriley/refactor/improve-error-handling`
 
 **Performance:**
+
 - `mriley/perf/optimize-database-queries`
 - `mriley/perf/add-response-caching`
 - `mriley/perf/reduce-memory-allocation`
@@ -385,26 +415,31 @@ Did you mean one of these?
 ## Quick Reference
 
 **Create branch:**
+
 ```bash
 git checkout -b mriley/feat/descriptive-name
 ```
 
 **Switch branch:**
+
 ```bash
 git checkout mriley/feat/existing-branch
 ```
 
 **Rename branch:**
+
 ```bash
 git branch -m mriley/feat/new-name
 ```
 
 **List branches:**
+
 ```bash
 git branch -v
 ```
 
 **Delete branch (local):**
+
 ```bash
 git branch -d mriley/feat/old-branch
 ```

@@ -1,5 +1,5 @@
 ---
-name: Git History Context
+name: check-history
 description: ⚠️ MANDATORY - YOU MUST invoke this skill at the start of EVERY task. Reviews git history, status, and context before starting any work. Runs parallel git commands to understand current state, recent changes, and related work. NEVER gather git context manually.
 version: 1.0.1
 ---
@@ -9,11 +9,13 @@ version: 1.0.1
 ## ⚠️ MANDATORY SKILL - YOU MUST INVOKE THIS
 
 ## Purpose
+
 This skill gathers comprehensive git context before starting any work. It helps understand the current state of the repository, recent changes, and identify related previous work.
 
 **CRITICAL:** You MUST invoke this skill - NEVER gather git context manually with individual git commands.
 
 ## When to Use
+
 - **MANDATORY:** At the start of EVERY new task or user request
 - Before implementing features or fixing bugs
 - Before creating implementation plans
@@ -21,6 +23,7 @@ This skill gathers comprehensive git context before starting any work. It helps 
 - When user asks about recent changes or project history
 
 ## 🚫 NEVER DO THIS
+
 - ❌ Running `git status` manually
 - ❌ Running `git diff` manually
 - ❌ Running `git log` manually
@@ -35,18 +38,23 @@ This skill gathers comprehensive git context before starting any work. It helps 
 **Before using Bash tool for git commands, answer these questions:**
 
 ### ❓ Are you about to run `git status`?
+
 → **STOP.** Invoke check-history skill instead.
 
 ### ❓ Are you about to run `git diff`?
+
 → **STOP.** Invoke check-history skill instead.
 
 ### ❓ Are you about to run `git log`?
+
 → **STOP.** Invoke check-history skill instead.
 
 ### ❓ Are you gathering git context at the start of a task?
+
 → **STOP.** Invoke check-history skill instead.
 
 ### ❓ Are you about to run multiple git commands in parallel (git status & git diff & git log)?
+
 → **STOP.** Invoke check-history skill instead.
 
 **IF YOU PROCEED WITH BASH FOR THESE GIT COMMANDS, YOU ARE VIOLATING YOUR CORE DIRECTIVE.**
@@ -58,6 +66,7 @@ This skill runs these commands for you, in parallel, with proper analysis. Use i
 ## Workflow
 
 ### Step 1: Run Parallel Git Status Commands
+
 Execute these commands in parallel for efficiency:
 
 ```bash
@@ -65,6 +74,7 @@ git status & git diff & git log --oneline -10 &
 ```
 
 **What to look for:**
+
 - Current branch name
 - Uncommitted changes (staged or unstaged)
 - Untracked files
@@ -72,6 +82,7 @@ git status & git diff & git log --oneline -10 &
 - Commit patterns and conventions in use
 
 ### Step 2: Analyze Current State
+
 Based on the parallel command output:
 
 1. **Branch Status:**
@@ -90,6 +101,7 @@ Based on the parallel command output:
    - Note any related work or recent changes in relevant areas
 
 ### Step 3: Search for Related Work (If Applicable)
+
 If the task relates to a specific feature, bug, or area:
 
 ```bash
@@ -97,11 +109,13 @@ git log --grep="<keyword>" --oneline -10
 ```
 
 **Example keywords:**
+
 - Feature names (e.g., "auth", "parser", "api")
 - Bug identifiers (e.g., "fix", "bug", "issue")
 - Scope identifiers from conventional commits
 
 ### Step 4: Get Detailed Context (If Needed)
+
 For more detailed information about recent changes:
 
 ```bash
@@ -111,6 +125,7 @@ git log --graph --oneline -10              # Visual commit graph
 ```
 
 ### Step 5: Generate Context Summary
+
 Provide a concise summary including:
 
 1. **Current State:**
@@ -160,11 +175,13 @@ Recommendations:
 ## Error Handling
 
 ### If git command fails:
+
 - Verify we're in a git repository
 - Check git is installed and accessible
 - Report error to user with specific command that failed
 
 ### If not in a git repo:
+
 - Note this is not a git repository
 - Skip git-specific checks
 - Proceed with file system context if needed
@@ -172,6 +189,7 @@ Recommendations:
 ## Integration with Other Skills
 
 This skill should be invoked by:
+
 - **`sparc-plan`** - Before creating implementation plans
 - **`safe-commit`** - To understand what's being committed
 - **`create-pr`** - To generate meaningful PR descriptions

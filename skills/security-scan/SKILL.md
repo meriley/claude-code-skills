@@ -1,5 +1,5 @@
 ---
-name: Security Scan
+name: security-scan
 description: ⚠️ MANDATORY - Automatically invoked by safe-commit. Performs comprehensive security scanning before commits. Checks for secrets (API keys, passwords, tokens), dependency vulnerabilities, code injection risks, and authentication issues. MUST pass before any commit. NEVER run security scans manually.
 version: 1.0.1
 ---
@@ -9,11 +9,13 @@ version: 1.0.1
 ## ⚠️ MANDATORY SKILL - AUTO-INVOKED BY SAFE-COMMIT
 
 ## Purpose
+
 Comprehensive security verification to ensure no secrets, vulnerabilities, or security issues are committed to the repository.
 
 **CRITICAL:** This skill is automatically invoked by safe-commit. NEVER run security scans manually.
 
 ## When to Use
+
 - **AUTOMATICALLY** invoked by safe-commit before every commit
 - Before creating pull requests (via safe-commit)
 - When adding new dependencies (manual invocation allowed)
@@ -21,6 +23,7 @@ Comprehensive security verification to ensure no secrets, vulnerabilities, or se
 - When user requests security review
 
 ## 🚫 NEVER DO THIS
+
 - ❌ Running `grep` for secrets manually before commit
 - ❌ Running `npm audit` or `go mod audit` manually before commit
 - ❌ Checking for security issues outside of this skill during commit workflow
@@ -34,28 +37,35 @@ Comprehensive security verification to ensure no secrets, vulnerabilities, or se
 **Before using Bash/Grep tools for security checks, answer these questions:**
 
 ### ❓ Are you about to run `grep` to search for secrets/API keys?
+
 → **STOP.** Are you doing this before commit? If YES, use safe-commit instead (it invokes this skill).
 
 ### ❓ Are you about to run `npm audit` or `go mod audit`?
+
 → **STOP.** Are you doing this before commit? If YES, use safe-commit instead (it invokes this skill).
 
 ### ❓ Are you checking for secrets, passwords, or tokens in code?
+
 → **STOP.** Are you doing this before commit? If YES, use safe-commit instead (it invokes this skill).
 
 ### ❓ Are you scanning for dependency vulnerabilities?
+
 → **STOP.** Are you doing this before commit? If YES, use safe-commit instead (it invokes this skill).
 
 ### ❓ Are you verifying security before committing?
+
 → **STOP.** Invoke safe-commit skill (it will invoke this skill automatically).
 
 **IF YOU RUN SECURITY SCANS MANUALLY BEFORE COMMIT, YOU ARE CREATING REDUNDANCY AND WASTING TIME.**
 
 When to run security scans manually:
+
 - ✅ When adding new dependencies (outside commit flow)
 - ✅ After modifying auth/security code (during development)
 - ✅ When user explicitly requests security review
 
 When NOT to run security scans manually:
+
 - ❌ Before commit (use safe-commit instead)
 - ❌ As part of commit workflow (use safe-commit instead)
 
@@ -68,27 +78,32 @@ When NOT to run security scans manually:
 ### 1. Secrets Scanning
 
 **Step 1.1: Scan for Common Secret Patterns**
+
 ```bash
 grep -r -E "(api_key|API_KEY|apikey|APIKEY)" . --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=vendor
 ```
 
 **Step 1.2: Scan for Passwords and Tokens**
+
 ```bash
 grep -r -E "(password|PASSWORD|secret|SECRET|token|TOKEN|bearer|BEARER)" . --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=vendor
 ```
 
 **Step 1.3: Scan for Private Keys**
+
 ```bash
 grep -r -E "(private_key|PRIVATE_KEY|-----BEGIN.*PRIVATE KEY-----)" . --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=vendor
 ```
 
 **Step 1.4: Scan for Database Credentials**
+
 ```bash
 grep -r -E "(db_password|DB_PASSWORD|database_url|DATABASE_URL|connection_string)" . --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=vendor
 ```
 
 **Step 1.5: Check Common Secret Files**
 Check if these files exist and are in .gitignore:
+
 - `.env`
 - `.env.local`
 - `.env.production`
@@ -99,6 +114,7 @@ Check if these files exist and are in .gitignore:
 - `*.key`
 
 **Action on Match:**
+
 - **HALT** if secrets found in files to be committed
 - Verify matches are false positives (test fixtures, documentation)
 - If real secrets: MUST remove before proceeding
@@ -109,6 +125,7 @@ Check if these files exist and are in .gitignore:
 
 **Step 2.1: Detect Project Type**
 Identify language/framework by checking for:
+
 - `package.json` → Node.js/npm
 - `go.mod` → Go
 - `requirements.txt` or `Pipfile` → Python
@@ -118,11 +135,13 @@ Identify language/framework by checking for:
 **Step 2.2: Run Language-Specific Audit**
 
 For **Node.js**:
+
 ```bash
 npm audit --audit-level=moderate
 ```
 
 For **Go**:
+
 ```bash
 go list -json -m all | nancy sleuth  # If nancy is installed
 # OR
@@ -130,6 +149,7 @@ go list -json -m all > go.list && docker run --rm -v $(pwd):/src sonatypecommuni
 ```
 
 For **Python**:
+
 ```bash
 pip-audit  # If pip-audit is installed
 # OR
@@ -137,11 +157,13 @@ safety check  # If safety is installed
 ```
 
 For **Rust**:
+
 ```bash
 cargo audit
 ```
 
 **Action on Vulnerabilities:**
+
 - **HALT** on HIGH or CRITICAL vulnerabilities
 - Report vulnerability details to user
 - Suggest update commands
@@ -150,21 +172,25 @@ cargo audit
 ### 3. Code Injection Risk Scanning
 
 **Step 3.1: SQL Injection Patterns**
+
 ```bash
 grep -r -E "(exec|execute|query|prepare).*\+|string.*concat.*query|fmt\.Sprintf.*query" . --include="*.go" --include="*.py" --include="*.js" --include="*.ts"
 ```
 
 **Step 3.2: Command Injection Patterns**
+
 ```bash
 grep -r -E "exec.*user|system.*user|os\.system.*\+|subprocess.*shell=True" . --include="*.py" --include="*.go" --include="*.js" --include="*.ts"
 ```
 
 **Step 3.3: XSS Patterns (for web projects)**
+
 ```bash
 grep -r -E "innerHTML.*\+|dangerouslySetInnerHTML|document\.write.*\+" . --include="*.js" --include="*.jsx" --include="*.ts" --include="*.tsx"
 ```
 
 **Action on Match:**
+
 - Review each match for proper input validation
 - Verify parameterized queries are used (SQL)
 - Check for proper escaping/sanitization
@@ -173,21 +199,25 @@ grep -r -E "innerHTML.*\+|dangerouslySetInnerHTML|document\.write.*\+" . --inclu
 ### 4. Authentication & Authorization Checks
 
 **Step 4.1: Check for Hardcoded Credentials**
+
 ```bash
 grep -r -E "(username|user).*=.*['\"].*['\"]" . --include="*.go" --include="*.py" --include="*.js" --include="*.ts" | grep -v "test" | grep -v "example"
 ```
 
 **Step 4.2: Check for Weak Cryptography**
+
 ```bash
 grep -r -E "(md5|MD5|sha1|SHA1|DES|ECB)" . --include="*.go" --include="*.py" --include="*.js" --include="*.ts"
 ```
 
 **Step 4.3: Check for Insecure Random**
+
 ```bash
 grep -r -E "(math\.random|Math\.random|rand\.Seed\(time)" . --include="*.go" --include="*.py" --include="*.js" --include="*.ts"
 ```
 
 **Action on Match:**
+
 - Verify cryptographic operations use strong algorithms
 - Recommend SHA-256+ for hashing
 - Recommend crypto/rand for security-sensitive random numbers
@@ -196,16 +226,19 @@ grep -r -E "(math\.random|Math\.random|rand\.Seed\(time)" . --include="*.go" --i
 ### 5. Data Exposure Checks
 
 **Step 5.1: Check for Debug/Verbose Logging**
+
 ```bash
 git diff --cached | grep -E "console\.log|fmt\.Println|print\(|logger\.debug" | grep -v "//.*console\|#.*print"
 ```
 
 **Step 5.2: Check for TODO Security Comments**
+
 ```bash
 grep -r -E "TODO.*security|FIXME.*security|XXX.*security" . --exclude-dir=.git
 ```
 
 **Action on Match:**
+
 - Verify no sensitive data in debug statements
 - Ensure debug logging disabled in production
 - Flag unresolved security TODOs
@@ -213,6 +246,7 @@ grep -r -E "TODO.*security|FIXME.*security|XXX.*security" . --exclude-dir=.git
 ## Reporting
 
 ### Success Report Format
+
 ```
 ✅ Security Scan PASSED
 
@@ -227,6 +261,7 @@ Safe to proceed with commit.
 ```
 
 ### Failure Report Format
+
 ```
 ❌ Security Scan FAILED
 
@@ -250,6 +285,7 @@ Suggestions:
 ## Integration with Other Skills
 
 This skill is invoked by:
+
 - **`safe-commit`** - Before committing changes
 - **`create-pr`** - Before creating pull requests
 
@@ -269,6 +305,7 @@ This skill is invoked by:
 - Comment references to security concepts
 
 **How to handle:**
+
 - Verify context of each match
 - If false positive: document and proceed
 - If uncertain: flag to user for review
@@ -276,6 +313,7 @@ This skill is invoked by:
 ## Emergency Override
 
 If user explicitly states "I have reviewed and approved these security findings", you may proceed with:
+
 1. Document the user's explicit approval
 2. List what was approved in commit message
 3. Suggest creating follow-up ticket for remediation
