@@ -74,12 +74,13 @@
 
 #### Helm & Kubernetes
 
-| Request       | Skill/Agent                    |
-| ------------- | ------------------------------ |
-| Create chart  | `helm-chart-writing`           |
-| Review chart  | `helm-chart-review`            |
-| ArgoCD GitOps | `helm-argocd-gitops`           |
-| General help  | `helm-kubernetes-expert` agent |
+| Request           | Skill/Agent                    |
+| ----------------- | ------------------------------ |
+| Create chart      | `helm-chart-writing`           |
+| Review chart      | `helm-chart-review`            |
+| ArgoCD GitOps     | `helm-argocd-gitops`           |
+| kubectl mutations | `gitops-apply`                 |
+| General help      | `helm-kubernetes-expert` agent |
 
 #### Testing & Quality
 
@@ -129,18 +130,19 @@
 
 ## Quick Reference
 
-| Item            | Value                          |
-| --------------- | ------------------------------ |
-| **User**        | Pedro                          |
-| **Branches**    | `mriley/` prefix required      |
-| **Attribution** | Never self-identify as AI      |
-| **Commits**     | Conventional format with scope |
-| **Auto-commit** | ONLY "raise/create PR"         |
-| **Testing**     | 90%+ unit, 100% E2E            |
-| **Quality**     | Zero linter errors             |
-| **Security**    | Never commit secrets           |
-| **Tools**       | Use parallel calls             |
-| **Skills**      | MANDATORY for workflows        |
+| Item            | Value                                |
+| --------------- | ------------------------------------ |
+| **User**        | Pedro                                |
+| **Branches**    | `mriley/` prefix required            |
+| **Attribution** | Never self-identify as AI            |
+| **Commits**     | Conventional format with scope       |
+| **Auto-commit** | ONLY "raise/create PR"               |
+| **Testing**     | 90%+ unit, 100% E2E                  |
+| **Quality**     | Zero linter errors                   |
+| **Security**    | Never commit secrets                 |
+| **Tools**       | Use parallel calls                   |
+| **Skills**      | MANDATORY for workflows              |
+| **kubectl**     | Mutations blocked - use gitops-apply |
 
 ---
 

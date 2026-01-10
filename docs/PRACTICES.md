@@ -4,13 +4,13 @@
 
 For significant projects (> 8 hours), use `sparc-plan` skill:
 
-| Phase | Focus |
-|-------|-------|
+| Phase             | Focus                                       |
+| ----------------- | ------------------------------------------- |
 | **S**pecification | Requirements, constraints, success criteria |
-| **P**seudocode | High-level algorithms |
-| **A**rchitecture | System design, components, data models |
-| **R**efinement | Iterative improvement |
-| **C**ompletion | Definition of done, checklists |
+| **P**seudocode    | High-level algorithms                       |
+| **A**rchitecture  | System design, components, data models      |
+| **R**efinement    | Iterative improvement                       |
+| **C**ompletion    | Definition of done, checklists              |
 
 ## Workflow Summary
 
@@ -50,6 +50,7 @@ Write self-documenting code:
 ### Parallel Operations
 
 Use concurrent tool calls when:
+
 - Reading multiple unrelated files
 - Running independent bash commands
 - Performing multiple searches
@@ -58,6 +59,7 @@ Use concurrent tool calls when:
 ### Context7
 
 Always check Context7 first for external libraries:
+
 ```
 mcp__context7__resolve-library-id
 mcp__context7__query-docs
@@ -72,17 +74,27 @@ mcp__context7__query-docs
 ## Anti-Patterns (NEVER DO)
 
 ### Git Operations
+
 - `git add && git commit` → Use `safe-commit`
 - `git push && gh pr create` → Use `create-pr`
 - `git reset --hard` → Use `safe-destroy`
 - `git branch` → Use `manage-branch`
 
 ### Quality Checks
+
 - Manual `npm test` → Let `safe-commit` run tests
 - Manual `eslint` → Let `safe-commit` run linters
 - Manual secret grep → Let `security-scan` handle
 
 ### Setup
+
 - Manual `go mod tidy` → Use `setup-go`
 - Manual `npm install` → Use `setup-node`
 - Manual `pip install` → Use `setup-python` (with uv)
+
+### GitOps Operations
+
+- `kubectl apply` → Use `gitops-apply`
+- `kubectl delete` → Use `gitops-apply`
+- `kubectl scale` → Use `gitops-apply`
+- `kubectl edit` → Use `gitops-apply`

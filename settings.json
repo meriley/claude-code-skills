@@ -4,23 +4,50 @@
     "allow": [
       "Bash(npm run lint)",
       "Bash(npm run test:*)",
-      "Read(~/.zshrc)"
-    ]
+      "Read(~/.zshrc)",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nfix\\(plugin\\): prevent use-after-free on OBS shutdown\n\nMake settings dialog non-modal to allow OBS to close from taskbar,\nand fix the resulting race condition:\n\n- Use show\\(\\) instead of exec\\(\\) for non-blocking dialog\n- Track dialog with static pointer, reuse if already open\n- Remove obs_output_release from OBS_FRONTEND_EVENT_EXIT handler\n  \\(obs_output_stop is async, release was freeing memory while\n  audio callbacks still running\\)\n- Let frontend_cleanup\\(\\) handle release during obs_module_unload\n  \\(after audio system is fully stopped\\)\n\nThis fixes the c0000005 access violation crash when closing OBS\nwhile the UDP audio output is active.\nEOF\n\\)\")",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__query-docs",
+      "Bash(grep:*)",
+      "Bash(ls:*)",
+      "Bash(cmake --build:*)",
+      "Bash(objdump:*)"
+    ],
+    "defaultMode": "plan"
   },
   "hooks": {
     "PreToolUse": [
       {
         "matcher": "Bash",
         "hooks": [
-          {"type": "command", "command": "uv run ~/.claude/hooks/enforce-safe-commit.py"},
-          {"type": "command", "command": "uv run ~/.claude/hooks/enforce-safe-destroy.py"},
-          {"type": "command", "command": "uv run ~/.claude/hooks/enforce-branch-prefix.py"}
+          {
+            "type": "command",
+            "command": "uv run ~/.claude/hooks/enforce-safe-commit.py"
+          },
+          {
+            "type": "command",
+            "command": "uv run ~/.claude/hooks/enforce-safe-destroy.py"
+          },
+          {
+            "type": "command",
+            "command": "uv run ~/.claude/hooks/enforce-branch-prefix.py"
+          },
+          {
+            "type": "command",
+            "command": "uv run ~/.claude/hooks/enforce-gitops-kubectl.py"
+          }
         ]
       },
       {
         "matcher": "Edit|Write",
         "hooks": [
-          {"type": "command", "command": "uv run ~/.claude/hooks/protect-files.py"}
+          {
+            "type": "command",
+            "command": "uv run ~/.claude/hooks/protect-files.py"
+          }
         ]
       }
     ],
@@ -28,14 +55,20 @@
       {
         "matcher": "Edit|Write",
         "hooks": [
-          {"type": "command", "command": "uv run ~/.claude/hooks/auto-format.py"}
+          {
+            "type": "command",
+            "command": "uv run ~/.claude/hooks/auto-format.py"
+          }
         ]
       }
     ],
     "SessionStart": [
       {
         "hooks": [
-          {"type": "command", "command": "~/.claude/hooks/session-context.sh"}
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/session-context.sh"
+          }
         ]
       }
     ]
@@ -51,5 +84,6 @@
   "alwaysThinkingEnabled": true,
   "feedbackSurveyState": {
     "lastShownTime": 1754078382179
-  }
+  },
+  "model": "sonnet"
 }

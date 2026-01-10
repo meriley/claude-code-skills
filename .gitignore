@@ -21,3 +21,15 @@
 # Keep docs directory (modular CLAUDE.md components)
 !docs/
 !docs/**
+
+# Keep hooks directory
+!hooks/
+!hooks/**
+
+# Keep settings.json
+!settings.json
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo

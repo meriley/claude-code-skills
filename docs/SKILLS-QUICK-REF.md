@@ -76,12 +76,13 @@ All skills have full documentation in `~/.claude/skills/[skill-name]/SKILL.md`
 
 ## Helm & Kubernetes
 
-| Skill                      | Purpose                     |
-| -------------------------- | --------------------------- |
-| `helm-chart-writing`       | Create Helm charts          |
-| `helm-chart-review`        | Audit charts                |
-| `helm-argocd-gitops`       | ArgoCD Application patterns |
-| `helm-production-patterns` | Blue-green, canary, secrets |
+| Skill                      | Purpose                             |
+| -------------------------- | ----------------------------------- |
+| `gitops-apply`             | Apply Kubernetes changes via GitOps |
+| `helm-chart-writing`       | Create Helm charts                  |
+| `helm-chart-review`        | Audit charts                        |
+| `helm-argocd-gitops`       | ArgoCD Application patterns         |
+| `helm-production-patterns` | Blue-green, canary, secrets         |
 
 **Agent:** `helm-kubernetes-expert` - Coordinates all Helm skills
 
