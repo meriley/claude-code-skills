@@ -1,89 +1,123 @@
 {
-  "mcpServers": {
-    "context7": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@upstash/context7-mcp@latest"
-      ],
-      "alwaysAllow": [
-        "resolve-library-id",
-        "get-library-docs"
-      ]
-    },
-    "fetch": {
-      "command": "uvx",
-      "args": [
-        "mcp-server-fetch"
-      ],
-      "alwaysAllow": []
-    },
-    "filesystem": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-filesystem",
-        "/mnt/dionysus/coding/tg-translator/"
-      ],
-      "alwaysAllow": [
-        "read_file",
-        "read_multiple_files",
-        "write_file",
-        "edit_file",
-        "list_directory",
-        "directory_tree",
-        "move_file",
-        "search_files",
-        "get_file_info",
-        "list_allowed_directories"
-      ]
-    },
-    "git": {
-      "command": "uvx",
-      "args": [
-        "mcp-server-git"
-      ],
-      "alwaysAllow": [
-        "git_status",
-        "git_diff_unstaged",
-        "git_diff_staged",
-        "git_diff",
-        "git_log",
-        "git_show"
-      ]
-    },
-    "playwright": {
-      "command": "npx",
-      "args": [
-        "@playwright/mcp@latest"
-      ],
-      "alwaysAllow": [
-        "browser_close",
-        "browser_wait",
-        "browser_resize",
-        "browser_console_messages",
-        "browser_handle_dialog",
-        "browser_file_upload",
-        "browser_install",
-        "browser_press_key",
-        "browser_navigate",
-        "browser_navigate_back",
-        "browser_navigate_forward",
-        "browser_network_requests",
-        "browser_pdf_save",
-        "browser_click",
-        "browser_snapshot",
-        "browser_drag",
-        "browser_hover",
-        "browser_type",
-        "browser_select_option",
-        "browser_take_screenshot",
-        "browser_tab_list",
-        "browser_tab_new",
-        "browser_tab_select",
-        "browser_tab_close",
-        "browser_generate_playwright_test"
-      ]
+    "mcpServers": {
+        "conversation-intelligence": {
+            "command": "mcp-proxy",
+            "args": [
+                "http://localhost:8001/sse"
+            ],
+            "alwaysAllow": [
+                "search",
+                "browse",
+                "expand",
+                "context",
+                "thread",
+                "get_stats",
+                "get_communication_stats",
+                "get_sentiment",
+                "detect_languages",
+                "discover_participants",
+                "register_participant",
+                "list_participants",
+                "get_relationship_summary",
+                "get_sentiment_trend",
+                "get_activity_heatmap",
+                "get_communication_gaps",
+                "get_topic_timeline",
+                "get_initiator_patterns",
+                "get_response_patterns",
+                "get_conflict_patterns",
+                "get_key_moments",
+                "get_relationship_phases",
+                "get_turning_points",
+                "summarize_period",
+                "get_story_arc",
+                "get_participant_profile"
+            ]
+        },
+        "context7": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@upstash/context7-mcp@latest"
+            ],
+            "alwaysAllow": [
+                "resolve-library-id",
+                "get-library-docs"
+            ]
+        },
+        "fetch": {
+            "command": "uvx",
+            "args": [
+                "mcp-server-fetch"
+            ],
+            "alwaysAllow": []
+        },
+        "filesystem": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@modelcontextprotocol/server-filesystem",
+                "/mnt/dionysus/coding/tg-translator/"
+            ],
+            "alwaysAllow": [
+                "read_file",
+                "read_multiple_files",
+                "write_file",
+                "edit_file",
+                "list_directory",
+                "directory_tree",
+                "move_file",
+                "search_files",
+                "get_file_info",
+                "list_allowed_directories"
+            ]
+        },
+        "git": {
+            "command": "uvx",
+            "args": [
+                "mcp-server-git"
+            ],
+            "alwaysAllow": [
+                "git_status",
+                "git_diff_unstaged",
+                "git_diff_staged",
+                "git_diff",
+                "git_log",
+                "git_show"
+            ]
+        },
+        "playwright": {
+            "command": "npx",
+            "args": [
+                "@playwright/mcp@latest"
+            ],
+            "alwaysAllow": [
+                "browser_close",
+                "browser_wait",
+                "browser_resize",
+                "browser_console_messages",
+                "browser_handle_dialog",
+                "browser_file_upload",
+                "browser_install",
+                "browser_press_key",
+                "browser_navigate",
+                "browser_navigate_back",
+                "browser_navigate_forward",
+                "browser_network_requests",
+                "browser_pdf_save",
+                "browser_click",
+                "browser_snapshot",
+                "browser_drag",
+                "browser_hover",
+                "browser_type",
+                "browser_select_option",
+                "browser_take_screenshot",
+                "browser_tab_list",
+                "browser_tab_new",
+                "browser_tab_select",
+                "browser_tab_close",
+                "browser_generate_playwright_test"
+            ]
+        }
     }
-  }
 }

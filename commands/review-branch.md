@@ -35,15 +35,16 @@ Execute these commands to understand the scope of changes:
 Execute this command to detect the project type:
 
 ```bash
-!ls -1 package.json go.mod requirements.txt setup.py Cargo.toml 2>/dev/null | head -1
+!ls -1 package.json go.mod requirements.txt setup.py pyproject.toml Cargo.toml CMakeLists.txt 2>/dev/null | head -1
 ```
 
 Based on the detected files:
 
 - `package.json` → TypeScript/JavaScript project
 - `go.mod` → Go project
-- `requirements.txt` or `setup.py` → Python project
+- `requirements.txt`, `setup.py`, or `pyproject.toml` → Python project
 - `Cargo.toml` → Rust project
+- `CMakeLists.txt` (with .c/.cpp files) → C/C++ project
 
 ## Step 4: Determine Review Depth
 
@@ -189,29 +190,76 @@ Task(
 
 ### For Python Projects:
 
-Use the Task tool with `subagent_type=general-purpose`:
+Use the Task tool with `subagent_type=python-code-reviewer`:
 
 ```
 Task(
-  subagent_type: "general-purpose",
+  subagent_type: "python-code-reviewer",
   description: "Review Python branch changes",
   prompt: "Perform a [depth] code review of all changes between ${BASE_BRANCH}...HEAD. Focus on:
 
   P0 - CRITICAL:
-  - Security vulnerabilities (SQL injection, XSS, path traversal)
-  - Data integrity bugs
-  - Resource leaks
+  - Security vulnerabilities (SQL injection, path traversal, command injection)
+  - Bare except clauses (catches SystemExit!)
+  - Blocking calls in async functions (time.sleep, requests.get)
+  - Resource leaks (unclosed files/connections)
   - Breaking API changes
 
   P1 - HIGH:
-  - Exception handling gaps
-  - Performance issues (N+1 queries, inefficient algorithms)
-  - Type hint violations
-  - Missing input validation
+  - Async anti-patterns (unbounded concurrency, missing await)
+  - Type safety violations (Any usage, missing hints)
+  - Exception handling gaps (swallowed errors)
+  - Performance issues (N+1 queries, blocking I/O)
+  - UV enforcement (never use pip directly)
 
   P2 - MEDIUM:
   - Code organization (PEP 8)
-  - Documentation gaps
+  - Missing type hints on public APIs
+  - Test coverage gaps
+
+  IMPORTANT: All Python commands MUST use UV (uv run ...)
+
+  For each file changed, provide:
+  1. Summary of changes
+  2. Issues found (grouped by priority)
+  3. Code snippets showing the problem
+  4. Specific fix recommendations
+
+  Generate an executive summary at the end with:
+  - Total P0/P1/P2 issues
+  - Must-fix-before-merge items (P0)
+  - Recommended fixes (P1)
+  - Suggestions (P2)"
+)
+```
+
+### For C/C++ Projects:
+
+Use the Task tool with `subagent_type=c-cpp-code-reviewer`:
+
+```
+Task(
+  subagent_type: "c-cpp-code-reviewer",
+  description: "Review C/C++ branch changes",
+  prompt: "Perform a [depth] code review of all changes between ${BASE_BRANCH}...HEAD. Focus on:
+
+  P0 - CRITICAL:
+  - Memory safety (buffer overflow, use-after-free, null dereference)
+  - Thread safety (data races, deadlocks, TOCTOU)
+  - Security vulnerabilities (format string, integer overflow)
+  - Double-free, uninitialized memory
+  - Breaking API changes
+
+  P1 - HIGH:
+  - Resource leaks (memory, file handles, sockets)
+  - Missing error handling (unchecked returns)
+  - Missing null checks before dereference
+  - Inefficient algorithms
+
+  P2 - MEDIUM:
+  - Code organization
+  - Const correctness
+  - Modern C++ patterns (RAII, smart pointers)
   - Test coverage gaps
 
   For each file changed, provide:
@@ -446,6 +494,9 @@ For EACH specialized review that was invoked, include a separate section:
 
 ## OBS Plugin Review (if invoked)
 [Output from obs-plugin-reviewing skill]
+
+## C/C++ Code Review (if invoked for non-OBS C/C++ code)
+[Output from c-cpp-code-reviewer agent]
 
 ## Documentation Review (if invoked)
 [Output from prd-reviewing / feature-spec-reviewing / technical-spec-reviewing]

@@ -98,6 +98,15 @@
 | Tutorial        | `tutorial-writer`        |
 | Tech spec       | `technical-spec-writing` |
 
+#### Code Review Agents
+
+| Language   | Agent                  | Focus                        |
+| ---------- | ---------------------- | ---------------------------- |
+| Go         | `go-code-reviewer`     | Control flow, errors         |
+| TypeScript | `hermes-code-reviewer` | N+1 queries, types           |
+| Python     | `python-code-reviewer` | Async, types, UV enforcement |
+| C/C++      | `c-cpp-code-reviewer`  | Memory safety, thread safety |
+
 ---
 
 ## Standards & Conventions
