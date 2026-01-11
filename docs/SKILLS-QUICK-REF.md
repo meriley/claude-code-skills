@@ -79,6 +79,7 @@ All skills have full documentation in `~/.claude/skills/[skill-name]/SKILL.md`
 | Skill                      | Purpose                             |
 | -------------------------- | ----------------------------------- |
 | `gitops-apply`             | Apply Kubernetes changes via GitOps |
+| `gitops-audit`             | Detect GitOps drift and violations  |
 | `helm-chart-writing`       | Create Helm charts                  |
 | `helm-chart-review`        | Audit charts                        |
 | `helm-argocd-gitops`       | ArgoCD Application patterns         |

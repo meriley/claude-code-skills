@@ -80,6 +80,7 @@
 | Review chart      | `helm-chart-review`            |
 | ArgoCD GitOps     | `helm-argocd-gitops`           |
 | kubectl mutations | `gitops-apply`                 |
+| GitOps drift      | `gitops-audit`                 |
 | General help      | `helm-kubernetes-expert` agent |
 
 #### Testing & Quality
