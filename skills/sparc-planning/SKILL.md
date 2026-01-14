@@ -1,27 +1,14 @@
 ---
 name: sparc-planning
-description: Creates comprehensive implementation plans using the SPARC framework (Specification, Pseudocode, Architecture, Refinement, Completion). Invokes check-history for context, generates detailed plans with tasks, dependencies, security/performance considerations. For significant features and refactoring.
-version: 1.0.0
+description: Creates comprehensive implementation plans using the SPARC framework (Specification, Pseudocode, Architecture, Refinement, Completion). Automatically invokes check-history for context, generates detailed plans with ranked task lists, dependency graphs, security/performance considerations. For significant features (>8 hours), major refactoring, breaking changes, or multi-component work.
+version: 2.0.0
 ---
 
 # SPARC Implementation Planning Skill
 
 ## Purpose
+
 Create comprehensive, structured implementation plans for significant development work using the SPARC (Specification, Pseudocode, Architecture, Refinement, Completion) framework.
-
-## When to Use
-- Starting a new significant feature
-- Major refactoring efforts
-- Complex bug fixes requiring architectural changes
-- When user explicitly requests "create an implementation plan"
-- Before making breaking changes
-- When planning affects multiple components/services
-
-## When NOT to Use
-- Trivial changes (single file, < 20 lines)
-- Documentation-only updates
-- Simple bug fixes
-- Configuration changes
 
 ## SPARC Framework Overview
 
@@ -33,7 +20,35 @@ Create comprehensive, structured implementation plans for significant developmen
 4. **Refinement**: Iteratively improve and optimize
 5. **Completion**: Finalize, document, and verify
 
-See REFERENCE.md for detailed phase descriptions.
+## When to Load Additional References
+
+The workflow below covers the essential SPARC planning process. Load detailed references when:
+
+**For detailed phase descriptions and templates:**
+
+```
+Read `~/.claude/skills/sparc-planning/references/REFERENCE.md`
+```
+
+Use when: Need specification templates, pseudocode examples, architecture patterns, refinement checklists, completion criteria templates
+
+**For implementation templates:**
+
+```
+Read `~/.claude/skills/sparc-planning/references/TEMPLATE.md`
+```
+
+Use when: Creating actual planning documents, need document structure, formatting guidelines
+
+**For test scenarios and examples:**
+
+```
+Read `~/.claude/skills/sparc-planning/references/test-scenarios.md`
+```
+
+Use when: Planning test strategy, defining test cases, comprehensive testing examples
+
+---
 
 ## Workflow
 
@@ -46,6 +61,7 @@ Invoke: check-history skill
 ```
 
 **Understand:**
+
 - Recent related commits
 - Existing patterns and conventions
 - Previous similar implementations
@@ -54,6 +70,7 @@ Invoke: check-history skill
 ### Step 2: Gather Requirements
 
 **Ask user clarifying questions:**
+
 - What problem are we solving?
 - What are the functional requirements?
 - What are the non-functional requirements (performance, security, scale)?
@@ -72,6 +89,7 @@ Invoke Context7 for library documentation
 ```
 
 Research:
+
 - Best practices for the technology
 - Security considerations
 - Performance characteristics
@@ -82,6 +100,7 @@ Research:
 Generate detailed specification document covering:
 
 #### Functional Requirements
+
 - Core features and capabilities
 - User stories / use cases
 - Input/output specifications
@@ -89,6 +108,7 @@ Generate detailed specification document covering:
 - Error scenarios
 
 #### Non-Functional Requirements
+
 - **Performance**: Response time, throughput, resource usage
 - **Security**: Authentication, authorization, data protection, audit
 - **Scalability**: Expected load, growth projections
@@ -96,48 +116,52 @@ Generate detailed specification document covering:
 - **Maintainability**: Code quality, documentation needs
 
 #### Constraints
+
 - Technology stack limitations
 - Compatibility requirements
 - Timeline and resource constraints
 - Regulatory or compliance requirements
 
 #### Success Criteria
+
 - How will we know when this is complete?
 - What metrics define success?
 - What testing is required?
 
-**See REFERENCE.md Section 1 for detailed specification template.**
+**See references/REFERENCE.md Section 1 for detailed specification template.**
 
 ### Step 5: Create Phase 2 - Pseudocode
 
 Generate structured pseudocode for key algorithms and workflows:
 
 #### Algorithm Pseudocode
+
 ```
 function processUserAuthentication(credentials):
     1. Validate input format
        - Check username not empty
        - Check password meets requirements
-    
+
     2. Query user from database
        - Handle user not found
        - Handle database errors
-    
+
     3. Verify password
        - Use bcrypt comparison
        - Constant-time comparison to prevent timing attacks
-    
+
     4. Generate session token
        - Create JWT with claims
        - Set appropriate expiry
        - Sign with secret key
-    
+
     5. Return success response
        - Include token
        - Include user profile (safe fields only)
 ```
 
 #### Component Interface Definitions
+
 ```
 interface AuthService:
     method authenticate(username: string, password: string) -> Result<Session, AuthError>
@@ -146,25 +170,28 @@ interface AuthService:
     method logout(sessionId: string) -> Result<void, Error>
 ```
 
-**See REFERENCE.md Section 2 for pseudocode examples.**
+**See references/REFERENCE.md Section 2 for pseudocode examples.**
 
 ### Step 6: Create Phase 3 - Architecture
 
 Design the system structure:
 
 #### Component Breakdown
+
 - List all components/modules needed
 - Define responsibilities of each component
 - Identify external dependencies
 - Note shared utilities
 
 #### Architecture Patterns
+
 - Which design patterns apply? (e.g., Repository, Factory, Strategy)
 - Layered architecture (presentation, business, data)
 - Separation of concerns
 - Dependency injection approach
 
 #### Data Models
+
 ```go
 type User struct {
     ID           string    `json:"id"`
@@ -184,6 +211,7 @@ type Session struct {
 ```
 
 #### Component Interactions
+
 ```
 User Request → Handler → Validator → Service → Repository → Database
                    ↓          ↓          ↓          ↓
@@ -191,11 +219,13 @@ User Request → Handler → Validator → Service → Repository → Database
 ```
 
 #### Technology Choices
+
 - Which libraries/frameworks to use?
 - Why these choices? (performance, security, familiarity)
 - Any alternatives considered?
 
 #### Security Architecture
+
 - Authentication mechanism
 - Authorization approach
 - Data encryption (at rest, in transit)
@@ -203,48 +233,54 @@ User Request → Handler → Validator → Service → Repository → Database
 - Audit logging plan
 
 #### Performance Architecture
+
 - Caching strategy
 - Database indexing plan
 - Query optimization approach
 - Resource pooling
 
-**See REFERENCE.md Section 3 for architecture templates.**
+**See references/REFERENCE.md Section 3 for architecture templates.**
 
 ### Step 7: Create Phase 4 - Refinement Plan
 
 Outline the iterative improvement process:
 
 #### Code Quality Checks
+
 - Linting requirements
 - Code review checklist
 - Refactoring opportunities
 - Technical debt to address
 
 #### Performance Optimization
+
 - Profiling approach
 - Bottleneck identification
 - Optimization targets
 - Benchmark requirements
 
 #### Security Review
+
 - Security scanning checklist
 - Penetration testing plan
 - Compliance verification
 - Vulnerability remediation
 
 #### Test Coverage Improvements
+
 - Current coverage gaps
 - Target coverage (90%+ unit, 100% E2E)
 - Test cases to add
 - Integration test scenarios
 
-**See REFERENCE.md Section 4 for refinement checklist.**
+**See references/REFERENCE.md Section 4 for refinement checklist.**
 
 ### Step 8: Create Phase 5 - Completion Criteria
 
 Define what "done" means:
 
 #### Completion Checklist
+
 - [ ] All functional requirements implemented
 - [ ] All tests passing (90%+ unit coverage, 100% E2E pass)
 - [ ] All linter issues resolved
@@ -256,18 +292,20 @@ Define what "done" means:
 - [ ] User acceptance testing passed
 
 #### Documentation Requirements
+
 - API documentation
 - User guide / README updates
 - Inline code comments (why, not what)
 - Architecture decision records
 
 #### Deployment Plan
+
 - Migration scripts (if needed)
 - Rollback plan
 - Monitoring setup
 - Alert configuration
 
-**See REFERENCE.md Section 5 for completion templates.**
+**See references/REFERENCE.md Section 5 for completion templates.**
 
 ### Step 9: Generate Ranked Task List
 
@@ -277,6 +315,7 @@ Break down implementation into ordered tasks:
 ## Implementation Task List
 
 ### Phase 1: Foundation (Priority: CRITICAL)
+
 1. [ ] Set up database schema for users table
    - Estimated: 2 hours
    - Dependencies: None
@@ -293,6 +332,7 @@ Break down implementation into ordered tasks:
    - Owner: Pedro
 
 ### Phase 2: Core Logic (Priority: HIGH)
+
 4. [ ] Implement password hashing service
    - Estimated: 2 hours
    - Dependencies: Task 2
@@ -306,6 +346,7 @@ Break down implementation into ordered tasks:
 [... continue with all tasks ...]
 
 ### Phase 5: Testing & Refinement (Priority: MEDIUM)
+
 15. [ ] Add unit tests for all services (target: 95%)
     - Estimated: 6 hours
     - Dependencies: Tasks 4-10
@@ -325,12 +366,12 @@ Create dependency graph:
 ## Task Dependencies
 
 Task 1 (Database schema)
-  └─> Task 2 (User model)
-       ├─> Task 3 (Repository)
-       ├─> Task 4 (Password hashing)
-       └─> Task 5 (JWT generation)
-            └─> Task 6 (Auth service)
-                 └─> Task 7 (HTTP handlers)
+└─> Task 2 (User model)
+├─> Task 3 (Repository)
+├─> Task 4 (Password hashing)
+└─> Task 5 (JWT generation)
+└─> Task 6 (Auth service)
+└─> Task 7 (HTTP handlers)
 
 ## Potential Blockers
 
@@ -350,16 +391,19 @@ Task 1 (Database schema)
 ### Step 11: Create Security & Performance Plans
 
 #### Security Plan
+
 ```markdown
 ## Security Checkpoints
 
 ### Design Phase
+
 - [ ] Threat modeling completed
 - [ ] Authentication mechanism reviewed
 - [ ] Authorization strategy defined
 - [ ] Data encryption plan verified
 
 ### Implementation Phase
+
 - [ ] Input validation on all endpoints
 - [ ] SQL injection prevention (parameterized queries)
 - [ ] XSS prevention (proper escaping)
@@ -367,6 +411,7 @@ Task 1 (Database schema)
 - [ ] Rate limiting implemented
 
 ### Testing Phase
+
 - [ ] Security scan passed (no secrets)
 - [ ] Dependency vulnerabilities checked
 - [ ] Penetration testing completed
@@ -374,22 +419,26 @@ Task 1 (Database schema)
 ```
 
 #### Performance Plan
+
 ```markdown
 ## Performance Targets
 
 ### Requirements
+
 - Authentication: < 100ms p95
 - Token validation: < 10ms p95
 - Database queries: < 50ms p95
 - Memory usage: < 50MB per request
 
 ### Measurement Points
+
 1. After initial implementation (baseline)
 2. After query optimization
 3. After caching implementation
 4. Before production deployment
 
 ### Optimization Strategy
+
 1. Profile with pprof (Go) / clinic.js (Node)
 2. Identify bottlenecks
 3. Optimize database queries (indexes, query optimization)
@@ -421,10 +470,12 @@ Present summary to user:
 # Implementation Plan: JWT Authentication System
 
 ## Summary
-Comprehensive authentication system with JWT tokens, including user management, 
+
+Comprehensive authentication system with JWT tokens, including user management,
 session handling, and security best practices.
 
 ## Phases
+
 1. **Specification**: Complete (see specification.md)
 2. **Pseudocode**: Complete (see pseudocode.md)
 3. **Architecture**: Complete (see architecture.md)
@@ -432,31 +483,37 @@ session handling, and security best practices.
 5. **Completion**: Criteria defined (see completion-checklist.md)
 
 ## Task Breakdown
+
 - Total tasks: 22
 - Estimated time: 40 hours
 - Critical path: 18 tasks (28 hours)
 
 ## Key Decisions
+
 - Technology: Go with JWT tokens
 - Database: PostgreSQL
 - Caching: Redis for session storage
 - Testing: 95% unit coverage target
 
 ## Security Considerations
+
 - Bcrypt password hashing (cost factor: 12)
 - JWT with RS256 signing
 - Token expiry: 1 hour (access), 30 days (refresh)
 - Rate limiting: 5 attempts per minute per IP
 
 ## Performance Targets
+
 - Authentication: < 100ms p95
 - Token validation: < 10ms p95
 
 ## Risks
+
 1. Database performance (Mitigation: Connection pooling, indexes)
 2. Token storage size (Mitigation: Redis with TTL)
 
 ## Next Steps
+
 1. Review plan and confirm approach
 2. Create branch: mriley/feat/jwt-authentication
 3. Begin Phase 1: Database schema
@@ -472,9 +529,11 @@ Ready to begin implementation?
 ## Integration with Other Skills
 
 This skill invokes:
+
 - **`check-history`** - Step 1 (gather context)
 
 This skill may be followed by:
+
 - **`manage-branch`** - Create feature branch
 - **`safe-commit`** - Commit planning documents
 
@@ -508,6 +567,7 @@ Some tasks don't need full SPARC planning:
 ## Adapting SPARC for Different Project Sizes
 
 ### Small feature (< 8 hours)
+
 - Brief specification (1 paragraph)
 - Simplified pseudocode
 - Component list (no diagrams)
@@ -515,6 +575,7 @@ Some tasks don't need full SPARC planning:
 - Standard checklist
 
 ### Medium feature (8-40 hours)
+
 - Detailed specification
 - Comprehensive pseudocode
 - Architecture diagrams
@@ -522,6 +583,7 @@ Some tasks don't need full SPARC planning:
 - Security & performance plans
 
 ### Large feature (> 40 hours)
+
 - Full SPARC documentation
 - Multiple architecture views
 - Dependency graphs
@@ -535,11 +597,13 @@ Some tasks don't need full SPARC planning:
 ### Problem: Requirements are incomplete or vague
 
 **Symptoms:**
+
 - User can't answer clarifying questions
 - Specifications are too high-level
 - Success criteria undefined
 
 **Solution:**
+
 1. Break down into smaller, well-defined pieces
 2. Focus on MVP (Minimum Viable Product) first
 3. Plan iteratively - start with what's known
@@ -551,11 +615,13 @@ Some tasks don't need full SPARC planning:
 ### Problem: Too many dependencies or blockers identified
 
 **Symptoms:**
+
 - Critical path has many external dependencies
 - Multiple high-risk items
 - Implementation seems impossible
 
 **Solution:**
+
 1. Re-scope to remove/defer optional dependencies
 2. Identify alternative approaches with fewer dependencies
 3. Plan dependency resolution tasks first
@@ -567,11 +633,13 @@ Some tasks don't need full SPARC planning:
 ### Problem: Estimated time is unrealistic or unknown
 
 **Symptoms:**
+
 - Tasks have wildly different estimates
 - Total time is way over budget
 - Can't estimate certain tasks
 
 **Solution:**
+
 1. Use time-boxing: "This task gets max 4 hours"
 2. Add research spikes for unknown areas
 3. Break large estimates into smaller measurable tasks
@@ -583,11 +651,13 @@ Some tasks don't need full SPARC planning:
 ### Problem: Architecture phase reveals fundamental issues
 
 **Symptoms:**
+
 - Chosen technology can't meet requirements
 - Performance targets are impossible
 - Security requirements conflict with design
 
 **Solution:**
+
 1. **STOP** - Don't proceed with flawed plan
 2. Go back to Specification phase
 3. Revise requirements or constraints
@@ -599,11 +669,13 @@ Some tasks don't need full SPARC planning:
 ### Problem: Plan is too detailed and taking too long
 
 **Symptoms:**
+
 - Planning session exceeds 2 hours
 - Documents are 20+ pages
 - Getting lost in minutiae
 
 **Solution:**
+
 1. **Simplify** - Remember: plan is a guide, not a contract
 2. Focus on critical decisions only
 3. Defer implementation details to coding phase
@@ -615,11 +687,13 @@ Some tasks don't need full SPARC planning:
 ### Problem: Plan doesn't match team conventions
 
 **Symptoms:**
+
 - Proposed architecture differs from existing code
 - Technology choices conflict with stack
 - Patterns don't match codebase style
 
 **Solution:**
+
 1. Review recent similar implementations (`check-history`)
 2. Align with existing patterns and conventions
 3. If change is justified, document rationale explicitly
@@ -631,11 +705,13 @@ Some tasks don't need full SPARC planning:
 ### Problem: User rejects or significantly changes plan
 
 **Symptoms:**
+
 - Major revisions requested after presentation
 - User had different expectations
 - Plan doesn't solve actual problem
 
 **Solution:**
+
 1. Don't take it personally - iterate!
 2. Clarify what specifically needs changing
 3. Understand the gap: requirements, approach, or scope?
@@ -647,6 +723,7 @@ Some tasks don't need full SPARC planning:
 ## Quick Reference
 
 **Invoke SPARC planning when:**
+
 - User requests implementation plan
 - Starting significant feature (> 8 hours)
 - Making breaking changes
@@ -654,6 +731,7 @@ Some tasks don't need full SPARC planning:
 - Need architecture decision record
 
 **Output artifacts:**
+
 1. Specification document
 2. Pseudocode for algorithms
 3. Architecture design
