@@ -1,29 +1,12 @@
 ---
 name: cursor-rules-review
-description: Audit Cursor IDE rules against quality standards using a 5-gate review process. Validates frontmatter, glob patterns, content quality, file length, and functionality. Use when reviewing .mdc rule files or conducting quality audits.
+description: Audit Cursor IDE rules (.mdc files) against quality standards using a 5-gate review process. Validates frontmatter (YAML syntax, required fields, description quality, triggering configuration), glob patterns (specificity, performance, correctness), content quality (focus, organization, examples, cross-references), file length (under 500 lines recommended), and functionality (triggering, cross-references, maintainability). Use when reviewing pull requests with Cursor rule changes, conducting periodic rule quality audits, validating new rules before committing, identifying improvement opportunities, preparing rules for team sharing, or debugging why rules aren't working as expected.
 version: 1.0.0
 ---
 
 # Cursor Rules Review
 
-## Purpose
-Audit Cursor IDE rules (.mdc files) against quality criteria to ensure optimal performance, maintainability, and effectiveness.
-
-## When to Use This Skill
-- Reviewing pull requests with Cursor rule changes
-- Conducting periodic rule quality audits
-- Validating new rules before committing
-- Identifying improvement opportunities in existing rules
-- Preparing rules for team sharing
-- Debugging why rules aren't working as expected
-
-## When NOT to Use This Skill
-- Creating new rules (use cursor-rules-writing skill instead)
-- General code review (not for .mdc files)
-- Reviewing Claude Code skills (use skill-review skill instead)
-- Cursor IDE settings configuration (not rules)
-
-## Review Process Overview
+## Quick Start
 
 **5-Gate Review Process:**
 
@@ -44,70 +27,50 @@ Gate 5: Functionality Review
 ```
 
 **Severity Levels:**
+
 - **BLOCKER** - Must fix before merge (prevents rule from working)
 - **CRITICAL** - Must fix before production (causes issues)
 - **MAJOR** - Should fix (impacts quality significantly)
 - **MINOR** - Nice to have (improvements)
 
-## Quick Start
+---
 
-### Step 1: Identify Rule to Review
-```bash
-# List all rules
-ls -la .cursor/rules/*.mdc
+## When to Load Additional References
 
-# Check rule to review
-cat .cursor/rules/my-rule.mdc
+The 5-gate review process below provides core checks. Load these references for detailed examples and checklists:
+
+**For detailed examples of good and bad patterns:**
+
+```
+Read `~/.claude/skills/cursor-rules-review/references/EXAMPLES.md`
 ```
 
-### Step 2: Run 5-Gate Review
-Work through each gate systematically (see detailed gates below).
+Use when: You need concrete examples of violations, want to see before/after comparisons, or need reference patterns
 
-### Step 3: Document Findings
-Use severity levels to categorize issues:
-- BLOCKER: Must fix immediately
-- CRITICAL: Fix before production
-- MAJOR: Should fix soon
-- MINOR: Improve when possible
+**For copy-paste review checklist:**
 
-### Step 4: Provide Actionable Recommendations
-For each issue, provide:
-- What's wrong
-- Why it matters
-- How to fix it
-- Example of correct pattern
+```
+Read `~/.claude/skills/cursor-rules-review/references/CHECKLIST.md`
+```
 
-### Step 5: Verify Fixes
-After changes, re-run review to confirm resolution.
+Use when: Performing systematic review, want a comprehensive checklist, or need to document findings
+
+**For test scenarios and edge cases:**
+
+```
+Read `~/.claude/skills/cursor-rules-review/references/test-scenarios.md`
+```
+
+Use when: Testing rules, validating fixes, or handling complex edge cases
 
 ---
 
 ## Gate 1: Frontmatter Review
 
-### What to Check
-
-#### 1.1 YAML Syntax Validation
-```yaml
-# ✅ Valid YAML
----
-description: Clear description here.
-globs: ["**/*.ts"]
-alwaysApply: false
----
-
-# ❌ Invalid YAML - missing closing ---
----
-description: Invalid description.
-globs: ["**/*.ts"]
-
-# ❌ Invalid YAML - unclosed quote
----
-description: "Missing closing quote
-globs: ["**/*.ts"]
----
-```
+### 1.1 YAML Syntax Validation
 
 **Check:**
+
 - [ ] Frontmatter starts with `---`
 - [ ] Frontmatter ends with `---`
 - [ ] All strings properly quoted if needed
@@ -116,950 +79,577 @@ globs: ["**/*.ts"]
 
 **Severity if missing:** BLOCKER (rule won't parse)
 
-#### 1.2 Required Fields
+**Valid example:**
+
 ```yaml
 ---
-description: Required field explaining what this rule provides.
-# Optional: globs or alwaysApply
+description: Clear description here.
+globs: ["**/*.ts"]
+alwaysApply: false
 ---
 ```
 
+---
+
+### 1.2 Required Fields
+
 **Check:**
+
 - [ ] `description` field present
 - [ ] Description is non-empty
-- [ ] Description under 1024 characters (practical limit)
+- [ ] Description under 1024 characters
 
 **Severity if missing:** BLOCKER (required field)
 
-#### 1.3 Description Quality
+---
+
+### 1.3 Description Quality
+
+**Good description pattern:**
+
 ```yaml
-# ❌ Bad - Vague, no context
-description: Helps with files.
-
-# ❌ Bad - First person
-description: I provide patterns for API design.
-
-# ❌ Bad - Second person
-description: You can use this for components.
-
-# ✅ Good - Specific, third person, includes "when"
 description: React component patterns including props typing, hooks usage, and component structure. Apply when creating or modifying React components.
 ```
 
 **Check:**
+
 - [ ] Description is specific (not vague)
 - [ ] Description uses third person (not "I" or "you")
 - [ ] Description explains WHAT context is provided
 - [ ] Description explains WHEN to apply the rule
 - [ ] Description includes key terms/technologies
-- [ ] Description is actionable
 
 **Severity:**
+
 - Vague/unclear: MAJOR
 - Wrong person: MINOR
 - Missing "when" context: MAJOR
 
-#### 1.4 Triggering Configuration
-```yaml
-# Option 1: Always apply
----
-description: Universal project conventions.
-alwaysApply: true
 ---
 
-# Option 2: File-based triggering
----
-description: TypeScript patterns.
-globs: ["**/*.ts", "**/*.tsx"]
-alwaysApply: false
----
+### 1.4 Triggering Configuration
 
-# Option 3: Manual only
----
-description: Advanced debugging guide.
-# No globs, no alwaysApply
----
-```
+**Three triggering modes:**
+
+1. **Always apply** (universal context):
+
+   ```yaml
+   alwaysApply: true
+   ```
+
+2. **File-based triggering** (most common):
+
+   ```yaml
+   globs: ["**/*.ts", "**/*.tsx"]
+   alwaysApply: false
+   ```
+
+3. **Manual only** (no automatic trigger):
+   ```yaml
+   # No globs, no alwaysApply
+   ```
 
 **Check:**
-- [ ] Has appropriate trigger (always vs file-based vs manual)
+
+- [ ] Has appropriate trigger for content type
 - [ ] `alwaysApply: true` only for universal context
 - [ ] File-based rules have `globs` array
-- [ ] Manual rules have neither (or `alwaysApply: false`)
+- [ ] No redundant combination (both globs and alwaysApply)
 
 **Severity:**
+
 - Inappropriate `alwaysApply: true`: CRITICAL (context bloat)
 - Missing globs for file-specific content: MAJOR
-- Both globs and alwaysApply true: MAJOR (redundant)
-
-#### 1.5 Field Validation
-```yaml
-# ✅ Valid field types
-description: "String value"
-globs: ["array", "of", "strings"]
-alwaysApply: false  # Boolean
-
-# ❌ Invalid field types
-globs: "**/*.ts"    # Should be array
-alwaysApply: "false" # Should be boolean, not string
-```
-
-**Check:**
-- [ ] `description` is string
-- [ ] `globs` is array (if present)
-- [ ] `alwaysApply` is boolean (if present)
-- [ ] No extra/unknown fields
-
-**Severity if wrong type:** BLOCKER (parsing error)
-
-### Gate 1 Checklist
-```
-Frontmatter Review:
-[ ] Valid YAML syntax
-[ ] description field present and non-empty
-[ ] Description is specific and includes "when to use"
-[ ] Description uses third person
-[ ] Appropriate triggering (always/file-based/manual)
-[ ] alwaysApply only used for universal context
-[ ] globs array for file-based rules
-[ ] Correct field types
-[ ] No unknown fields
-```
 
 ---
 
 ## Gate 2: Glob Patterns Review
 
-### What to Check
+### 2.1 Pattern Specificity
 
-#### 2.1 Pattern Syntax Validation
+**Good patterns** (specific):
+
 ```yaml
-# ✅ Valid patterns
-globs: [
-  "**/*.ts",           # Recursive all .ts files
-  "**/components/**/*", # Specific directory recursive
-  "**/*.{ts,tsx}",     # Multiple extensions
-  "**/{Chart,values}.yaml" # Multiple filenames
-]
+globs: ["**/*.test.ts", "**/*.spec.ts"]  # Test files only
+globs: ["**/src/components/**/*.tsx"]    # Component files only
+globs: ["**/Chart.yaml"]                  # Helm charts only
+```
 
-# ❌ Invalid patterns
-globs: [
-  "*.ts",              # Not recursive (misses nested)
-  "components/*.tsx",  # Only matches root components/
-  "**/*.ts"            # Missing comma or not in array
-]
+**Bad patterns** (too broad):
+
+```yaml
+globs: ["**/*"]           # Matches everything (use alwaysApply instead)
+globs: ["**/*.ts"]        # Too broad if rule is component-specific
 ```
 
 **Check:**
-- [ ] Patterns use `**/` for recursive matching
-- [ ] Patterns target specific file types
-- [ ] Multiple extensions use `{ext1,ext2}` syntax
-- [ ] Patterns are in array format
-- [ ] No bare patterns (all should match expected files)
+
+- [ ] Patterns are as specific as needed
+- [ ] Patterns match intended files only
+- [ ] No overly broad patterns that bloat context
 
 **Severity:**
-- Missing `**/`: MAJOR (won't match nested files)
-- Too broad (`**/*`): CRITICAL (matches everything)
-- Invalid syntax: BLOCKER (won't work)
 
-#### 2.2 Pattern Specificity
+- Overly broad patterns: CRITICAL (performance/context bloat)
+- Insufficiently specific: MAJOR (incorrect triggering)
+
+---
+
+### 2.2 Pattern Performance
+
+**Efficient patterns:**
+
 ```yaml
-# ❌ Too broad - matches all files
-globs: ["**/*"]
+globs: ["**/src/**/*.ts"]      # Scoped to src/ directory
+globs: ["**/*.test.ts"]         # Specific file extension
+```
 
-# ❌ Still too broad - matches all YAML
-globs: ["**/*.yaml"]
+**Inefficient patterns:**
 
-# ✅ Specific - targets Helm charts
-globs: ["**/Chart.yaml", "**/values*.yaml", "**/templates/**/*.yaml"]
+```yaml
+globs: ["**/*.ts", "**/*.js", "**/*.tsx", "**/*.jsx", "**/*.mjs", ...]
+# Too many patterns - consider simplification
 ```
 
 **Check:**
-- [ ] Patterns are appropriately specific
-- [ ] Not matching unrelated file types
-- [ ] Not causing context pollution
-- [ ] Targets actual files in project
+
+- [ ] Patterns are efficient (not excessive)
+- [ ] Use `**` sparingly (matches any depth)
+- [ ] Combine similar patterns where possible
 
 **Severity:**
-- Matches all files: CRITICAL
-- Overly broad: MAJOR
-- Could be more specific: MINOR
 
-#### 2.3 Pattern Coverage
-```yaml
-# ❌ Too narrow - misses common cases
-globs: ["components/*.tsx"]  # Only root components/
+- Excessive pattern count (>10): MAJOR
+- Inefficient wildcards: MINOR
 
-# ✅ Appropriate coverage
-globs: [
-  "**/*.tsx",              # All React components
-  "**/components/**/*.ts", # Component utilities
-  "**/hooks/**/*.ts"       # Custom hooks
-]
-```
+---
 
-**Check:**
-- [ ] Patterns cover all relevant files
-- [ ] Doesn't miss nested directories
-- [ ] Covers related file types (e.g., .ts and .tsx)
-- [ ] No gaps in coverage
+### 2.3 Pattern Correctness
 
-**Severity:**
-- Missing major file types: MAJOR
-- Missing nested directories: MAJOR
+**Test patterns:**
 
-#### 2.4 Negation Patterns (if used)
-```yaml
-# ✅ Correct - exclusion after inclusion
-globs: [
-  "**/*.ts",
-  "!**/*.test.ts",      # Exclude tests
-  "!**/node_modules/**" # Exclude dependencies
-]
-
-# ❌ Wrong order - tests will still match
-globs: [
-  "!**/*.test.ts",
-  "**/*.ts"
-]
-```
-
-**Check:**
-- [ ] Negations come after inclusions
-- [ ] Negation syntax correct (starts with `!`)
-- [ ] Negations are necessary (not redundant)
-
-**Severity:**
-- Wrong order: MAJOR (won't work as intended)
-- Invalid syntax: BLOCKER
-
-#### 2.5 Pattern Testing
 ```bash
-# Test patterns match expected files
+# Test if pattern matches intended files
 find . -path "**/Chart.yaml"
-fd --glob "**/*.ts"
-ls **/*.tsx  # (requires globstar in bash)
+find . -path "**/*.test.ts"
 ```
 
 **Check:**
-- [ ] Patterns actually match files in project
-- [ ] Can verify with `find` or `fd` commands
-- [ ] No false positives
-- [ ] No false negatives
+
+- [ ] Patterns use correct glob syntax
+- [ ] Patterns match intended files
+- [ ] Patterns exclude unintended files
+- [ ] Test patterns with `find` command
 
 **Severity:**
-- Doesn't match any files: BLOCKER
-- Matches wrong files: CRITICAL
 
-### Gate 2 Checklist
-```
-Glob Patterns Review:
-[ ] Valid glob syntax
-[ ] Patterns use **/ for recursive matching
-[ ] Patterns are appropriately specific
-[ ] Coverage is adequate (no gaps)
-[ ] Negations (if any) are correct
-[ ] Patterns tested and verified
-[ ] No overly broad patterns
-[ ] Targets actual project files
-```
+- Pattern doesn't match: BLOCKER (rule won't trigger)
+- Pattern syntax error: BLOCKER
 
 ---
 
 ## Gate 3: Content Quality Review
 
-### What to Check
+### 3.1 Single Responsibility
 
-#### 3.1 Overview Section
-```markdown
-# ✅ Good overview
-## Overview
-This rule provides React component patterns including props typing and hooks usage.
+**Check:**
 
-**Related rules:** See @typescript-patterns.mdc for general TypeScript, @testing.mdc for test patterns.
+- [ ] Rule focuses on single concern/domain
+- [ ] No mixing of unrelated topics (e.g., API + UI in one rule)
+- [ ] Split multi-topic rules into separate files
+
+**Severity:**
+
+- Multiple unrelated topics: MAJOR
 
 ---
 
-# ❌ Missing overview
-[Content starts directly without overview]
+### 3.2 Content Organization
+
+**Recommended structure:**
+
+```markdown
+# Title matching description
+
+## Core Patterns
+
+[Main content]
+
+## Common Issues
+
+[Troubleshooting]
+
+## Examples
+
+[Code examples]
+
+## Related Rules
+
+[@cross-references]
 ```
 
 **Check:**
-- [ ] Has Overview section
-- [ ] Overview explains rule purpose (1-2 sentences)
-- [ ] Includes cross-references to related rules
-- [ ] Uses `---` separator after overview
+
+- [ ] Content has clear structure
+- [ ] Sections have descriptive headings
+- [ ] Information flows logically
+- [ ] No redundancy or repetition
 
 **Severity:**
-- Missing overview: MAJOR
-- No cross-references: MINOR (if related rules exist)
 
-#### 3.2 Content Organization
-```markdown
-# ✅ Good structure
-## Overview
-...
-
-**Related rules:** ...
-
----
-
-## Section 1
-...
-
----
-
-## Section 2
-...
-
----
-
-## Resources
-...
-```
-
-**Check:**
-- [ ] Logical section organization
-- [ ] Sections separated with `---`
-- [ ] Clear section headings
-- [ ] Progressive flow (general to specific)
-- [ ] Resources section at bottom
-
-**Severity:**
 - Poor organization: MAJOR
-- Missing section separators: MINOR
+- Missing structure: MINOR
 
-#### 3.3 Examples Quality
-```markdown
-# ❌ Bad - Abstract advice
-Make sure to handle errors properly.
+---
 
-# ✅ Good - Concrete code example
-\`\`\`typescript
-// ✅ Good - Complete error handling
-try {
-  const result = await api.call();
-  return result;
-} catch (error) {
-  logger.error('API call failed', { error });
-  throw new ApiError('Failed to fetch data', error);
-}
+### 3.3 Example Quality
 
-// ❌ Bad - No error handling
-const result = await api.call();
-return result;
-\`\`\`
-```
+**Good examples:**
+
+- Show both good (✅) and bad (❌) patterns
+- Include brief explanations
+- Use realistic code snippets
+- Highlight key differences
 
 **Check:**
-- [ ] Contains concrete code examples (not just text)
-- [ ] Examples are project-specific (not generic)
-- [ ] Shows good AND bad patterns (✅/❌)
-- [ ] Examples are runnable/realistic
-- [ ] At least 2-3 substantial examples
+
 - [ ] Examples demonstrate key concepts
+- [ ] Examples show good and bad patterns
+- [ ] Examples are realistic (not trivial)
+- [ ] Examples are concise (not walls of code)
 
 **Severity:**
-- No examples: CRITICAL
-- Only abstract advice: MAJOR
-- Generic examples: MINOR
 
-#### 3.4 Good vs Bad Patterns
+- Missing examples: MAJOR
+- Poor example quality: MINOR
+
+---
+
+### 3.4 Cross-References
+
+**Good cross-references:**
+
 ```markdown
-# ✅ Includes both
-\`\`\`typescript
-// ✅ Good - Type-safe approach
-interface Props { name: string; }
-function Component({ name }: Props) { }
-
-// ❌ Bad - Untyped props
-function Component({ name }) { }
-\`\`\`
+For React component structure, see @react-component-patterns
+For TypeScript types, see @typescript-types
 ```
 
 **Check:**
-- [ ] Uses ✅ for good patterns
-- [ ] Uses ❌ for bad patterns
-- [ ] Shows both (not just one)
-- [ ] Explains why each is good/bad
 
-**Severity:**
-- Only shows good OR bad (not both): MAJOR
-- No visual indicators (✅/❌): MINOR
-
-#### 3.5 Cross-References
-```markdown
-# ✅ Good cross-references
-**Related rules:** See @api-patterns.mdc for API design, @error-handling.mdc for error patterns.
-
-For deployment procedures, see @deployment-guide.mdc.
-
-# ❌ Missing cross-references
-[No references to related rules despite clear relationships]
-```
-
-**Check:**
-- [ ] References related rules with `@filename.mdc`
+- [ ] Cross-references use `@` syntax
+- [ ] Referenced rules exist
 - [ ] Cross-references are relevant
-- [ ] Referenced rules actually exist
-- [ ] Uses descriptive text ("See @X for Y")
+- [ ] No circular references
 
 **Severity:**
-- Missing obvious cross-references: MAJOR
-- Broken references (file doesn't exist): CRITICAL
-- No descriptive text: MINOR
 
-#### 3.6 Actionable Guidance
-```markdown
-# ❌ Vague
-Be careful with memory management.
-
-# ✅ Actionable
-## Memory Management
-
-Always remove event listeners to prevent leaks:
-
-\`\`\`javascript
-// Setup
-emitter.on('event', handler);
-
-// Cleanup
-emitter.off('event', handler);
-\`\`\`
-
-Check listener count in development:
-\`\`\`javascript
-console.log(emitter.listenerCount('event'));
-\`\`\`
-```
-
-**Check:**
-- [ ] Guidance is specific and actionable
-- [ ] Includes "how to" not just "what to"
-- [ ] Provides concrete steps
-- [ ] Avoids vague phrases ("make sure", "be careful")
-
-**Severity:**
-- Mostly vague guidance: MAJOR
-- Mix of vague and concrete: MINOR
-
-### Gate 3 Checklist
-```
-Content Quality Review:
-[ ] Has Overview section with cross-references
-[ ] Logical section organization
-[ ] Sections separated with ---
-[ ] Contains concrete code examples
-[ ] Shows good vs bad patterns (✅/❌)
-[ ] Cross-references related rules
-[ ] References are valid (files exist)
-[ ] Guidance is actionable (not vague)
-[ ] Examples are project-specific
-[ ] At least 2-3 substantial examples
-```
+- Broken cross-references: CRITICAL
+- Missing beneficial cross-references: MINOR
 
 ---
 
 ## Gate 4: File Length Review
 
-### What to Check
+### Recommended Limits
 
-#### 4.1 Line Count
-```bash
-# Check line count
-wc -l .cursor/rules/my-rule.mdc
-
-# Target: Under 500 lines
-# Acceptable: 500-700 with justification
-# Problem: Over 700 requires splitting
-```
+- **Optimal:** <300 lines
+- **Good:** 300-500 lines
+- **Acceptable:** 500-750 lines
+- **Needs splitting:** >750 lines
 
 **Check:**
-- [ ] Under 500 lines (ideal)
-- [ ] 500-700 lines with justification
-- [ ] If over 700, must split into multiple rules
+
+- [ ] File length is appropriate for content
+- [ ] Consider splitting if >500 lines
+- [ ] Split if multiple distinct topics
 
 **Severity:**
-- Under 500: ✅ PASS
-- 500-700 with justification: ✅ PASS (MINOR note)
-- 500-700 without justification: MAJOR
-- Over 700: CRITICAL (must split)
 
-#### 4.2 Justification (if over 500)
-```markdown
-# Acceptable reasons for 500-700 lines:
-- Comprehensive reference material (troubleshooting guide)
-- Multiple complex examples required
-- Cannot split without losing coherence
-- Already extracted content to separate files
+- > 1000 lines: MAJOR (must split)
+- > 750 lines: MINOR (should split)
 
-# NOT acceptable:
-- "Didn't have time to split"
-- Could easily separate into focused rules
-- Mixed unrelated concerns
-```
+**Action:**
+Split large rules into:
 
-**Check:**
-- [ ] If over 500 lines, justification documented
-- [ ] Justification is valid
-- [ ] Alternative splitting considered
-
-**Severity:**
-- Over 500 without justification: MAJOR
-- Over 700 even with justification: CRITICAL
-
-#### 4.3 Splitting Opportunities
-```markdown
-# Rule with 800 lines covering:
-- Topic A (300 lines)
-- Topic B (250 lines)
-- Topic C (250 lines)
-
-# Should split into:
-1. core-overview.mdc (200 lines, always-apply)
-2. topic-a.mdc (400 lines, file-based)
-3. topic-b.mdc (350 lines, file-based)
-4. topic-c.mdc (350 lines, manual)
-```
-
-**Check:**
-- [ ] Identified distinct topics/concerns
-- [ ] Each topic could be separate rule
-- [ ] Splitting would improve maintainability
-- [ ] Cross-references would connect them
-
-**Severity:**
-- Clear splitting opportunity missed: MAJOR
-- Could potentially split: MINOR
-
-#### 4.4 Content Density
-```markdown
-# ❌ Low density - lots of whitespace, repetition
-[100 lines of repeated patterns]
-
-# ✅ Good density - concise, no duplication
-[Well-organized, each line adds value]
-```
-
-**Check:**
-- [ ] Content is dense (not wasteful)
-- [ ] No repetitive patterns
-- [ ] No excessive whitespace
-- [ ] Each section adds value
-
-**Severity:**
-- Lots of waste that could be removed: MAJOR
-
-### Gate 4 Checklist
-```
-File Length Review:
-[ ] Line count checked (wc -l)
-[ ] Under 500 lines OR justified
-[ ] If over 700, splitting is required
-[ ] No clear splitting opportunities missed
-[ ] Content is appropriately dense
-[ ] No repetitive patterns
-```
+- Base rule (core patterns)
+- Advanced rule (edge cases, advanced patterns)
+- Examples rule (detailed code examples)
 
 ---
 
 ## Gate 5: Functionality Review
 
-### What to Check
+### 5.1 Triggering Test
 
-#### 5.1 Rule Loading Test
+**Test triggering:**
+
 ```bash
-# Test always-apply rule
-# 1. Start Cursor
-# 2. Open any file
-# 3. Start chat
-# 4. Verify rule context is present
+# Create test file
+touch test.ts
 
-# Test file-based rule
-# 1. Open file matching glob pattern
-# 2. Start chat
-# 3. Verify rule loads
-# 4. Open non-matching file
-# 5. Verify rule doesn't load
+# Open in Cursor
+cursor test.ts
 
-# Test manual rule
-# 1. Start chat
-# 2. Type @rule-name.mdc
-# 3. Verify rule loads
+# Check if rule appears in context
+# Rule should trigger if globs match "**/*.ts"
 ```
 
 **Check:**
-- [ ] Always-apply rules load in every chat
-- [ ] File-based rules load for matching files
-- [ ] File-based rules don't load for non-matching files
-- [ ] Manual rules load when @-mentioned
-- [ ] No error messages in Cursor
+
+- [ ] Rule triggers when expected
+- [ ] Rule doesn't trigger when not expected
+- [ ] Glob patterns work correctly
+- [ ] `alwaysApply` rules always load
 
 **Severity:**
-- Rule doesn't load at all: BLOCKER
-- Loads when shouldn't: CRITICAL
-- Doesn't load when should: CRITICAL
 
-#### 5.2 Glob Pattern Verification
+- Rule doesn't trigger: BLOCKER
+- Rule triggers incorrectly: CRITICAL
+
+---
+
+### 5.2 Cross-Reference Validation
+
+**Validate cross-references:**
+
 ```bash
-# Verify patterns match expected files
-cd project-root
-
-# Test pattern with find
-find . -path "**/Chart.yaml"
-
-# Test with fd
-fd --glob "**/*.tsx"
-
-# Verify matches project structure
-```
-
-**Check:**
-- [ ] Glob patterns match actual project files
-- [ ] Patterns tested with find/fd
-- [ ] No unexpected matches
-- [ ] No missed files
-
-**Severity:**
-- Patterns don't match anything: BLOCKER
-- Pattern mismatches project structure: CRITICAL
-
-#### 5.3 Cross-Reference Validation
-```bash
-# Check all @-mentions
-grep -o "@[a-z-]*.mdc" .cursor/rules/my-rule.mdc
-
-# Verify each referenced file exists
+# Check referenced files exist
+grep "@" .cursor/rules/my-rule.mdc
 ls .cursor/rules/referenced-rule.mdc
 ```
 
 **Check:**
-- [ ] All `@filename.mdc` references verified
-- [ ] Referenced files exist in `.cursor/rules/`
-- [ ] No broken links
-- [ ] @-mentions work in Cursor chat
+
+- [ ] All cross-referenced rules exist
+- [ ] Cross-references use correct syntax
+- [ ] No circular dependencies
 
 **Severity:**
-- Broken reference (file doesn't exist): CRITICAL
-- Reference typo: MAJOR
 
-#### 5.4 Context Quality Test
-```markdown
-# Test in actual Cursor chat:
-
-Prompt: "Create an API endpoint for user registration"
-
-Expected result:
-- If API rule is present, context should be relevant
-- Examples should be helpful
-- Patterns should be followed
-
-Not expected:
-- Generic advice Cursor already knows
-- Irrelevant context
-- Contradictory guidance
-```
-
-**Check:**
-- [ ] Rule provides relevant context
-- [ ] Context is actually helpful
-- [ ] No conflicts with other rules
-- [ ] Improves Cursor's responses
-
-**Severity:**
-- Provides irrelevant context: MAJOR
-- Conflicts with other rules: CRITICAL
-- No measurable improvement: MAJOR
-
-#### 5.5 Performance Impact
-```markdown
-# Check context size:
-- Always-apply rules should be short (<300 lines)
-- Total always-apply context should be reasonable
-- File-based rules should target specific files
-- No unnecessary loading
-```
-
-**Check:**
-- [ ] Always-apply rules are concise
-- [ ] Total context load is reasonable
-- [ ] No performance degradation
-- [ ] File-based targeting works correctly
-
-**Severity:**
-- Large always-apply rule: CRITICAL
-- Excessive total context: MAJOR
-- Performance issues: CRITICAL
-
-### Gate 5 Checklist
-```
-Functionality Review:
-[ ] Rule loads correctly (always/file-based/manual)
-[ ] Glob patterns match expected files
-[ ] Cross-references validated (files exist)
-[ ] Context is relevant and helpful
-[ ] No conflicts with other rules
-[ ] Performance impact acceptable
-[ ] Tested in actual Cursor chat
-```
+- Broken cross-references: CRITICAL
+- Circular references: MAJOR
 
 ---
 
-## Review Report Template
+### 5.3 Maintainability Review
+
+**Check:**
+
+- [ ] Rule is easy to understand
+- [ ] Rule follows naming conventions
+- [ ] Rule has clear ownership (if team-shared)
+- [ ] Rule documented in README/index (if part of collection)
+
+**Severity:**
+
+- Poor maintainability: MINOR
+- Unclear ownership: MINOR
+
+---
+
+## Review Output Format
+
+### Comprehensive Report Structure
 
 ```markdown
 # Cursor Rule Review: [rule-name.mdc]
 
-**Reviewed by:** [Your Name]
-**Date:** [Date]
-**Overall Status:** [APPROVED / NEEDS WORK / BLOCKED]
-
----
+**Status:** ❌ FAILED (2 BLOCKER, 3 MAJOR, 1 MINOR)
+**Date:** 2024-01-16
+**Reviewer:** Claude/Pedro
 
 ## Summary
 
-[1-2 sentence overview of review]
+| Gate                    | Status  | Blocker | Critical | Major | Minor |
+| ----------------------- | ------- | ------- | -------- | ----- | ----- |
+| Gate 1: Frontmatter     | ❌ FAIL | 1       | 0        | 1     | 0     |
+| Gate 2: Glob Patterns   | ✅ PASS | 0       | 0        | 0     | 0     |
+| Gate 3: Content Quality | ⚠️ WARN | 0       | 0        | 2     | 1     |
+| Gate 4: File Length     | ✅ PASS | 0       | 0        | 0     | 0     |
+| Gate 5: Functionality   | ❌ FAIL | 1       | 0        | 0     | 0     |
+| **TOTAL**               | ❌ FAIL | **2**   | **0**    | **3** | **1** |
 
 ---
 
-## Gate 1: Frontmatter Review
+## 🚫 BLOCKER Issues (Must Fix Before Merge)
 
-**Status:** [✅ PASS / ⚠️ ISSUES]
+### Gate 1.1: Invalid YAML Syntax
 
-Issues found:
-- [ ] BLOCKER: [Description]
-- [ ] CRITICAL: [Description]
-- [ ] MAJOR: [Description]
-- [ ] MINOR: [Description]
+- **Issue:** Missing closing `---` in frontmatter
+- **Location:** Line 1-5
+- **Fix:** Add `---` after line 5
+- **Impact:** Rule will not parse at all
 
----
+### Gate 5.1: Rule Doesn't Trigger
 
-## Gate 2: Glob Patterns Review
-
-**Status:** [✅ PASS / ⚠️ ISSUES]
-
-Issues found:
-- [ ] BLOCKER: [Description]
-- [ ] CRITICAL: [Description]
-- [ ] MAJOR: [Description]
-- [ ] MINOR: [Description]
+- **Issue:** Glob pattern `**/*.tsx` doesn't match test files
+- **Expected:** Should trigger for `src/components/Button.tsx`
+- **Actual:** No trigger
+- **Fix:** Verify glob syntax and test with `find`
 
 ---
 
-## Gate 3: Content Quality Review
+## 🚨 MAJOR Issues (Should Fix Soon)
 
-**Status:** [✅ PASS / ⚠️ ISSUES]
+### Gate 1.3: Vague Description
 
-Issues found:
-- [ ] BLOCKER: [Description]
-- [ ] CRITICAL: [Description]
-- [ ] MAJOR: [Description]
-- [ ] MINOR: [Description]
+- **Current:** "Helps with components."
+- **Issue:** Too vague, no context about WHAT or WHEN
+- **Recommended:** "React component patterns including props typing and hooks usage. Apply when creating or modifying React components."
 
----
+### Gate 3.1: Mixed Topics
 
-## Gate 4: File Length Review
+- **Issue:** Rule mixes API design + UI components
+- **Recommendation:** Split into:
+  - `api-design-patterns.mdc`
+  - `react-component-patterns.mdc`
 
-**Status:** [✅ PASS / ⚠️ ISSUES]
+### Gate 3.3: Missing Examples
 
-**Line count:** [X lines]
-**Target:** Under 500 lines
-
-Issues found:
-- [ ] BLOCKER: [Description]
-- [ ] CRITICAL: [Description]
-- [ ] MAJOR: [Description]
-- [ ] MINOR: [Description]
+- **Issue:** No code examples provided
+- **Recommendation:** Add good/bad pattern examples
 
 ---
 
-## Gate 5: Functionality Review
+## ⚠️ MINOR Issues (Nice to Have)
 
-**Status:** [✅ PASS / ⚠️ ISSUES]
+### Gate 1.3: First-Person Description
 
-Issues found:
-- [ ] BLOCKER: [Description]
-- [ ] CRITICAL: [Description]
-- [ ] MAJOR: [Description]
-- [ ] MINOR: [Description]
+- **Current:** "I provide patterns for..."
+- **Recommendation:** "Provides patterns for..." (third person)
 
 ---
 
 ## Recommendations
 
-### Must Fix (BLOCKER/CRITICAL)
-1. [Recommendation with example]
-2. [Recommendation with example]
+**Immediate Actions (BLOCKER - Before Merge):**
 
-### Should Fix (MAJOR)
-1. [Recommendation]
-2. [Recommendation]
+1. Fix YAML frontmatter syntax
+2. Fix glob pattern to trigger correctly
 
-### Nice to Have (MINOR)
-1. [Suggestion]
-2. [Suggestion]
+**Short-term Actions (MAJOR - This Week):**
 
----
+1. Improve description quality
+2. Split mixed-topic rule
+3. Add code examples
 
-## Overall Assessment
+**Long-term Actions (MINOR - When Convenient):**
 
-[Detailed assessment paragraph]
-
-**Approve?** [YES / NO / CONDITIONAL]
-
-**Conditions (if any):**
-- [Condition for approval]
-
----
-
-**Review complete.**
+1. Convert to third-person voice
 ```
 
 ---
 
-## Quality Checklist
+## Best Practices
 
-Use this comprehensive checklist for reviews:
+### 1. Start with Frontmatter
 
-```
-Rule Review Checklist:
+Always validate frontmatter first - if it's broken, nothing else matters.
 
-Frontmatter:
-[ ] Valid YAML syntax
-[ ] description present and specific
-[ ] Description uses third person
-[ ] Appropriate trigger (always/file/manual)
-[ ] Correct field types
+### 2. Test Triggering Early
 
-Glob Patterns:
-[ ] Valid glob syntax
-[ ] Patterns use **/ recursively
-[ ] Appropriately specific
-[ ] Tested and verified
+Create test files and verify the rule triggers as expected.
 
-Content:
-[ ] Has Overview with cross-references
-[ ] Logical organization
-[ ] Concrete code examples
-[ ] Good vs bad patterns (✅/❌)
-[ ] Cross-references validated
-[ ] Actionable guidance
+### 3. Use Consistent Severity
 
-File Length:
-[ ] Under 500 lines OR justified
-[ ] No clear splitting opportunities missed
-[ ] Appropriate content density
+Apply severity levels consistently across reviews.
 
-Functionality:
-[ ] Rule loads correctly
-[ ] Globs match expected files
-[ ] Cross-references work
-[ ] Context is helpful
-[ ] No performance issues
+### 4. Provide Actionable Fixes
 
-Overall:
-[ ] No BLOCKER issues
-[ ] No CRITICAL issues
-[ ] MAJOR issues acceptable or addressed
-[ ] Ready for approval
-```
+Every issue should have a clear fix recommendation.
+
+### 5. Re-Review After Fixes
+
+Always run review again after fixes to confirm resolution.
 
 ---
 
-## Common Review Findings
+## Common Issues & Solutions
 
-### Finding 1: Missing Frontmatter Description
-```yaml
-# ❌ Problem
----
-globs: ["**/*.ts"]
----
+### Issue: Rule Not Triggering
 
-# ✅ Solution
----
-description: TypeScript patterns for type safety and best practices. Apply when working with TypeScript code.
-globs: ["**/*.ts"]
----
-```
+**Symptoms:**
 
-**Severity:** BLOCKER
+- Rule should trigger but doesn't appear
+- Glob patterns look correct
 
-### Finding 2: Overly Broad Glob Patterns
-```yaml
-# ❌ Problem - matches everything
-globs: ["**/*"]
-
-# ✅ Solution - specific targeting
-globs: ["**/*.tsx", "**/components/**/*.ts"]
-```
-
-**Severity:** CRITICAL
-
-### Finding 3: No Code Examples
-```markdown
-# ❌ Problem - abstract advice only
-Make sure to use TypeScript types properly.
-
-# ✅ Solution - concrete example
-\`\`\`typescript
-// ✅ Good - explicit typing
-interface User { id: string; name: string; }
-function getUser(id: string): User { }
-
-// ❌ Bad - implicit any
-function getUser(id) { }
-\`\`\`
-```
-
-**Severity:** CRITICAL
-
-### Finding 4: File Too Long Without Justification
-```bash
-# Problem
-wc -l .cursor/rules/my-rule.mdc
-# Output: 850 lines
-
-# Solution: Split into focused rules
-my-rule-core.mdc (200 lines)
-my-rule-patterns.mdc (400 lines)
-my-rule-advanced.mdc (350 lines)
-```
-
-**Severity:** CRITICAL (over 700 lines)
-
-### Finding 5: Broken Cross-References
-```markdown
-# ❌ Problem
-See @nonexistent-rule.mdc for details.
-
-# ✅ Solution
-# Verify file exists:
-ls .cursor/rules/api-patterns.mdc
-
-# Then reference:
-See @api-patterns.mdc for API design patterns.
-```
-
-**Severity:** CRITICAL
-
----
-
-## Resources
-
-- cursor-rules-writing skill (for creating rules)
-- [Cursor Documentation](https://cursor.com/docs/context/rules)
-- [YAML Specification](https://yaml.org/spec/)
-- CHECKLIST.md (copy-paste review checklist)
-- EXAMPLES.md (sample review reports)
-
----
-
-## Quick Reference
+**Debug:**
 
 ```bash
-# Start review
-cat .cursor/rules/rule-name.mdc
+# Test glob pattern
+find . -path "**/*.test.ts"
 
+# Check frontmatter syntax
+head -n 10 .cursor/rules/rule-name.mdc
+
+# Verify Cursor settings
+cat .cursor/settings.json
+```
+
+**Solutions:**
+
+- Fix glob pattern syntax
+- Ensure frontmatter is valid YAML
+- Check file is in `.cursor/rules/` directory
+- Restart Cursor IDE
+
+---
+
+### Issue: Context Bloat
+
+**Symptoms:**
+
+- Too much context loaded
+- Slow Cursor performance
+- Responses include irrelevant information
+
+**Debug:**
+
+```bash
+# Check for overly broad patterns
+grep "globs:" .cursor/rules/*.mdc | grep "\*\*/\*"
+
+# Check for too many alwaysApply rules
+grep "alwaysApply: true" .cursor/rules/*.mdc
+```
+
+**Solutions:**
+
+- Make glob patterns more specific
+- Use `alwaysApply: true` sparingly
+- Split large rules into smaller, focused rules
+- Consider file-based triggering over alwaysApply
+
+---
+
+### Issue: Broken Cross-References
+
+**Symptoms:**
+
+- `@referenced-rule` doesn't load
+- Error in Cursor logs
+
+**Debug:**
+
+```bash
+# Find all cross-references
+grep "@" .cursor/rules/my-rule.mdc
+
+# Check if referenced files exist
+ls .cursor/rules/referenced-rule.mdc
+```
+
+**Solutions:**
+
+- Fix filename (case-sensitive)
+- Ensure referenced rule exists
+- Use correct `@filename` syntax (without `.mdc`)
+
+---
+
+## Quick Validation Commands
+
+```bash
 # Check frontmatter
 head -n 10 .cursor/rules/rule-name.mdc
 
@@ -1073,10 +663,16 @@ find . -path "**/Chart.yaml"
 grep "@" .cursor/rules/rule-name.mdc
 ls .cursor/rules/referenced-rule.mdc
 
-# Complete checklist
-# See CHECKLIST.md for copy-paste version
+# For complete checklist, read references/CHECKLIST.md
 ```
 
 ---
 
-**This skill follows cursor-rules-writing and skill-review best practices and should be reviewed quarterly for updates.**
+## Related Skills
+
+- **cursor-rules-writing**: Create new Cursor rules following best practices
+- **skill-review**: Review Claude Code skills (different from Cursor rules)
+
+---
+
+**This skill should be reviewed quarterly for updates to align with latest Cursor IDE features.**
