@@ -10,13 +10,6 @@ version: 1.0.0
 
 Enforce branch naming conventions and provide safe branch creation/switching operations with proper validation.
 
-## When to Use
-
-- Creating new feature/fix/refactor branches
-- Switching between branches
-- As part of PR creation workflow
-- When user requests branch operations
-
 ## CRITICAL POLICY
 
 ### Branch Naming Convention

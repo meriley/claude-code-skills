@@ -10,14 +10,6 @@ version: 1.0.0
 
 Detect N+1 query anti-patterns in GraphQL resolvers and TypeScript code. This skill identifies situations where code makes sequential database/service calls in loops instead of batching requests, which causes severe performance degradation.
 
-## When to Use This Skill
-
-- **Before committing GraphQL resolvers** - Prevent N+1 problems before they reach production
-- **Performance investigation** - When APIs are slow or database load is high
-- **Code review preparation** - Before submitting resolver PRs
-- **After adding new resolvers** - Verify batching is implemented
-- **Debugging query performance** - When seeing repeated identical queries
-
 ## What This Skill Checks
 
 ### 1. GraphQL Field Resolvers Without DataLoader (Priority: CRITICAL)

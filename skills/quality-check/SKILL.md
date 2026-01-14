@@ -14,13 +14,6 @@ Enforce code quality standards through automated linting, formatting, and static
 
 **CRITICAL:** This skill is automatically invoked by safe-commit. NEVER run linters manually.
 
-## When to Use
-
-- **AUTOMATICALLY** invoked by safe-commit before every commit
-- During code refinement phase (manual invocation allowed)
-- After making code changes (manual invocation allowed)
-- When user requests code quality review
-
 ## 🚫 NEVER DO THIS
 
 - ❌ Running `eslint` or `npm run lint` manually before commit

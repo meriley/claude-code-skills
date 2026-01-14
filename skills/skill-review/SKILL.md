@@ -9,14 +9,6 @@ version: 1.0.0
 ## Purpose
 Systematically audit Claude Code skills against official best practices to ensure quality, discoverability, and maintainability before release or merge.
 
-## When to Use
-- Reviewing skill PRs before merge
-- Preparing skills for marketplace or team release
-- Quality audit of existing skills
-- Validating skill improvements
-- Ensuring compliance with best practices
-- Identifying skill anti-patterns
-
 ## Review Workflow
 
 ### Step 1: Structure Validation

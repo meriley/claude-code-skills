@@ -30,14 +30,6 @@ Execute comprehensive testing to ensure code correctness, prevent regressions, a
 - Coverage below thresholds = failure
 - E2E tests use real dependencies, never mocks
 
-## When to Use
-
-- **AUTOMATICALLY** invoked by safe-commit before every commit
-- During refinement phase (manual invocation allowed)
-- After implementing new features (manual invocation allowed)
-- After bug fixes to verify fix + prevent regression (manual invocation allowed)
-- When user requests "run tests"
-
 ## 🚫 NEVER DO THIS
 
 - ❌ Running `npm test` or `jest` manually before commit

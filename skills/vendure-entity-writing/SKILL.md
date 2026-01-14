@@ -10,14 +10,6 @@ version: 1.0.0
 
 Guide creation of Vendure database entities following TypeORM and Vendure patterns.
 
-## When to Use
-
-- Creating new database entities
-- Defining entity relations
-- Adding custom fields to existing entities
-- Setting up channel-aware entities
-- Creating migration files
-
 ## When NOT to Use
 
 - Plugin structure only (use vendure-plugin-writing)

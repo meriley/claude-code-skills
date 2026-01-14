@@ -14,16 +14,6 @@ Prevent accidental data loss by requiring explicit confirmation before any destr
 
 **CRITICAL:** You MUST invoke this skill before ANY destructive operation. NEVER run destructive commands directly.
 
-## When to Use
-
-- **MANDATORY:** Before `git reset --hard`
-- **MANDATORY:** Before `git clean -fd`
-- **MANDATORY:** Before `rm -rf`
-- **MANDATORY:** Before `git checkout -- .`
-- **MANDATORY:** Before `git restore .`
-- **MANDATORY:** Before `docker system prune`
-- **MANDATORY:** Before any operation that permanently deletes data
-
 ## 🚫 NEVER DO THIS
 
 - ❌ Running `git reset --hard` directly

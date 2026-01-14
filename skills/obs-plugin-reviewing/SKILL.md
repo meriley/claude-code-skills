@@ -10,14 +10,6 @@ version: 1.0.0
 
 Audit OBS Studio plugins for correctness, performance, memory safety, and thread safety. Covers module registration, callback implementations, resource management, and audio-specific patterns.
 
-## When to Use This Skill
-
-- Reviewing OBS plugin PRs
-- Pre-release plugin audit
-- Code quality assessment
-- Learning OBS plugin best practices
-- Debugging plugin issues
-
 ## When NOT to Use
 
 - Writing new plugins → Use **obs-audio-plugin-writing**

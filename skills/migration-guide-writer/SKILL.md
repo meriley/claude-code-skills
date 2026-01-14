@@ -1,6 +1,6 @@
 ---
 name: migration-guide-writer
-description: Creates problem-oriented migration guides following Diátaxis How-To pattern. Maps old APIs to new APIs with before/after examples, documents breaking changes, provides troubleshooting. Zero tolerance for fabricated APIs or unverified performance claims.
+description: Creates problem-oriented migration guides following Diátaxis How-To pattern. Maps old APIs to new APIs with before/after examples, documents breaking changes, provides troubleshooting. Zero tolerance for fabricated APIs or unverified performance claims. Use when new system replaces old, breaking API changes occur, major version upgrades needed, service decomposition happens, deprecation notices required, or architectural changes documented.
 version: 1.0.0
 ---
 
@@ -9,16 +9,6 @@ version: 1.0.0
 ## Purpose
 
 Create comprehensive migration guides for moving from old systems/APIs to new ones. Follows the Diátaxis How-To pattern for problem-oriented documentation. Verifies all APIs in both old and new systems before documenting, with zero tolerance for fabrication.
-
-## When to Use This Skill
-
-- **New system replaces old** - Guide users through migration
-- **Breaking API changes** - Document how to adapt to changes
-- **Major version upgrades** - Help users upgrade safely
-- **Service decomposition** - Guide migration from monolith to microservices
-- **Deprecation notices** - Show how to move away from deprecated APIs
-- **User requests** - "how to migrate from X to Y"
-- **Architectural changes** - Document pattern changes
 
 ## Diátaxis Framework: How-To Guide
 
@@ -170,12 +160,6 @@ find . -name "*bench*" -o -name "*benchmark*"
 ## Goal
 
 [Specific migration outcome - what they'll achieve]
-
-## When to Use This Guide
-
-- You're currently using [Old System] version [X.Y]
-- You need to migrate to [New System] version [A.B]
-- [Specific scenario or requirement]
 
 ## Prerequisites
 

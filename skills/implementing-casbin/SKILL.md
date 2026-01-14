@@ -10,14 +10,6 @@ version: 1.0.0
 
 Implement fine-grained authorization in Go services using Casbin's policy-based access control. Supports RBAC (role-based), ABAC (attribute-based), and hybrid models with database-backed policy storage.
 
-## When to Use
-
-- Implementing role-based access control (users -> roles -> permissions)
-- Implementing attribute-based access control (dynamic rules)
-- Building REST APIs with path-based authorization
-- Building gRPC services with method-based authorization
-- Multi-tenant applications requiring domain-scoped permissions
-
 ## When NOT to Use
 
 - Simple API key authentication (use middleware directly)

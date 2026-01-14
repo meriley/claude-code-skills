@@ -10,14 +10,6 @@ version: 1.0.0
 
 Guide creation of delivery and fulfillment features in Vendure with production-grade patterns for concurrency, performance, and reliability.
 
-## When to Use
-
-- Implementing delivery slot reservation
-- Building capacity management systems
-- Creating shipping calculators
-- Implementing fulfillment handlers
-- Building customer-facing delivery selection
-
 ## When NOT to Use
 
 - Generic plugin structure (use vendure-plugin-writing)

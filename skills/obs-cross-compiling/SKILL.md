@@ -10,15 +10,6 @@ version: 1.0.0
 
 Cross-compile OBS Studio plugins from Linux to Windows using MinGW-w64. Covers CMake presets, toolchain configuration, headers-only linking, CI/CD workflows, and artifact packaging.
 
-## When to Use This Skill
-
-- Cross-compiling OBS plugin from Linux to Windows
-- Setting up CMakePresets.json for multi-platform builds
-- Configuring MinGW toolchain for OBS plugins
-- Building CI/CD pipelines for OBS plugins
-- Fetching OBS SDK for cross-compilation
-- Packaging OBS plugin artifacts
-
 ## When NOT to Use
 
 - Native Windows builds with MSVC → Use **obs-windows-building**

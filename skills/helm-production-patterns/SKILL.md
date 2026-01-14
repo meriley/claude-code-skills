@@ -1,6 +1,6 @@
 ---
 name: helm-production-patterns
-description: Implement production deployment strategies including secrets management, blue-green deployments, canary releases, and upgrade procedures. Use when deploying to production or implementing advanced deployment patterns.
+description: Implement production deployment strategies including secrets management, blue-green deployments, canary releases, and upgrade procedures. Use when deploying charts to production, implementing secrets management, setting up blue-green or canary deployments, configuring chart testing strategies, or planning upgrade and rollback procedures.
 version: 1.0.0
 dependencies: helm>=3.0, kubectl>=1.19
 ---
@@ -9,13 +9,6 @@ dependencies: helm>=3.0, kubectl>=1.19
 
 ## Purpose
 Provide production-proven patterns for deploying Helm charts safely and reliably, including secrets management, testing strategies, deployment patterns, and upgrade procedures.
-
-## When to Use This Skill
-- Deploying charts to production
-- Implementing secrets management
-- Setting up blue-green or canary deployments
-- Configuring chart testing strategies
-- Planning upgrade and rollback procedures
 
 ## Secrets Management
 

@@ -10,15 +10,6 @@ version: 1.0.0
 
 Audit Vendure GraphQL resolvers and schema extensions for violations and anti-patterns.
 
-## When to Use
-
-- Reviewing PRs with GraphQL changes
-- Auditing resolver security
-- Checking permission configuration
-- Verifying schema patterns
-
----
-
 ## Review Workflow
 
 ### Step 1: Identify GraphQL Files

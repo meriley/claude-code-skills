@@ -15,13 +15,6 @@ Transform approved PRD requirements into actionable implementation tasks with:
 - Effort estimates
 - Progress tracking framework with date/commit tracking
 
-## When to Use This Skill
-
-- After PRD is approved and ready for implementation
-- When transitioning from requirements to development
-- To create skill-aware implementation roadmap
-- User requests: "plan implementation for this PRD", "map PRD to tasks"
-
 ## When NOT to Use This Skill
 
 - PRD is not yet approved (use `prd-reviewing` first)

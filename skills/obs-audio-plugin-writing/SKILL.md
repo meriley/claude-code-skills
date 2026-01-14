@@ -10,14 +10,6 @@ version: 1.0.0
 
 Develop OBS Studio audio plugins including audio sources (generators, capture) and audio filters (gain, EQ, compression). Covers real-time audio processing patterns, the filter_audio callback, and audio-specific settings.
 
-## When to Use This Skill
-
-- Creating audio filters (gain, EQ, compression, noise gate, etc.)
-- Creating audio sources (tone generators, audio capture, etc.)
-- Processing audio in real-time within OBS
-- Implementing audio-specific UI properties (dB sliders, channel selectors)
-- Need audio data structure guidance (obs_audio_data, speaker_layout)
-
 ## When NOT to Use
 
 - Video plugins → Use **obs-plugin-developing** (future skills)

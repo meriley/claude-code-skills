@@ -14,14 +14,6 @@ This skill gathers comprehensive git context before starting any work. It helps 
 
 **CRITICAL:** You MUST invoke this skill - NEVER gather git context manually with individual git commands.
 
-## When to Use
-
-- **MANDATORY:** At the start of EVERY new task or user request
-- Before implementing features or fixing bugs
-- Before creating implementation plans
-- When investigating issues or understanding code behavior
-- When user asks about recent changes or project history
-
 ## 🚫 NEVER DO THIS
 
 - ❌ Running `git status` manually

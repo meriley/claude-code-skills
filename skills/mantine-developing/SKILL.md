@@ -10,15 +10,6 @@ version: 1.0.0
 
 Build React UIs with Mantine's component library, Styles API for customization, and @mantine/form for form handling.
 
-## When to Use This Skill
-
-- Creating new React components with Mantine
-- Customizing Mantine component styles (not using default)
-- Building forms with validation using @mantine/form
-- Fixing Mantine styling or accessibility issues
-- Implementing dark mode or theming
-- Debugging Mantine Styles API problems
-
 ## When NOT to Use
 
 - Basic React development (Claude knows this)

@@ -10,15 +10,6 @@ version: 1.0.0
 
 Audit Vendure Admin UI extensions for violations and anti-patterns.
 
-## When to Use
-
-- Reviewing PRs with Admin UI changes
-- Auditing UI component quality
-- Checking hook usage patterns
-- Verifying route and navigation setup
-
----
-
 ## Review Workflow
 
 ### Step 1: Identify UI Files

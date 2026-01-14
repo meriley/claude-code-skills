@@ -10,14 +10,6 @@ version: 1.0.0
 
 Creates implementation-focused technical specifications that translate product requirements into concrete system designs, covering architecture, APIs, data models, and operational concerns.
 
-## When to Use This Skill
-
-- Designing system architecture for a new feature
-- Defining API contracts before implementation
-- Complex features requiring architectural decisions
-- Cross-team features needing shared technical agreement
-- User requests: "write a tech spec", "design the architecture", "define the API"
-
 ## When NOT to Use This Skill
 
 - Product requirements (use `prd-writing` instead)

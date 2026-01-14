@@ -10,15 +10,6 @@ version: 1.0.0
 
 Create on-call friendly Grafana dashboards for TRON team services using grafanalib and axon_helpers. Implements Grafana best practices including health overview panels, tiered information design, and service-specific alert annotations.
 
-## When to Use This Skill
-
-- Creating consumer dashboards (task metadata, RQ rules manager)
-- Building health overview panels for on-call triage
-- Adding Kafka lag/throughput metrics to dashboards
-- Setting up alert annotations for TRON services
-- Implementing internal vs customer deployment splits
-- Working with RMS metrics in dashboards
-
 ## When NOT to Use
 
 - Generic API dashboards without Kafka consumers (use standard rms_helpers patterns)

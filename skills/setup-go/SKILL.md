@@ -1,6 +1,6 @@
 ---
 name: setup-go
-description: Sets up Go development environment with proper tooling, linting, testing, and dependencies. Runs go mod tidy, configures golangci-lint, sets up testing framework, and verifies build.
+description: Sets up Go development environment with proper tooling, linting, testing, and dependencies. Runs go mod tidy, configures golangci-lint, sets up testing framework, and verifies build. Use when starting work on Go projects, after cloning Go repositories, setting up CI/CD for Go, or troubleshooting Go environment issues.
 version: 1.0.0
 ---
 
@@ -9,13 +9,6 @@ version: 1.0.0
 ## Purpose
 
 Quickly set up and verify a Go development environment with all necessary tooling.
-
-## When to Use
-
-- Starting work on a Go project
-- After cloning a Go repository
-- When setting up CI/CD for Go
-- When troubleshooting Go environment issues
 
 ## Workflow
 

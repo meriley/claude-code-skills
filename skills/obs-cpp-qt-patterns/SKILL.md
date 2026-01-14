@@ -10,15 +10,6 @@ version: 1.0.0
 
 Integrate C++ and Qt6 into OBS Studio plugins for settings dialogs, frontend API access, and rich UI components. Covers CMake configuration, optional Qt builds, and platform fallbacks.
 
-## When to Use This Skill
-
-- Adding settings dialogs to OBS plugins
-- Using OBS frontend API (obs-frontend-api)
-- Creating Qt-based plugin UI
-- Mixing C and C++ in OBS plugins
-- Implementing optional Qt with C fallbacks
-- Building plugins for OBS Studio's Qt-based UI
-
 ## When NOT to Use
 
 - Cross-compiling → Use **obs-cross-compiling**

@@ -10,15 +10,6 @@ version: 1.0.0
 
 Guide creation of Vendure plugins following official best practices and production patterns.
 
-## When to Use
-
-- Creating a new Vendure plugin
-- Adding providers/services to a plugin
-- Configuring plugin options with defaults
-- Implementing lifecycle hooks
-- Setting up plugin dependencies and imports
-- Extending existing plugin functionality
-
 ## When NOT to Use
 
 - Reviewing existing plugins (use vendure-plugin-reviewing)

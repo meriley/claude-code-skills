@@ -10,15 +10,6 @@ version: 1.0.0
 
 Entry point for all Vendure development tasks. Provides quick reference and guides to the vendure-expert agent for coordinated multi-domain guidance.
 
-## When to Use This Skill
-
-- Creating new Vendure plugins
-- Extending GraphQL schema (Shop or Admin API)
-- Building Admin UI components
-- Defining custom entities with TypeORM
-- Implementing shipping/delivery features
-- Working with any Vendure codebase
-
 ## When NOT to Use
 
 - Non-Vendure e-commerce platforms (Shopify, Magento, etc.)

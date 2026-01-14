@@ -10,14 +10,6 @@ version: 1.0.0
 
 Creates lightweight, actionable Product Requirements Documents that bridge product and engineering, focusing on user value rather than implementation details.
 
-## When to Use This Skill
-
-- Starting a new feature or product initiative
-- Formalizing a rough product idea into requirements
-- Documenting user needs before implementation planning
-- Creating shared understanding between product and engineering
-- User requests: "write a PRD", "document requirements for X", "create spec for feature Y"
-
 ## When NOT to Use This Skill
 
 - Technical implementation planning (use `sparc-planning` instead)

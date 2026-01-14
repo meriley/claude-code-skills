@@ -14,14 +14,6 @@ Comprehensive security verification to ensure no secrets, vulnerabilities, or se
 
 **CRITICAL:** This skill is automatically invoked by safe-commit. NEVER run security scans manually.
 
-## When to Use
-
-- **AUTOMATICALLY** invoked by safe-commit before every commit
-- Before creating pull requests (via safe-commit)
-- When adding new dependencies (manual invocation allowed)
-- After modifying authentication/authorization code (manual invocation allowed)
-- When user requests security review
-
 ## 🚫 NEVER DO THIS
 
 - ❌ Running `grep` for secrets manually before commit

@@ -10,14 +10,6 @@ version: 1.0.0
 
 Systematically review Product Requirements Documents to ensure they are complete, clear, actionable, and ready for implementation planning. Identifies issues before they become costly engineering problems.
 
-## When to Use This Skill
-
-- Reviewing a PRD before approval/sign-off
-- Validating requirements before implementation begins
-- Stakeholder review sessions
-- Quality audit of existing PRDs
-- User requests: "review this PRD", "check these requirements", "validate this spec"
-
 ## When NOT to Use This Skill
 
 - Creating PRDs (use `prd-writing` instead)

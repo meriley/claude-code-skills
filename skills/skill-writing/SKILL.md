@@ -9,13 +9,6 @@ version: 1.0.0
 ## Purpose
 Guide the creation of new Claude Code skills following official best practices to ensure optimal performance, discoverability, and maintainability.
 
-## When to Use This Skill
-- Creating a new Claude Code skill from scratch
-- Need a skill template or starting point
-- Unsure of proper skill format and structure
-- Want to follow official best practices
-- Creating skills for team or marketplace
-
 ## Quick Start Workflow
 
 ### Step 1: Identify the Gap
@@ -82,11 +75,6 @@ version: 1.0.0
 
 ## Purpose
 [One sentence: what this skill does]
-
-## When to Use
-- [Specific scenario 1]
-- [Specific scenario 2]
-- [Specific scenario 3]
 
 ## Workflow
 

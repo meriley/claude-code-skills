@@ -1,20 +1,14 @@
 ---
 name: helm-argocd-gitops
-description: Configure ArgoCD Applications and ApplicationSets for GitOps-based Helm deployments with sync policies and multi-environment support. Use when setting up ArgoCD or GitOps workflows.
+description: Configure ArgoCD Applications and ApplicationSets for GitOps-based Helm deployments with sync policies and multi-environment support. Use when setting up ArgoCD Applications for Helm charts, configuring multi-environment deployments with ApplicationSets, implementing GitOps workflows, configuring sync policies and strategies, or setting up progressive delivery with Argo Rollouts.
 version: 1.0.0
 ---
 
 # Helm ArgoCD GitOps Integration
 
 ## Purpose
-Guide the configuration of ArgoCD Applications and ApplicationSets for GitOps-based Helm chart deployments with proper sync policies, multi-environment support, and progressive delivery patterns.
 
-## When to Use This Skill
-- Setting up ArgoCD Applications for Helm charts
-- Configuring multi-environment deployments with ApplicationSets
-- Implementing GitOps workflows
-- Configuring sync policies and strategies
-- Setting up progressive delivery with Argo Rollouts
+Guide the configuration of ArgoCD Applications and ApplicationSets for GitOps-based Helm chart deployments with proper sync policies, multi-environment support, and progressive delivery patterns.
 
 ## Basic ArgoCD Application Setup
 
@@ -50,8 +44,8 @@ spec:
 
   syncPolicy:
     automated:
-      prune: false      # Manual approval for deletions
-      selfHeal: false   # Manual approval for drift correction
+      prune: false # Manual approval for deletions
+      selfHeal: false # Manual approval for drift correction
     syncOptions:
       - CreateNamespace=true
       - PruneLast=true
@@ -64,6 +58,7 @@ spec:
 ```
 
 **Key configuration points:**
+
 - ✅ Add finalizer to ensure clean deletion
 - ✅ Use multiple value files for environment overrides
 - ✅ Set `PruneLast=true` to delete resources in correct order
@@ -107,32 +102,32 @@ metadata:
   namespace: argocd
 spec:
   generators:
-  - list:
-      elements:
-      - env: dev
-        cluster: https://dev.k8s.local
-        namespace: myapp-dev
-        autoPrune: "true"
-        autoHeal: "true"
-        imageTag: latest
-      - env: staging
-        cluster: https://staging.k8s.local
-        namespace: myapp-staging
-        autoPrune: "true"
-        autoHeal: "true"
-        imageTag: staging
-      - env: prod
-        cluster: https://prod.k8s.local
-        namespace: myapp-prod
-        autoPrune: "false"  # Manual approval for prod
-        autoHeal: "false"
-        imageTag: v1.0.0
+    - list:
+        elements:
+          - env: dev
+            cluster: https://dev.k8s.local
+            namespace: myapp-dev
+            autoPrune: "true"
+            autoHeal: "true"
+            imageTag: latest
+          - env: staging
+            cluster: https://staging.k8s.local
+            namespace: myapp-staging
+            autoPrune: "true"
+            autoHeal: "true"
+            imageTag: staging
+          - env: prod
+            cluster: https://prod.k8s.local
+            namespace: myapp-prod
+            autoPrune: "false" # Manual approval for prod
+            autoHeal: "false"
+            imageTag: v1.0.0
 
   template:
     metadata:
-      name: 'myapp-{{env}}'
+      name: "myapp-{{env}}"
       labels:
-        environment: '{{env}}'
+        environment: "{{env}}"
     spec:
       project: default
       source:
@@ -141,24 +136,25 @@ spec:
         path: charts/myapp
         helm:
           valueFiles:
-          - values.yaml
-          - environments/{{env}}/values.yaml
+            - values.yaml
+            - environments/{{env}}/values.yaml
           parameters:
-          - name: image.tag
-            value: '{{imageTag}}'
+            - name: image.tag
+              value: "{{imageTag}}"
       destination:
-        server: '{{cluster}}'
-        namespace: '{{namespace}}'
+        server: "{{cluster}}"
+        namespace: "{{namespace}}"
       syncPolicy:
         automated:
-          prune: '{{autoPrune}}'
-          selfHeal: '{{autoHeal}}'
+          prune: "{{autoPrune}}"
+          selfHeal: "{{autoHeal}}"
         syncOptions:
           - CreateNamespace=true
           - PruneLast=true
 ```
 
 **ApplicationSet benefits:**
+
 - ✅ Single source of truth for all environments
 - ✅ DRY principle - no duplicated manifests
 - ✅ Easy to add new environments
@@ -174,28 +170,28 @@ metadata:
   namespace: argocd
 spec:
   generators:
-  - git:
-      repoURL: https://github.com/myorg/cluster-config
-      revision: HEAD
-      directories:
-      - path: apps/*
+    - git:
+        repoURL: https://github.com/myorg/cluster-config
+        revision: HEAD
+        directories:
+          - path: apps/*
 
   template:
     metadata:
-      name: '{{path.basename}}'
+      name: "{{path.basename}}"
     spec:
       project: default
       source:
         repoURL: https://github.com/myorg/cluster-config
         targetRevision: HEAD
-        path: '{{path}}'
+        path: "{{path}}"
         helm:
           valueFiles:
-          - values.yaml
-          - ../common-values.yaml
+            - values.yaml
+            - ../common-values.yaml
       destination:
         server: https://kubernetes.default.svc
-        namespace: '{{path.basename}}'
+        namespace: "{{path.basename}}"
       syncPolicy:
         automated:
           prune: true
@@ -205,11 +201,12 @@ spec:
 ## Sync Policies for Different Environments
 
 ### Conservative (Production)
+
 ```yaml
 syncPolicy:
   automated:
-    prune: false      # Manual approval for deletions
-    selfHeal: false   # Manual approval for drift correction
+    prune: false # Manual approval for deletions
+    selfHeal: false # Manual approval for drift correction
   syncOptions:
     - CreateNamespace=true
     - PruneLast=true
@@ -223,11 +220,12 @@ syncPolicy:
 ```
 
 ### Progressive (Staging)
+
 ```yaml
 syncPolicy:
   automated:
-    prune: true       # Auto-delete removed resources
-    selfHeal: true    # Auto-correct drift
+    prune: true # Auto-delete removed resources
+    selfHeal: true # Auto-correct drift
   syncOptions:
     - CreateNamespace=true
     - PruneLast=true
@@ -240,6 +238,7 @@ syncPolicy:
 ```
 
 ### Aggressive (Development)
+
 ```yaml
 syncPolicy:
   automated:
@@ -249,7 +248,7 @@ syncPolicy:
   syncOptions:
     - CreateNamespace=true
     - PruneLast=true
-    - Replace=true    # Use replace instead of apply
+    - Replace=true # Use replace instead of apply
   retry:
     limit: 2
     backoff:
@@ -311,6 +310,7 @@ metadata:
 ## Resource Hooks for Lifecycle Management
 
 ### Pre-Sync: Database Migration
+
 ```yaml
 apiVersion: batch/v1
 kind: Job
@@ -323,13 +323,14 @@ spec:
   template:
     spec:
       containers:
-      - name: migrate
-        image: myapp:v1.0.0
-        command: ["./migrate"]
+        - name: migrate
+          image: myapp:v1.0.0
+          command: ["./migrate"]
       restartPolicy: Never
 ```
 
 ### Post-Sync: Smoke Test
+
 ```yaml
 apiVersion: batch/v1
 kind: Job
@@ -342,13 +343,13 @@ spec:
   template:
     spec:
       containers:
-      - name: test
-        image: curlimages/curl:latest
-        command:
-        - sh
-        - -c
-        - |
-          curl -f http://myapp:80/healthz || exit 1
+        - name: test
+          image: curlimages/curl:latest
+          command:
+            - sh
+            - -c
+            - |
+              curl -f http://myapp:80/healthz || exit 1
       restartPolicy: Never
 ```
 
@@ -379,9 +380,9 @@ charts/myapp/
 ```yaml
 helm:
   valueFiles:
-  - values.yaml                              # Base
-  - environments/{{env}}/values.yaml         # Environment
-  - clusters/{{cluster}}-values.yaml         # Cluster-specific
+    - values.yaml # Base
+    - environments/{{env}}/values.yaml # Environment
+    - clusters/{{cluster}}-values.yaml # Cluster-specific
 ```
 
 ## App of Apps Pattern
@@ -412,6 +413,7 @@ spec:
 ## Monitoring ArgoCD Deployments
 
 ### Check Application Status
+
 ```bash
 # Get application details
 argocd app get myapp
@@ -427,6 +429,7 @@ argocd app events myapp
 ```
 
 ### Prometheus Metrics
+
 ```
 # Application sync status
 argocd_app_sync_status{name="myapp",namespace="argocd"}
@@ -439,21 +442,22 @@ argocd_app_sync_duration_seconds{name="myapp"}
 ```
 
 ### Alerting Rules
+
 ```yaml
 groups:
-- name: argocd
-  rules:
-  - alert: ApplicationOutOfSync
-    expr: argocd_app_sync_status{sync_status="OutOfSync"} == 1
-    for: 15m
-    annotations:
-      summary: "Application {{ $labels.name }} is out of sync"
+  - name: argocd
+    rules:
+      - alert: ApplicationOutOfSync
+        expr: argocd_app_sync_status{sync_status="OutOfSync"} == 1
+        for: 15m
+        annotations:
+          summary: "Application {{ $labels.name }} is out of sync"
 
-  - alert: ApplicationUnhealthy
-    expr: argocd_app_health_status{health_status="Degraded"} == 1
-    for: 5m
-    annotations:
-      summary: "Application {{ $labels.name }} is unhealthy"
+      - alert: ApplicationUnhealthy
+        expr: argocd_app_health_status{health_status="Degraded"} == 1
+        for: 5m
+        annotations:
+          summary: "Application {{ $labels.name }} is unhealthy"
 ```
 
 ## Troubleshooting Common Issues
@@ -461,6 +465,7 @@ groups:
 ### Issue: Application stuck in "OutOfSync"
 
 **Diagnosis:**
+
 ```bash
 # Check app details
 argocd app get myapp
@@ -473,6 +478,7 @@ argocd app sync myapp --dry-run
 ```
 
 **Common causes:**
+
 - Resource field managed by controller (add to `ignoreDifferences`)
 - Invalid Helm template syntax
 - Missing CRD
@@ -481,6 +487,7 @@ argocd app sync myapp --dry-run
 ### Issue: Sync fails with "resource already exists"
 
 **Solution:**
+
 ```yaml
 # Add annotation to take ownership
 metadata:
@@ -491,6 +498,7 @@ metadata:
 ### Issue: Helm values not being applied
 
 **Diagnosis:**
+
 ```bash
 # Check rendered values
 argocd app manifests myapp

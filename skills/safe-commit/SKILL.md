@@ -14,13 +14,6 @@ Comprehensive, safe commit workflow that ensures code quality, security, and pro
 
 **CRITICAL:** You MUST invoke this skill for all commits. NEVER commit manually using git commands.
 
-## When to Use
-
-- **MANDATORY:** When user says "commit these changes" or "commit this"
-- As part of PR creation workflow (invoked by create-pr skill)
-- After completing a feature or bug fix
-- When user explicitly requests a commit
-
 ## 🚫 NEVER DO THIS
 
 - ❌ Running `git add . && git commit -m "message"` manually

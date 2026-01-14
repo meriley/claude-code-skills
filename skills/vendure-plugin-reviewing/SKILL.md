@@ -10,14 +10,6 @@ version: 1.0.0
 
 Audit Vendure plugins for violations of best practices, security issues, and anti-patterns.
 
-## When to Use
-
-- Reviewing PRs that modify Vendure plugins
-- Auditing existing plugin code quality
-- Before merging plugin changes
-- Quality gate for plugin releases
-- Post-implementation verification
-
 ## When NOT to Use
 
 - Creating new plugins (use vendure-plugin-writing)

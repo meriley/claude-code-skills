@@ -9,14 +9,6 @@ version: 1.0.0
 ## Purpose
 Guide the creation of Cursor IDE rules in .mdc format following best practices for optimal AI context injection and maintainability.
 
-## When to Use This Skill
-- Creating new Cursor rules for project-specific context
-- Modifying existing .mdc rule files
-- Need guidance on glob patterns or frontmatter
-- Splitting large rules into composable units
-- Structuring rules for specific file types or scenarios
-- Creating rule templates for team use
-
 ## When NOT to Use This Skill
 - Writing general documentation (use regular .md files)
 - Creating Claude Code skills (use skill-writing skill instead)

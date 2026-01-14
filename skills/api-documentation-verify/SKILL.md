@@ -10,14 +10,6 @@ version: 1.0.0
 
 Verify API documentation accuracy against source code. This skill eliminates fabricated API methods, unverified performance claims, non-runnable code examples, and marketing language. Every documented feature must exist in the codebase.
 
-## When to Use This Skill
-
-- **Before committing API documentation** - Verify all claims are accurate
-- **After code changes** - Ensure docs reflect current implementation
-- **Documentation reviews** - Validate technical accuracy
-- **Before releases** - Prevent shipping incorrect documentation
-- **When debugging docs issues** - Find discrepancies between docs and code
-
 ## What This Skill Checks
 
 ### 1. API Method Existence (Priority: CRITICAL)

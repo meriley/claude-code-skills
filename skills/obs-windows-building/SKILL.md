@@ -10,15 +10,6 @@ version: 1.0.0
 
 Build OBS Studio plugins for Windows using MSVC (Visual Studio) or MinGW. Covers symbol exports, Windows-specific linking, platform source files, and DLL verification.
 
-## When to Use This Skill
-
-- Building OBS plugins natively on Windows with Visual Studio
-- Configuring MSVC compiler for OBS plugins
-- Creating .def files for symbol exports
-- Linking Windows system libraries (ws2_32, comctl32)
-- Writing platform-specific source files
-- Troubleshooting Windows DLL issues
-
 ## When NOT to Use
 
 - Cross-compiling from Linux → Use **obs-cross-compiling**

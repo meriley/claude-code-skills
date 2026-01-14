@@ -10,14 +10,6 @@ version: 1.0.0
 
 Guide creation of GraphQL schema extensions and resolvers in Vendure following official patterns.
 
-## When to Use
-
-- Adding custom queries or mutations
-- Extending existing Vendure types
-- Creating resolvers for new endpoints
-- Implementing field resolvers
-- Setting up Shop vs Admin API separation
-
 ## When NOT to Use
 
 - Plugin structure only (use vendure-plugin-writing)

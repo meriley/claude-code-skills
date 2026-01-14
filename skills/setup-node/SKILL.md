@@ -1,6 +1,6 @@
 ---
 name: setup-node
-description: Sets up Node.js/TypeScript development environment with npm/yarn, dependencies, ESLint, Prettier, testing (Jest/Vitest), and TypeScript type checking. Ensures consistent tooling configuration.
+description: Sets up Node.js/TypeScript development environment with npm/yarn, dependencies, ESLint, Prettier, testing (Jest/Vitest), and TypeScript type checking. Ensures consistent tooling configuration. Use when starting work on Node.js/TypeScript projects, after cloning repositories, setting up CI/CD, or troubleshooting environment issues.
 version: 1.0.0
 ---
 
@@ -9,13 +9,6 @@ version: 1.0.0
 ## Purpose
 
 Quickly set up and verify a Node.js/TypeScript development environment with all necessary tooling.
-
-## When to Use
-
-- Starting work on a Node.js/TypeScript project
-- After cloning a Node.js repository
-- When setting up CI/CD for Node.js
-- When troubleshooting Node.js environment issues
 
 ## Workflow
 

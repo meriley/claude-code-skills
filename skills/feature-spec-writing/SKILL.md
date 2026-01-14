@@ -10,14 +10,6 @@ version: 1.0.0
 
 Creates implementation-ready feature specifications that break down PRD requirements into detailed, actionable specs with comprehensive edge case coverage.
 
-## When to Use This Skill
-
-- Breaking down an approved PRD into individual feature specs
-- Specifying a standalone feature without a parent PRD
-- Sprint planning - detailing features for upcoming sprints
-- Documenting features for engineering handoff
-- User requests: "write a feature spec", "detail this feature", "spec out the login flow"
-
 ## When NOT to Use This Skill
 
 - Initial product requirements (use `prd-writing` instead)

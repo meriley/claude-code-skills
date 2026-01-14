@@ -10,14 +10,6 @@ version: 1.0.0
 
 Entry point skill for the OBS Studio plugin development ecosystem. Routes to specialized skills based on plugin type and guides initial project setup.
 
-## When to Use This Skill
-
-- Starting a new OBS plugin project
-- Unsure which OBS plugin skill to use
-- Need an overview of OBS plugin types
-- Setting up the build system (CMake, buildspec.json)
-- Learning OBS plugin architecture basics
-
 ## When NOT to Use
 
 - Developing audio plugins → Use **obs-audio-plugin-writing**

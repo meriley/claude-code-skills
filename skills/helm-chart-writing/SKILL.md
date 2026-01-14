@@ -1,6 +1,6 @@
 ---
 name: helm-chart-writing
-description: Create and validate production-ready Helm charts with proper Chart.yaml structure, values organization, and template patterns. Use when creating new charts or scaffolding Helm projects.
+description: Create and validate production-ready Helm charts with proper Chart.yaml structure, values organization, and template patterns. Use when creating new Helm charts from scratch, scaffolding chart directory structure, configuring Chart.yaml and values.yaml, writing template helpers and deployment manifests, or validating chart structure and syntax.
 version: 1.0.0
 ---
 
@@ -8,13 +8,6 @@ version: 1.0.0
 
 ## Purpose
 Guide the creation of production-ready Helm charts from initial scaffolding through validation, ensuring proper structure, security, and best practices.
-
-## When to Use This Skill
-- Creating new Helm charts from scratch
-- Scaffolding chart directory structure
-- Configuring Chart.yaml and values.yaml
-- Writing template helpers and deployment manifests
-- Validating chart structure and syntax
 
 ## Quick Start Workflow
 

@@ -10,14 +10,6 @@ version: 1.0.0
 
 Guide creation of Vendure Admin UI extensions following React patterns and official conventions.
 
-## When to Use
-
-- Adding custom admin pages to a plugin
-- Creating list/detail/form components
-- Registering navigation menu items
-- Building data tables with CRUD operations
-- Integrating GraphQL queries and mutations
-
 ## When NOT to Use
 
 - Plugin structure only (use vendure-plugin-writing)

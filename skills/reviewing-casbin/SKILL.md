@@ -10,13 +10,6 @@ version: 1.0.0
 
 Review Go code using Casbin for authorization to identify security vulnerabilities, model configuration errors, and common anti-patterns. Ensures RBAC/ABAC implementations follow best practices.
 
-## When to Use
-
-- Reviewing PRs that add or modify Casbin authorization
-- Auditing existing authorization implementations
-- Pre-commit review of authorization code
-- Security audits of access control systems
-
 ## When NOT to Use
 
 - Initial Casbin setup (use `implementing-casbin` skill instead)

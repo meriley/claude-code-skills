@@ -10,14 +10,6 @@ version: 1.0.0
 
 Review React components using Mantine UI library for accessibility compliance, Styles API correctness, component pattern adherence, and common pitfall detection.
 
-## When to Use This Skill
-
-- Reviewing PRs that modify Mantine components
-- Auditing existing Mantine codebase for issues
-- Before merging frontend changes using Mantine
-- When asked to review React/Mantine code quality
-- Debugging Mantine styling or accessibility issues
-
 ## When NOT to Use
 
 - Non-Mantine React components (use general React review)

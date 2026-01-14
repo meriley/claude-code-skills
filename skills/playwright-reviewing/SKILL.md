@@ -9,13 +9,6 @@ version: 1.0.0
 ## Purpose
 Audit Playwright E2E tests for violations of best practices. Detects anti-patterns that cause flaky tests, hide bugs, or reduce maintainability.
 
-## When to Use
-- Reviewing PRs that modify Playwright tests
-- Auditing existing Playwright test suite for issues
-- Before merging E2E test changes
-- When debugging flaky or unreliable tests
-- Quality gate before test suite releases
-
 ## When NOT to Use
 - Writing new tests (use `playwright-writing` skill instead)
 - Unit test reviews (different patterns)

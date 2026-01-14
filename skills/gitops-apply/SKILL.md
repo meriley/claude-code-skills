@@ -10,13 +10,6 @@ version: 1.0.0
 
 Guide users through proper GitOps workflow when they attempt to mutate Kubernetes resources with kubectl. Replaces imperative kubectl commands with declarative manifests in git, ensuring all cluster changes are auditable, reviewable, and recoverable.
 
-## When to Use This Skill
-
-- User attempts kubectl mutation and is blocked by enforce-gitops-kubectl hook
-- User asks to "apply changes to kubernetes"
-- User says "update deployment", "scale service", "delete pod", etc.
-- Any scenario requiring Kubernetes cluster state change
-
 ## Why GitOps Over kubectl
 
 **kubectl apply/create/delete:**

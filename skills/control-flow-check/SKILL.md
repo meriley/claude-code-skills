@@ -10,13 +10,6 @@ version: 1.0.0
 
 Audit Go code for control flow best practices based on RMS Go coding standards. This skill identifies control flow anti-patterns and suggests refactoring opportunities to improve readability and maintainability.
 
-## When to Use This Skill
-
-- **Before committing Go code** - As part of quality checks
-- **During code refactoring** - To identify improvement opportunities
-- **Code review preparation** - Before submitting PRs
-- **When functions feel complex** - To validate control flow structure
-
 ## What This Skill Checks
 
 ### 1. Early Return Pattern (Priority: HIGH)

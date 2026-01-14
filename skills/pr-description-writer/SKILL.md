@@ -1,6 +1,6 @@
 ---
 name: pr-description-writer
-description: Writes and verifies GitHub pull request descriptions with zero fabrication tolerance. Discovers project PR templates, generates descriptions from git changes, and applies technical documentation verification standards.
+description: Writes and verifies GitHub pull request descriptions with zero fabrication tolerance. Discovers project PR templates, generates descriptions from git changes, and applies technical documentation verification standards. Use when creating PR descriptions (automatically invoked by create-pr skill), verifying PR descriptions, updating PR descriptions after additional changes, discovering templates, or when user requests "write PR description" or "verify PR description".
 version: 1.0.0
 ---
 
@@ -9,14 +9,6 @@ version: 1.0.0
 ## Purpose
 
 Write and verify GitHub pull request descriptions following project templates with zero fabrication tolerance. Ensures all claims are backed by actual code changes and applies technical documentation verification standards to prevent marketing language and unverified claims.
-
-## When to Use This Skill
-
-- **Creating PR descriptions** - Automatically invoked by `create-pr` skill
-- **Verifying PR descriptions** - Manual invocation to audit existing descriptions
-- **Updating PR descriptions** - After additional changes to existing PR
-- **Template discovery** - Find and follow project-specific PR templates
-- **User requests** - "write PR description" or "verify PR description"
 
 ## Two Modes of Operation
 

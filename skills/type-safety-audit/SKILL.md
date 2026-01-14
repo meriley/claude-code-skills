@@ -10,14 +10,6 @@ version: 1.0.0
 
 Audit TypeScript code for type safety best practices. This skill ensures the type system is leveraged correctly to catch bugs at compile-time, prevent runtime type errors, and maintain type safety across API boundaries.
 
-## When to Use This Skill
-
-- **Before committing TypeScript code** - Prevent type safety violations
-- **Code review preparation** - Verify type hygiene before PRs
-- **After TypeScript upgrades** - Ensure strict mode compliance
-- **Debugging type-related bugs** - When runtime errors suggest type issues
-- **API boundary reviews** - Verify external data validation
-
 ## What This Skill Checks
 
 ### 1. `any` Type Usage (Priority: CRITICAL)

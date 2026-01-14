@@ -10,14 +10,6 @@ version: 1.0.0
 
 Systematically review technical specifications to ensure they are complete, feasible, secure, and ready for implementation. Catches architectural issues, security gaps, and operational blind spots before engineering work begins.
 
-## When to Use This Skill
-
-- Reviewing a technical spec before implementation
-- Architecture review meetings
-- Security review of proposed designs
-- Validating spec is ready for engineering handoff
-- User requests: "review this tech spec", "check the architecture", "validate the design"
-
 ## When NOT to Use This Skill
 
 - Creating technical specs (use `technical-spec-writing` instead)

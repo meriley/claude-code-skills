@@ -10,13 +10,6 @@ dependencies: "@playwright/test"
 ## Purpose
 Guide the creation of reliable, maintainable Playwright E2E tests that test real user-visible behavior against real application data.
 
-## When to Use
-- Writing new Playwright E2E tests
-- Reviewing existing Playwright tests for best practices
-- Debugging flaky or failing Playwright tests
-- Setting up Playwright test structure for a project
-- Choosing appropriate locators and assertions
-
 ## When NOT to Use
 - Unit tests (use Jest/Vitest instead)
 - Integration tests that don't need browser automation

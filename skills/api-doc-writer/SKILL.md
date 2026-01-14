@@ -10,15 +10,6 @@ version: 1.0.0
 
 Create comprehensive, accurate API reference documentation by reading source code and extracting exact method signatures. Follows the Diátaxis Reference pattern for information-oriented documentation with zero tolerance for fabricated methods or incorrect signatures.
 
-## When to Use This Skill
-
-- **New package/module added** - Document public APIs
-- **Major API refactor** - Update documentation to match changes
-- **Existing docs outdated** - Refresh documentation from source
-- **After breaking changes** - Document new API signatures
-- **User requests** - "document the [package] API"
-- **Before release** - Ensure complete API coverage
-
 ## Diátaxis Framework: Reference Documentation
 
 **Reference Type Characteristics:**

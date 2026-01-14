@@ -1,6 +1,6 @@
 ---
 name: setup-python
-description: Sets up Python development environment using UV for fast dependency management. Configures virtual environment, dependencies, testing (pytest), linting/formatting (ruff), and type checking (mypy). ALWAYS use UV - NEVER use pip directly.
+description: Sets up Python development environment using UV for fast dependency management. Configures virtual environment, dependencies, testing (pytest), linting/formatting (ruff), and type checking (mypy). ALWAYS use UV - NEVER use pip directly. Use when starting work on Python projects, after cloning Python repositories, setting up CI/CD for Python, or troubleshooting Python environment issues.
 version: 2.0.0
 ---
 
@@ -20,13 +20,6 @@ UV is 10-100x faster than pip and provides:
 - Lockfile support
 - Virtual environment management
 - Drop-in pip replacement
-
-## When to Use
-
-- Starting work on a Python project
-- After cloning a Python repository
-- When setting up CI/CD for Python
-- When troubleshooting Python environment issues
 
 ## Workflow
 

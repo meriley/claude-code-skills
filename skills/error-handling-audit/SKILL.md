@@ -10,13 +10,6 @@ version: 1.0.0
 
 Audit Go code for error handling best practices based on RMS Go coding standards. This skill ensures errors are properly wrapped, context is preserved, and error handling follows idiomatic Go patterns.
 
-## When to Use This Skill
-
-- **Before committing Go code** - As part of quality checks
-- **Debugging error-related issues** - When errors lack context
-- **Code review preparation** - Before submitting PRs
-- **Production error analysis** - When investigating lost error context
-
 ## What This Skill Checks
 
 ### 1. Error Wrapping with %w (Priority: CRITICAL)

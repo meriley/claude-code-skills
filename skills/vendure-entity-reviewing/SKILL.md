@@ -10,15 +10,6 @@ version: 1.0.0
 
 Audit Vendure entities for violations and TypeORM anti-patterns.
 
-## When to Use
-
-- Reviewing PRs with entity changes
-- Auditing database model quality
-- Before merging entity modifications
-- Checking migration completeness
-
----
-
 ## Review Workflow
 
 ### Step 1: Identify Entity Files

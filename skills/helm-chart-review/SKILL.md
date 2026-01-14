@@ -1,20 +1,14 @@
 ---
 name: helm-chart-review
-description: Conduct comprehensive Helm chart security and quality audits with automated checks for security contexts, resource limits, and production readiness. Use when reviewing PRs or preparing charts for release.
+description: Conduct comprehensive Helm chart security and quality audits with automated checks for security contexts, resource limits, and production readiness. Use when reviewing pull requests with Helm chart changes, conducting pre-release chart audits, security scanning Helm manifests, validating chart structure and best practices, or preparing charts for production deployment.
 version: 1.0.0
 ---
 
 # Helm Chart Review
 
 ## Purpose
-Provide comprehensive review checklists and automated validation for ensuring Helm charts meet production quality and security standards before deployment.
 
-## When to Use This Skill
-- Reviewing pull requests with Helm chart changes
-- Conducting pre-release chart audits
-- Security scanning Helm manifests
-- Validating chart structure and best practices
-- Preparing charts for production deployment
+Provide comprehensive review checklists and automated validation for ensuring Helm charts meet production quality and security standards before deployment.
 
 ## Complete Review Workflow
 
@@ -49,7 +43,7 @@ helm install test ./charts/mychart --dry-run --debug --namespace test
     allowPrivilegeEscalation: false
     capabilities:
       drop:
-      - ALL
+        - ALL
   ```
 - [ ] **RBAC is properly configured** with least privilege
 - [ ] **Resource limits** are set for all containers
@@ -57,18 +51,19 @@ helm install test ./charts/mychart --dry-run --debug --namespace test
 - [ ] **Secrets** use external secret management (not inline)
 
 **Security red flags:**
+
 ```yaml
 # ❌ NEVER allow these
 securityContext:
-  privileged: true               # Unacceptable
-  runAsUser: 0                   # Root user - requires justification
+  privileged: true # Unacceptable
+  runAsUser: 0 # Root user - requires justification
   allowPrivilegeEscalation: true # Security risk
 
 image:
-  tag: latest                    # Non-deterministic
+  tag: latest # Non-deterministic
 
 # Hardcoded secrets
-password: "hardcoded123"         # NEVER hardcode secrets
+password: "hardcoded123" # NEVER hardcode secrets
 ```
 
 ### Step 3: Structure Review Checklist
@@ -99,14 +94,15 @@ password: "hardcoded123"         # NEVER hardcode secrets
 - [ ] **Resource requests/limits** have realistic values
 
 **Good vs bad values:**
+
 ```yaml
 # ✅ Good
-replicaCount: 2           # Documented, reasonable default
+replicaCount: 2 # Documented, reasonable default
 
 image:
   repository: myapp
   pullPolicy: IfNotPresent
-  tag: ""                 # Empty, uses appVersion
+  tag: "" # Empty, uses appVersion
 
 resources:
   limits:
@@ -117,10 +113,10 @@ resources:
     memory: 128Mi
 
 # ❌ Bad
-replicas: 1               # Undocumented, single point of failure
-ImageTag: latest          # Wrong case, non-specific tag
+replicas: 1 # Undocumented, single point of failure
+ImageTag: latest # Wrong case, non-specific tag
 database:
-  password: "changeme"    # Hardcoded secret
+  password: "changeme" # Hardcoded secret
 ```
 
 ### Step 5: Template Review Checklist
@@ -140,6 +136,7 @@ database:
 - [ ] **Names truncated** to 63 characters
 
 **Template quality patterns:**
+
 ```yaml
 # ✅ Good
 metadata:
@@ -179,6 +176,7 @@ image: {{ .Values.image }}:latest      # Hardcoded latest
 ## Security Scanning Integration
 
 ### Kubesec Analysis
+
 ```bash
 # Scan rendered templates for security issues
 helm template mychart ./charts/mychart | kubesec scan -
@@ -191,6 +189,7 @@ helm template mychart ./charts/mychart | kubesec scan -
 ```
 
 ### Trivy Image Scanning
+
 ```bash
 # Extract images from chart
 helm template mychart ./charts/mychart | grep "image:" | sort -u
@@ -202,6 +201,7 @@ trivy image myapp:1.0.0
 ## Common Review Findings and Fixes
 
 ### Finding: Missing Resource Limits
+
 ```yaml
 # ❌ Problem
 containers:
@@ -222,6 +222,7 @@ containers:
 ```
 
 ### Finding: Insecure Security Context
+
 ```yaml
 # ❌ Problem
 securityContext: {}
@@ -239,6 +240,7 @@ securityContext:
 ```
 
 ### Finding: Latest Image Tag
+
 ```yaml
 # ❌ Problem
 image: myapp:latest
@@ -248,6 +250,7 @@ image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.App
 ```
 
 ### Finding: No Liveness/Readiness Probes
+
 ```yaml
 # ❌ Problem
 containers:
@@ -275,6 +278,7 @@ containers:
 ## Review Severity Levels
 
 **BLOCKER** (must fix before merge):
+
 - Hardcoded secrets
 - Missing security contexts
 - Privileged containers
@@ -282,18 +286,21 @@ containers:
 - Use of `:latest` tag
 
 **CRITICAL** (must fix before production):
+
 - Missing liveness/readiness probes
 - Single replica without PDB
 - No pod disruption budget
 - Incorrect RBAC (too permissive)
 
 **MAJOR** (should fix):
+
 - Undocumented values
 - Missing tests
 - Incomplete README
 - No CHANGELOG entry
 
 **MINOR** (nice to have):
+
 - Improved comments
 - Additional examples
 - Optimization opportunities
@@ -346,6 +353,7 @@ helm-dry-run:
 ## Documentation Review
 
 **README.md must include:**
+
 - [ ] Chart description and purpose
 - [ ] Prerequisites and dependencies
 - [ ] Installation instructions
@@ -354,6 +362,7 @@ helm-dry-run:
 - [ ] Upgrade instructions
 
 **CHANGELOG.md must track:**
+
 - [ ] Version number and date
 - [ ] Added features
 - [ ] Changed behavior

@@ -10,14 +10,6 @@ version: 1.0.0
 
 Systematically review feature specifications to ensure they are complete, testable, and ready for implementation. Catches gaps in edge cases and error handling before engineering work begins.
 
-## When to Use This Skill
-
-- Reviewing a feature spec before sprint planning
-- Validating spec is ready for engineering handoff
-- Sprint grooming sessions
-- QA reviewing specs for testability
-- User requests: "review this feature spec", "check if spec is ready", "validate spec"
-
 ## When NOT to Use This Skill
 
 - Creating feature specs (use `feature-spec-writing` instead)
