@@ -419,3 +419,5 @@ See REFERENCE.md for detailed component patterns including:
 ## Related Agent
 
 For comprehensive React + Mantine UI guidance that coordinates this and other Mantine skills, use the **`mantine-ui-expert`** agent.
+
+**Cost Optimization:** Use `model="haiku"` when invoking this agent for routine component development tasks. Haiku is sufficient for template-based Mantine patterns and Styles API usage.

@@ -1,6 +1,6 @@
 ---
 name: uac-permissions-expert
-description: Use this agent when working with UAC (User Access Control) permissions, implementing authorization checks, or integrating downstream services with the UAC authorization system. Examples: <example>Context: User is implementing authorization middleware in a downstream service that needs to check permissions via UAC. user: "I need to add authorization checks to my API endpoints to verify user permissions through the UAC service" assistant: "I'll use the uac-permissions-expert agent to help implement the authorization integration with UAC" <commentary>Since the user needs UAC authorization implementation, use the uac-permissions-expert agent to provide expert guidance on permission checks and service integration.</commentary></example> <example>Context: User is debugging permission authorization issues in a service that calls UAC. user: "Users are getting 403 errors when they should have access. The service calls UAC but something isn't working right" assistant: "Let me use the uac-permissions-expert agent to help troubleshoot the UAC authorization flow" <commentary>Since this involves UAC permission authorization troubleshooting, use the uac-permissions-expert agent to diagnose the issue.</commentary></example>
+description: Use this agent when working with UAC (User Access Control) permissions, implementing authorization checks, or integrating downstream services with the UAC authorization system.
 model: sonnet
 ---
 

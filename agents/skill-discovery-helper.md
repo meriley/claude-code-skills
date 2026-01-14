@@ -1,6 +1,6 @@
 ---
 name: skill-discovery-helper
-description: Use this agent to help users find the right skill or agent for their task. Provides guidance on skill selection, explains skill purposes, and suggests workflows. Examples: <example>Context: User unsure which skill to use. user: "What skill should I use for testing?" assistant: "I'll use the skill-discovery-helper agent to recommend the right testing skills" <commentary>Use skill-discovery-helper when users need guidance finding skills.</commentary></example> <example>Context: User wants to see available skills. user: "List all skills related to Go" assistant: "I'll use the skill-discovery-helper agent to find Go-related skills" <commentary>Use skill-discovery-helper for skill listing and filtering.</commentary></example>
+description: Use this agent to help users find the right skill or agent for their task. Provides guidance on skill selection, explains skill purposes, and suggests workflows.
 model: haiku
 ---
 

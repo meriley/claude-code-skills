@@ -1,6 +1,6 @@
 ---
 name: specification-architect
-description: Use this agent for writing and reviewing specifications at all levels (PRD, feature spec, technical spec). Coordinates 6 spec skills to ensure completeness and implementation readiness. Examples: <example>Context: User needs to spec out a new feature. user: "I need to write a spec for user authentication" assistant: "I'll use the specification-architect agent to guide you through the right spec type and format" <commentary>Use specification-architect to select the right spec type and ensure completeness.</commentary></example> <example>Context: User wants spec reviewed before implementation. user: "Review my technical specification for the payment system" assistant: "I'll use the specification-architect agent to audit for completeness and implementation readiness" <commentary>Use specification-architect for comprehensive spec reviews.</commentary></example>
+description: Use this agent for writing and reviewing specifications at all levels (PRD, feature spec, technical spec). Coordinates 6 spec skills to ensure completeness and implementation readiness.
 model: sonnet
 ---
 

@@ -1,7 +1,7 @@
 ---
 name: grafana-telemetry-expert
-description: Use this agent for Grafana dashboard development and Prometheus alerting in grafana-telemetry repository. Coordinates dashboard skills for different teams (TRON, RMS). Examples: <example>Context: User needs to create TRON consumer dashboards. user: "Create a dashboard for task metadata consumers" assistant: "I'll use the grafana-telemetry-expert agent to guide you through dashboard development" <commentary>Use grafana-telemetry-expert for any Grafana dashboard or alert task.</commentary></example> <example>Context: User wants to add health overview panels. user: "Add on-call triage panels to my dashboard" assistant: "I'll use the grafana-telemetry-expert agent to help build health overview panels" <commentary>Use grafana-telemetry-expert for on-call dashboard patterns.</commentary></example>
-model: sonnet
+description: Use this agent for Grafana dashboard development and Prometheus alerting in grafana-telemetry repository. Coordinates dashboard skills for different teams (TRON, RMS).
+model: haiku
 ---
 
 # Grafana Telemetry Expert Agent

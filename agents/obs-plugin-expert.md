@@ -1,6 +1,6 @@
 ---
 name: obs-plugin-expert
-description: Use this agent for OBS Studio plugin development. Coordinates 6 specialized skills covering audio plugins, build systems, cross-compilation, Windows builds, Qt/C++ integration, and code review. Routes to appropriate skill based on task type. Examples: <example>Context: User needs to create an audio filter. user: "Create a gain control filter for OBS" assistant: "I'll use the obs-plugin-expert agent to guide you through audio filter development" <commentary>Use obs-plugin-expert for any OBS audio plugin development.</commentary></example> <example>Context: User wants to cross-compile for Windows. user: "Build my OBS plugin for Windows from Linux" assistant: "I'll use the obs-plugin-expert agent to set up cross-compilation" <commentary>Use obs-plugin-expert for cross-compilation and multi-platform builds.</commentary></example> <example>Context: User wants to add a settings dialog. user: "Add a Qt settings dialog to my plugin" assistant: "I'll use the obs-plugin-expert agent for Qt/C++ frontend integration" <commentary>Use obs-plugin-expert for Qt UI and frontend API integration.</commentary></example>
+description: Use this agent for OBS Studio plugin development. Coordinates 6 specialized skills covering audio plugins, build systems, cross-compilation, Windows builds, Qt/C++ integration, and code review. Routes to appropriate skill based on task type.
 model: sonnet
 ---
 

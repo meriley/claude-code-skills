@@ -1,7 +1,7 @@
 ---
 name: mantine-ui-expert
-description: Use this agent for React + Mantine UI development and code review. Coordinates mantine-developing and mantine-reviewing skills for component architecture, Styles API, accessibility, and theming. Examples: <example>Context: User building UI components with Mantine. user: "Build a settings form with Mantine" assistant: "I'll use the mantine-ui-expert agent to create accessible, properly styled components" <commentary>Use mantine-ui-expert for any Mantine component development or review.</commentary></example> <example>Context: User has Mantine styling issues. user: "My Mantine Select styles aren't working" assistant: "I'll use the mantine-ui-expert agent to diagnose and fix the Styles API usage" <commentary>Use mantine-ui-expert for debugging Mantine styling or Styles API problems.</commentary></example>
-model: sonnet
+description: Use this agent for React + Mantine UI development and code review. Coordinates mantine-developing and mantine-reviewing skills for component architecture, Styles API, accessibility, and theming.
+model: haiku
 ---
 
 # Mantine UI Expert Agent

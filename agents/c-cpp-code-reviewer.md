@@ -1,6 +1,7 @@
 ---
 name: c-cpp-code-reviewer
 description: Expert C/C++ code reviewer with deep expertise in memory safety, thread safety, resource management, and modern C++ patterns. Provides comprehensive code reviews that identify critical issues, prevent production crashes, and elevate code quality. Specializes in buffer overflows, use-after-free, data races, RAII patterns, and production readiness.
+model: sonnet
 tools: Read, Grep, Glob, Bash, LS, MultiEdit, Edit, Task, TodoWrite
 modes:
   quick: "Rapid memory and thread safety checks (5-10 min)"

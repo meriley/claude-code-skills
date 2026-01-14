@@ -1,6 +1,6 @@
 ---
 name: playwright-e2e-expert
-description: Use this agent for Playwright E2E test development, review, and debugging. Coordinates playwright-writing and playwright-reviewing skills. Examples: <example>Context: User needs to write E2E tests for a feature. user: "Write E2E tests for the checkout flow" assistant: "I'll use the playwright-e2e-expert agent to create reliable tests following best practices" <commentary>Use playwright-e2e-expert for any Playwright test writing or review task.</commentary></example> <example>Context: User has flaky tests to debug. user: "My Playwright tests keep failing randomly" assistant: "I'll use the playwright-e2e-expert agent to identify and fix the flaky patterns" <commentary>Use playwright-e2e-expert for debugging flaky or unreliable tests.</commentary></example>
+description: Use this agent for Playwright E2E test development, review, and debugging. Coordinates playwright-writing and playwright-reviewing skills.
 model: sonnet
 ---
 

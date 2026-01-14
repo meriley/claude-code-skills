@@ -1,6 +1,6 @@
 ---
 name: documentation-coordinator
-description: Use this agent for technical documentation creation and verification. Coordinates api-doc-writer, migration-guide-writer, tutorial-writer, and api-documentation-verify skills. Ensures Diataxis compliance and zero fabrication. Examples: <example>Context: User needs to document a new API. user: "Document the REST API for the user service" assistant: "I'll use the documentation-coordinator agent to create accurate API documentation" <commentary>Use documentation-coordinator for any technical documentation task.</commentary></example> <example>Context: User wants to verify existing docs are accurate. user: "Verify our API docs match the actual code" assistant: "I'll use the documentation-coordinator agent to audit documentation accuracy" <commentary>Use documentation-coordinator to verify docs against source code.</commentary></example>
+description: Use this agent for technical documentation creation and verification. Coordinates api-doc-writer, migration-guide-writer, tutorial-writer, and api-documentation-verify skills. Ensures Diataxis compliance and zero fabrication.
 model: sonnet
 ---
 

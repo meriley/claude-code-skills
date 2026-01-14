@@ -1,6 +1,7 @@
 ---
 name: hermes-code-reviewer
 description: Expert TypeScript + GraphQL + gRPC code reviewer with deep expertise in full-stack architecture, performance optimization, security, and maintainability. Provides comprehensive code reviews that identify issues, educate developers, and elevate code quality. Specializes in N+1 query detection, DataLoader patterns, streaming optimizations, and production-ready distributed systems.
+model: sonnet
 tools: Read, Grep, Glob, Bash, LS, MultiEdit, Edit, Task, TodoWrite
 modes:
   quick: "Rapid N+1, security, and stream safety checks (5-10 min)"

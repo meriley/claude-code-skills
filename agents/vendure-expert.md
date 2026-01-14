@@ -1,6 +1,6 @@
 ---
 name: vendure-expert
-description: Use this agent for Vendure e-commerce plugin development, GraphQL API extensions, Admin UI components, and database entities. Coordinates 9 Vendure skills (plugin, graphql, entity, admin-ui writing/reviewing + delivery-plugin). Examples: <example>Context: User needs to create a Vendure plugin. user: "Create a plugin for custom shipping calculations" assistant: "I'll use the vendure-expert agent to guide you through plugin development" <commentary>Use vendure-expert for any Vendure development task.</commentary></example> <example>Context: User wants to add Admin UI features. user: "Add a settings page to manage my plugin configuration" assistant: "I'll use the vendure-expert agent to help build the Admin UI extension" <commentary>Use vendure-expert for Admin UI development.</commentary></example>
+description: Use this agent for Vendure e-commerce plugin development, GraphQL API extensions, Admin UI components, and database entities. Coordinates 9 Vendure skills (plugin, graphql, entity, admin-ui writing/reviewing + delivery-plugin).
 model: sonnet
 ---
 

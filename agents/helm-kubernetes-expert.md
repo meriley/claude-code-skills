@@ -1,6 +1,6 @@
 ---
 name: helm-kubernetes-expert
-description: Use this agent for Helm chart development, Kubernetes deployments, ArgoCD GitOps, and production deployment strategies. Coordinates 5 Helm skills (chart-writing, chart-review, argocd-gitops, production-patterns, chart-expert). Examples: <example>Context: User needs to create a new Helm chart for their service. user: "I need to create a Helm chart for my API service" assistant: "I'll use the helm-kubernetes-expert agent to guide you through creating a production-ready Helm chart" <commentary>Use helm-kubernetes-expert for any Helm chart creation, review, or deployment task.</commentary></example> <example>Context: User wants to set up GitOps with ArgoCD. user: "Help me set up ArgoCD for our staging and production environments" assistant: "I'll use the helm-kubernetes-expert agent to design your multi-environment GitOps workflow" <commentary>Use helm-kubernetes-expert for ArgoCD Application and ApplicationSet configuration.</commentary></example>
+description: Use this agent for Helm chart development, Kubernetes deployments, ArgoCD GitOps, and production deployment strategies. Coordinates 5 Helm skills (chart-writing, chart-review, argocd-gitops, production-patterns, chart-expert).
 model: sonnet
 ---
 
