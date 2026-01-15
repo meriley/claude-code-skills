@@ -74,415 +74,49 @@ When NOT to run linters manually:
 - Auto-fix when tools support it
 - Manual fix when auto-fix unavailable
 
-## Workflow
+## Workflow (Quick Summary)
 
-### Step 1: Detect Project Language(s)
+### Core Steps
 
-Check for language indicators in parallel:
+1. **Detect Languages**: Check for package.json, go.mod, requirements.txt, Cargo.toml, etc.
+2. **Run Standard Checks**: Linting, formatting, type checking, static analysis (auto-fix when possible)
+3. **Run Deep Audits**: Language-specific skills (control-flow-check, type-safety-audit, n-plus-one-detection)
+4. **Handle Results**: Report pass/auto-fix/fail, provide specific error locations and fixes
+5. **Verify Multi-Language**: All languages must pass before commit
 
-```bash
-ls package.json go.mod requirements.txt Cargo.toml setup.py pyproject.toml 2>/dev/null
+### Language Support
+
+- **Node.js/TypeScript**: ESLint, Prettier, tsc, npm audit
+- **Go**: gofmt, go vet, golangci-lint, go mod tidy
+- **Python**: black, flake8, mypy, isort
+- **Rust**: rustfmt, clippy
+- **Java**: Maven/Gradle spotless, checkstyle
+
+**For detailed language-specific commands and checks:**
+
+```
+Read `~/.claude/skills/quality-check/references/LANGUAGE-CHECKS.md`
 ```
 
-**Language Detection Rules:**
+Use when: Need specific tool commands, troubleshooting linter issues, or setting up new language
 
-- `package.json` → Node.js/TypeScript
-- `go.mod` or `*.go` files → Go
-- `requirements.txt`, `Pipfile`, or `pyproject.toml` → Python
-- `Cargo.toml` → Rust
-- `pom.xml` or `build.gradle` → Java
+**For deep audit integration (control-flow, type-safety, N+1 detection):**
 
-Multiple languages possible (e.g., monorepo).
+```
+Read `~/.claude/skills/quality-check/references/DEEP-AUDITS.md`
+```
 
-### Step 2: Run Language-Specific Quality Checks
+Use when: Running language-specific deep audits or integrating specialized checks
 
-Run all applicable checks in parallel when possible.
+**For result handling and reporting patterns:**
+
+```
+Read `~/.claude/skills/quality-check/references/RESULT-HANDLING.md`
+```
+
+Use when: Formatting output, handling auto-fix scenarios, or reporting manual fix requirements
 
 ---
-
-## Node.js / TypeScript
-
-### Check 2.1: ESLint (Linting)
-
-```bash
-npm run lint
-# OR if direct eslint:
-npx eslint . --ext .js,.jsx,.ts,.tsx
-```
-
-**If issues found:**
-
-```bash
-npx eslint . --ext .js,.jsx,.ts,.tsx --fix
-```
-
-### Check 2.2: Prettier (Formatting)
-
-```bash
-npx prettier --check "**/*.{js,jsx,ts,tsx,json,css,md}"
-```
-
-**If issues found:**
-
-```bash
-npx prettier --write "**/*.{js,jsx,ts,tsx,json,css,md}"
-```
-
-### Check 2.3: TypeScript Type Checking (if TypeScript)
-
-```bash
-npm run type-check
-# OR if direct tsc:
-npx tsc --noEmit
-```
-
-**No auto-fix available** - must fix type errors manually.
-
-### Check 2.4: Package Audit (bonus)
-
-```bash
-npm audit --audit-level=moderate
-```
-
----
-
-## Go
-
-### Check 2.1: go fmt (Formatting)
-
-```bash
-gofmt -l .
-```
-
-**If files listed (not formatted):**
-
-```bash
-gofmt -w .
-```
-
-### Check 2.2: go vet (Static Analysis)
-
-```bash
-go vet ./...
-```
-
-**No auto-fix** - must address issues manually.
-
-### Check 2.3: golangci-lint (Comprehensive Linting)
-
-```bash
-golangci-lint run
-```
-
-**If auto-fix supported:**
-
-```bash
-golangci-lint run --fix
-```
-
-### Check 2.4: go mod tidy (Dependency Cleanup)
-
-```bash
-go mod tidy
-```
-
-Auto-fixes dependency issues.
-
----
-
-## Python
-
-### Check 2.1: black (Formatting)
-
-```bash
-black --check .
-```
-
-**If issues found:**
-
-```bash
-black .
-```
-
-### Check 2.2: flake8 (Linting)
-
-```bash
-flake8 .
-```
-
-**No auto-fix** - must address issues manually.
-
-### Check 2.3: mypy (Type Checking)
-
-```bash
-mypy .
-```
-
-**No auto-fix** - must add type hints manually.
-
-### Check 2.4: isort (Import Sorting)
-
-```bash
-isort --check-only .
-```
-
-**If issues found:**
-
-```bash
-isort .
-```
-
----
-
-## Rust
-
-### Check 2.1: rustfmt (Formatting)
-
-```bash
-cargo fmt --check
-```
-
-**If issues found:**
-
-```bash
-cargo fmt
-```
-
-### Check 2.2: clippy (Linting)
-
-```bash
-cargo clippy -- -D warnings
-```
-
-**If auto-fix available:**
-
-```bash
-cargo clippy --fix --allow-dirty --allow-staged
-```
-
----
-
-## Java
-
-### Check 2.1: Maven/Gradle Formatting
-
-```bash
-# Maven:
-mvn spotless:check
-
-# Gradle:
-gradle spotlessCheck
-```
-
-**If issues found:**
-
-```bash
-# Maven:
-mvn spotless:apply
-
-# Gradle:
-gradle spotlessApply
-```
-
-### Check 2.2: Maven/Gradle Linting
-
-```bash
-# Maven:
-mvn checkstyle:check
-
-# Gradle:
-gradle checkstyleMain
-```
-
----
-
-## Step 2.5: Language-Specific Deep Audits
-
-After standard linting/formatting, run specialized audits based on detected languages.
-
-### For Go Projects
-
-#### Invoke `control-flow-check` Skill
-
-```bash
-/skill control-flow-check
-```
-
-**What it audits:**
-
-- Early return pattern usage
-- Excessive nesting (> 2-3 levels)
-- Large if/else blocks (> 10 lines)
-- Guard clause placement
-- Complex control flow refactoring opportunities
-
-#### Invoke `error-handling-audit` Skill
-
-```bash
-/skill error-handling-audit
-```
-
-**What it audits:**
-
-- Error wrapping with `%w` vs `%v`
-- Error context sufficiency
-- Error message formatting
-- Error swallowing
-- Panic usage outside initialization
-- Error propagation patterns
-
-**Report CRITICAL issues** from these audits - they should block commit.
-
----
-
-### For TypeScript Projects
-
-#### Invoke `type-safety-audit` Skill
-
-```bash
-/skill type-safety-audit
-```
-
-**What it audits:**
-
-- `any` type usage (zero tolerance)
-- Branded types for IDs
-- Runtime validation at API boundaries
-- Type guards vs type assertions
-- Null/undefined handling
-- Generic constraints
-- tsconfig.json strict mode
-
-**Report CRITICAL issues** from this audit - they should block commit.
-
----
-
-### For TypeScript + GraphQL Projects
-
-#### Invoke `n-plus-one-detection` Skill (in addition to type-safety-audit)
-
-```bash
-/skill n-plus-one-detection
-```
-
-**What it audits:**
-
-- N+1 query problems in resolvers
-- Missing DataLoader usage
-- Sequential queries in loops
-- Nested resolver chains
-- Performance impact estimation
-
-**Report CRITICAL N+1 problems** - they have severe performance impact.
-
----
-
-### Audit Results Integration
-
-After running language-specific audits:
-
-1. **Collect all CRITICAL issues** from specialized audits
-2. **Combine with linting/formatting results**
-3. **Block commit if any CRITICAL issues found**
-4. **Report HIGH/MEDIUM issues as warnings**
-
-Example combined output:
-
-```
-📊 Quality Check Summary:
-
-Standard Checks:
-✅ Go formatting (gofmt)
-✅ Go static analysis (go vet)
-✅ Go linting (golangci-lint)
-
-Deep Audits:
-❌ Control Flow: 2 CRITICAL issues
-  - TaskService.ProcessTask (line 45): Nesting depth 4 levels
-  - UserService.ValidateUser (line 120): 15-line if block needs extraction
-⚠️  Error Handling: 5 HIGH issues
-  - Using %v instead of %w in 3 locations
-  - Missing error context in 2 locations
-
-RESULT: ❌ FAILED - Must fix 2 CRITICAL control flow issues before commit
-```
-
----
-
-## Step 3: Handle Check Results
-
-### If All Checks Pass:
-
-```
-✅ Code Quality PASSED
-
-All checks completed:
-- [Language]: Formatting ✓
-- [Language]: Linting ✓
-- [Language]: Type checking ✓
-- [Language]: Static analysis ✓
-
-Code quality verified. Safe to commit.
-```
-
-### If Auto-Fixable Issues:
-
-1. Run auto-fix commands
-2. Show what was fixed:
-
-   ```
-   🔧 Auto-fixed code quality issues:
-
-   - Formatted 5 files with prettier
-   - Fixed 3 linting issues with eslint --fix
-   - Sorted imports in 2 Python files
-
-   Changes have been applied. Please review the fixes.
-   ```
-
-3. Re-run checks to verify
-4. If still failing after auto-fix, report manual issues
-
-### If Manual Fixes Required:
-
-```
-❌ Code Quality FAILED
-
-Manual fixes required:
-
-[TypeScript Type Errors]
-src/utils/parser.ts:42:15 - error TS2339: Property 'value' does not exist on type '{}'.
-src/api/handlers.ts:128:20 - error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
-
-[Python flake8]
-app/models.py:56:80: E501 line too long (88 > 79 characters)
-app/views.py:23:1: F401 'typing.Optional' imported but unused
-
-[Go vet]
-pkg/parser/parser.go:145: composite literal uses unkeyed fields
-
-MUST fix these issues before commit.
-
-Suggestions:
-- Review type definitions in parser.ts
-- Add type assertions where needed
-- Break long lines or increase line length limit
-- Remove unused imports
-- Use keyed fields in Go structs
-```
-
-## Step 4: Verify All Languages
-
-If project has multiple languages, ensure ALL languages pass before proceeding.
-
-```
-Multi-Language Check:
-- Go: ✅ PASSED
-- TypeScript: ❌ FAILED (3 type errors)
-- Python: ✅ PASSED
-
-Cannot proceed - TypeScript checks must pass.
-```
 
 ## Integration with Other Skills
 
