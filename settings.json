@@ -71,6 +71,27 @@
           }
         ]
       }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/skill-activation-prompt.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "<skill-unload>Skills from this task are now unloaded. Re-evaluate skill needs for the next task.</skill-unload>"
+          }
+        ]
+      }
     ]
   },
   "statusLine": {
@@ -84,6 +105,5 @@
   "alwaysThinkingEnabled": true,
   "feedbackSurveyState": {
     "lastShownTime": 1754078382179
-  },
-  "model": "sonnet"
+  }
 }
