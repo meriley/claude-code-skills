@@ -7,11 +7,13 @@ version: 1.0.0
 # Skill Review
 
 ## Purpose
+
 Systematically audit Claude Code skills against official best practices to ensure quality, discoverability, and maintainability before release or merge.
 
 ## Review Workflow
 
 ### Step 1: Structure Validation
+
 Check the basic structural requirements:
 
 ```bash
@@ -28,6 +30,7 @@ ls -la
 ```
 
 **Validation checklist:**
+
 - [ ] Directory name matches skill name
 - [ ] Directory name uses gerund form (verb + -ing)
 - [ ] Directory name lowercase-with-hyphens
@@ -37,6 +40,7 @@ ls -la
 - [ ] No files with underscores or wrong extensions
 
 ### Step 2: Frontmatter Audit
+
 Validate YAML frontmatter quality:
 
 ```bash
@@ -45,6 +49,7 @@ head -n 10 Skill.md
 ```
 
 **Validation checklist:**
+
 - [ ] Has valid YAML frontmatter (between --- markers)
 - [ ] `name` field present and matches directory name
 - [ ] `name` uses gerund form (verb + -ing)
@@ -80,6 +85,7 @@ description: Extract text, tables, and forms from PDF files including scanned do
 ```
 
 ### Step 3: Content Quality Check
+
 Review the main skill content:
 
 ```bash
@@ -89,6 +95,7 @@ wc -l Skill.md
 ```
 
 **Core content validation:**
+
 - [ ] Main file under 500 lines
 - [ ] Has clear "Purpose" section
 - [ ] Has "When to Use" section with specific scenarios
@@ -105,13 +112,27 @@ wc -l Skill.md
 - [ ] No marketing language or vague confidence claims
 
 **Progressive disclosure validation:**
-- [ ] Details moved to REFERENCE.md (not in main file)
-- [ ] Templates in TEMPLATE.md (if applicable)
-- [ ] No nested references (Skill.md → REF1.md → REF2.md)
-- [ ] Reference files have table of contents if >100 lines
-- [ ] Clear signposting to reference files
+
+- [ ] SKILL.md under 500 lines (target: under 300 for complex skills)
+- [ ] Uses references/ directory for detailed content
+- [ ] Detailed workflows extracted to references/WORKFLOW-STEPS.md
+- [ ] Troubleshooting content in references/TROUBLESHOOTING.md
+- [ ] Templates/examples in references/TEMPLATE-EXAMPLES.md
+- [ ] Domain-specific checks in references/[DOMAIN]-CHECKS.md
+- [ ] No nested references (SKILL.md → references/A.md only)
+- [ ] Clear loading guidance format:
+  ```markdown
+  **For detailed [topic]:**
+  \`\`\`
+  Read `~/.claude/skills/[skill]/references/FILE.md`
+  \`\`\`
+  Use when: [specific scenario]
+  ```
+- [ ] Each reference has "Use when:" context
+- [ ] Reference files are standalone (no cross-references)
 
 **Example quality validation:**
+
 - [ ] At least 2-3 concrete examples provided
 - [ ] Examples show input AND expected output
 - [ ] Code examples are complete (not pseudocode)
@@ -119,9 +140,11 @@ wc -l Skill.md
 - [ ] Examples include validation steps
 
 ### Step 4: Instruction Clarity Audit
+
 Verify instructions are clear and actionable:
 
 **Sequential workflows:**
+
 - [ ] Steps numbered clearly (Step 1, Step 2, etc.)
 - [ ] Each step has concrete action
 - [ ] Code blocks show exact commands
@@ -129,40 +152,49 @@ Verify instructions are clear and actionable:
 - [ ] Validation checkpoints provided
 
 **Example pattern:**
+
 ```markdown
 ### Step 1: Validate Input
+
 \`\`\`bash
+
 # Check file exists
+
 test -f document.pdf || echo "File not found"
 \`\`\`
 
 ### Step 2: Extract Text
+
 \`\`\`python
 import pdfplumber
 with pdfplumber.open('document.pdf') as pdf:
-    text = pdf.pages[0].extract_text()
+text = pdf.pages[0].extract_text()
 \`\`\`
 
 ### Step 3: Verify Output
+
 Expected format:
 \`\`\`json
 {
-  "pages": 5,
-  "text": "extracted content..."
+"pages": 5,
+"text": "extracted content..."
 }
 \`\`\`
 ```
 
 **Terminology consistency:**
+
 - [ ] Same concept uses same term throughout
 - [ ] No switching between synonyms
 - [ ] Terms defined before use
 - [ ] Technical terms used correctly
 
 ### Step 5: Testing Verification
+
 Validate testing and evaluation quality:
 
 **Testing checklist:**
+
 - [ ] Has evaluations or test cases
 - [ ] At least 3 test scenarios created
 - [ ] Tests cover common use cases
@@ -173,6 +205,7 @@ Validate testing and evaluation quality:
 - [ ] Team feedback incorporated
 
 **Code quality (if applicable):**
+
 - [ ] Scripts have explicit error handling
 - [ ] Configuration values commented (WHY, not WHAT)
 - [ ] Required packages available and version-specified
@@ -185,6 +218,7 @@ Validate testing and evaluation quality:
 Use these severity levels to prioritize issues:
 
 ### BLOCKER (Must fix before release)
+
 - First/second person in description
 - Skill.md over 750 lines
 - No description or completely vague
@@ -195,6 +229,7 @@ Use these severity levels to prioritize issues:
 - Major structural issues
 
 ### CRITICAL (Should fix before release)
+
 - Description missing key triggers
 - Skill.md 500-750 lines (over recommended)
 - Fewer than 2 examples
@@ -205,6 +240,7 @@ Use these severity levels to prioritize issues:
 - No testing performed
 
 ### MAJOR (Should fix soon)
+
 - Description could be more specific
 - Missing troubleshooting section
 - Examples lack expected outputs
@@ -215,6 +251,7 @@ Use these severity levels to prioritize issues:
 - Inconsistent file naming
 
 ### MINOR (Nice to have)
+
 - Could add more examples
 - Could improve comments
 - Could add table of contents
@@ -225,11 +262,13 @@ Use these severity levels to prioritize issues:
 
 ```markdown
 # Skill Review: [skill-name]
+
 **Reviewer:** [name]
 **Date:** [YYYY-MM-DD]
 **Version Reviewed:** [X.Y.Z]
 
 ## Summary
+
 [1-2 sentences on overall quality]
 
 **Recommendation:** [PASS | NEEDS WORK | FAIL]
@@ -237,72 +276,89 @@ Use these severity levels to prioritize issues:
 ## Findings by Category
 
 ### Structure [PASS/FAIL]
+
 - [ ] Directory structure correct
 - [ ] File naming conventions followed
 - [ ] Under 500 lines
 
 **Issues:**
+
 - [SEVERITY] Issue description
 - [SEVERITY] Issue description
 
 ### Frontmatter [PASS/FAIL]
+
 - [ ] Valid YAML
 - [ ] All required fields present
 - [ ] Description quality
 
 **Issues:**
+
 - [SEVERITY] Issue description
 
 ### Content Quality [PASS/FAIL]
+
 - [ ] Clear purpose and workflows
 - [ ] Concrete examples provided
 - [ ] Progressive disclosure used
 - [ ] Consistent terminology
 
 **Issues:**
+
 - [SEVERITY] Issue description
 
 ### Instruction Clarity [PASS/FAIL]
+
 - [ ] Clear sequential steps
 - [ ] Code examples complete
 - [ ] Validation steps included
 
 **Issues:**
+
 - [SEVERITY] Issue description
 
 ### Testing [PASS/FAIL]
+
 - [ ] Test scenarios created
 - [ ] Fresh instance testing done
 - [ ] Multi-model testing done
 
 **Issues:**
+
 - [SEVERITY] Issue description
 
 ## Blockers (must fix)
+
 1. [Issue]
 2. [Issue]
 
 ## Critical Issues (should fix)
+
 1. [Issue]
 2. [Issue]
 
 ## Major Issues (fix soon)
+
 1. [Issue]
 2. [Issue]
 
 ## Minor Issues (nice to have)
+
 1. [Issue]
 2. [Issue]
 
 ## Positive Highlights
+
 - [What the skill does well]
 - [What the skill does well]
 
 ## Recommendations
+
 1. [Specific actionable recommendation]
 2. [Specific actionable recommendation]
 
 ## Next Steps
+
 - [ ] Address blockers
 - [ ] Address critical issues
 - [ ] Re-review after fixes
@@ -314,7 +370,9 @@ Use these severity levels to prioritize issues:
 Watch for these common anti-patterns:
 
 ### Anti-Pattern: Too Many Options
+
 **Problem:**
+
 ```markdown
 You can use pypdf, pdfplumber, PyMuPDF, pdf2image, camelot, tabula,
 or pytesseract depending on your needs. Each has pros and cons...
@@ -322,26 +380,33 @@ or pytesseract depending on your needs. Each has pros and cons...
 ```
 
 **Solution:**
+
 ```markdown
 Use pdfplumber for text and tables. For scanned PDFs, use pytesseract with pdf2image.
 See REFERENCE.md for alternative libraries.
 ```
 
 ### Anti-Pattern: General Knowledge
+
 **Problem:**
+
 ```markdown
 ## Python Basics
+
 Python is a programming language. To install Python, visit python.org...
 [100 lines of Python installation]
 ```
 
 **Solution:**
+
 ```markdown
 # Remove entirely - Claude already knows this
 ```
 
 ### Anti-Pattern: Vague Instructions
+
 **Problem:**
+
 ```markdown
 1. Do the thing
 2. Check if it worked
@@ -349,15 +414,18 @@ Python is a programming language. To install Python, visit python.org...
 ```
 
 **Solution:**
+
 ```markdown
 ### Step 1: Extract Text
+
 \`\`\`python
 import pdfplumber
 with pdfplumber.open('document.pdf') as pdf:
-    text = pdf.pages[0].extract_text()
+text = pdf.pages[0].extract_text()
 \`\`\`
 
 ### Step 2: Validate Extraction
+
 \`\`\`python
 assert text is not None, "Extraction failed"
 assert len(text) > 0, "Empty result"
@@ -365,12 +433,15 @@ assert len(text) > 0, "Empty result"
 ```
 
 ### Anti-Pattern: Nested References
+
 **Problem:**
+
 ```
 Skill.md → REFERENCE.md → ADVANCED.md → EXPERT.md
 ```
 
 **Solution:**
+
 ```
 Skill.md → REFERENCE.md
 Skill.md → ADVANCED.md
@@ -378,12 +449,15 @@ Skill.md → EXPERT.md
 ```
 
 ### Anti-Pattern: Bloated Main File
+
 **Problem:**
+
 ```
 Skill.md: 1,247 lines
 ```
 
 **Solution:**
+
 ```
 Skill.md: 342 lines
 REFERENCE.md: 400 lines (detailed API)
@@ -396,29 +470,34 @@ TEMPLATE.md: 205 lines (output templates)
 Skills should pass these gates before release:
 
 ### Gate 1: Structure ✅
+
 - Directory/file naming correct
 - Frontmatter valid and complete
 - Under 500 lines
 
 ### Gate 2: Description ✅
+
 - Third person
 - Specific capabilities
 - Clear triggers
 - Key terms included
 
 ### Gate 3: Content ✅
+
 - Clear purpose and workflows
 - 2-3 concrete examples
 - One default approach
 - Validation steps
 
 ### Gate 4: Clarity ✅
+
 - Sequential steps
 - Complete code examples
 - Expected outputs
 - Troubleshooting section
 
 ### Gate 5: Testing ✅
+
 - Test scenarios created
 - Fresh instance testing
 - Multi-model validation

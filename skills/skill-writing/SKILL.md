@@ -7,11 +7,13 @@ version: 1.0.0
 # Skill Writing
 
 ## Purpose
+
 Guide the creation of new Claude Code skills following official best practices to ensure optimal performance, discoverability, and maintainability.
 
 ## Quick Start Workflow
 
 ### Step 1: Identify the Gap
+
 **Ask:** Does Claude really need this skill?
 
 ```bash
@@ -22,6 +24,7 @@ Guide the creation of new Claude Code skills following official best practices t
 ```
 
 **Only create a skill if:**
+
 - ✅ Claude lacks specific domain knowledge
 - ✅ Task requires exact procedures or formats
 - ✅ Performance improvement is measurable
@@ -30,6 +33,7 @@ Guide the creation of new Claude Code skills following official best practices t
 - ❌ Task is too variable/creative
 
 ### Step 2: Create Evaluations First
+
 **Before writing extensive documentation:**
 
 ```python
@@ -52,6 +56,7 @@ evaluations = [
 **Test baseline:** Run scenarios without skill, measure gaps
 
 ### Step 3: Write Minimal SKILL.md
+
 **Keep under 500 lines**
 
 ```bash
@@ -74,23 +79,30 @@ version: 1.0.0
 # PDF Processing
 
 ## Purpose
+
 [One sentence: what this skill does]
 
 ## Workflow
 
 ### Step 1: [Action]
+
 \`\`\`bash
+
 # Concrete command
+
 \`\`\`
 
 ### Step 2: [Action]
+
 [Clear instructions]
 
 ## Examples
+
 [2-3 input/output examples]
 ```
 
 ### Step 4: Test with Fresh Instances
+
 ```bash
 # Open new Claude Code session
 # Test skill by triggering scenarios
@@ -99,8 +111,10 @@ version: 1.0.0
 ```
 
 ### Step 5: Iterate Based on Usage
+
 ```markdown
 # Refinement cycle:
+
 1. Observe real usage patterns
 2. Identify missing information
 3. Add only what's needed
@@ -111,6 +125,7 @@ version: 1.0.0
 ## Skill Structure Requirements
 
 ### Directory Structure
+
 ```
 skill-name/                    # Use gerund: verb + -ing
 ├── Skill.md                   # Required (capital S)
@@ -124,20 +139,22 @@ skill-name/                    # Use gerund: verb + -ing
 
 ```yaml
 ---
-name: processing-pdfs              # Gerund form, lowercase-with-hyphens, max 64 chars
-description: Extract text, tables, and forms from PDF files including scanned documents. Use when working with PDFs or document extraction tasks.  # Max 1024 chars, third person, specific
-version: 1.0.0                     # SemVer format
-dependencies: python>=3.8, pdfplumber>=0.9.0  # Optional, list required packages
+name: processing-pdfs # Gerund form, lowercase-with-hyphens, max 64 chars
+description: Extract text, tables, and forms from PDF files including scanned documents. Use when working with PDFs or document extraction tasks. # Max 1024 chars, third person, specific
+version: 1.0.0 # SemVer format
+dependencies: python>=3.8, pdfplumber>=0.9.0 # Optional, list required packages
 ---
 ```
 
 **Naming Rules:**
+
 - ✅ Use gerund form (verb + -ing): `processing-pdfs`, `analyzing-spreadsheets`
 - ✅ Max 64 characters
 - ✅ Lowercase letters, numbers, hyphens only
 - ❌ Avoid vague names: `helper`, `utils`, `tool`
 
 **Description Rules:**
+
 - ✅ Third person: "Extracts text from PDFs"
 - ❌ First/second person: "I can extract" or "You can use"
 - ✅ Specific: "Extract text, tables, and forms from PDF files"
@@ -169,42 +186,110 @@ description: Analyze Excel spreadsheets, create pivot tables, generate charts. U
 
 ### Progressive Disclosure Pattern
 
-**Keep SKILL.md under 500 lines for optimal performance**
+**Keep SKILL.md under 500 lines for optimal performance (target: under 300 lines for complex skills)**
+
+#### Directory Structure
 
 ```
-Main file (Skill.md):           Reference files (load when needed):
-├─ Overview & Purpose           ├─ REFERENCE.md (API details)
-├─ When to Use                  ├─ FORMS.md (form processing)
-├─ Quick Start                  └─ TEMPLATE.md (output formats)
-├─ Common Workflows
-├─ Key Concepts
-└─ Reference → REFERENCE.md     ← Links to detailed info
+skill-name/
+├── SKILL.md                      # Main file (always loaded, <500 lines)
+└── references/                   # On-demand detailed content
+    ├── WORKFLOW-STEPS.md         # Detailed step-by-step procedures
+    ├── TROUBLESHOOTING.md        # Error handling and edge cases
+    ├── TEMPLATE-EXAMPLES.md      # Templates and code examples
+    └── [DOMAIN-SPECIFIC].md      # Skill-specific detailed content
 ```
 
-**Example structure:**
+#### SKILL.md Structure (Always Loaded)
 
 ```markdown
-# PDF Processing
+## Workflow (Quick Summary)
 
-## Purpose
-Extract text and data from PDFs
+### Core Steps
 
-## Workflow
-1. Load PDF
-2. For forms, see FORMS.md
-3. For tables, extract with pdfplumber
-4. For scanned docs, use OCR
+1. **Step Name**: Brief description of what to do
+2. **Step Name**: Brief description of what to do
+   [...concise steps...]
 
-## API Details
-See REFERENCE.md for complete API documentation
+**For detailed step-by-step workflow with commands and examples:**
+
+\`\`\`
+Read `~/.claude/skills/[skill-name]/references/WORKFLOW-STEPS.md`
+\`\`\`
+
+Use when: Performing the task, need specific commands, or understanding each step
 ```
 
-**Reference File Organization:**
-- ✅ Keep references ONE level deep from Skill.md
-- ✅ Use table of contents for files >100 lines
-- ❌ Don't nest references (Skill.md → ref1.md → ref2.md)
+#### Loading Guidance Format
+
+Always include explicit loading instructions with "Use when" context:
+
+```markdown
+**For [detailed topic]:**
+
+\`\`\`
+Read `~/.claude/skills/[skill-name]/references/[FILENAME].md`
+\`\`\`
+
+Use when: [specific scenario requiring this content]
+```
+
+#### What to Extract to references/
+
+| Content Type       | Reference File         | Extract When                   |
+| ------------------ | ---------------------- | ------------------------------ |
+| Detailed workflows | WORKFLOW-STEPS.md      | Steps exceed 20 lines          |
+| Troubleshooting    | TROUBLESHOOTING.md     | >5 error scenarios             |
+| Templates/examples | TEMPLATE-EXAMPLES.md   | Complex output formats         |
+| Domain checks      | [DOMAIN]-CHECKS.md     | Language/tool-specific details |
+| Validation rules   | VERIFICATION-CHECKS.md | Detailed verification criteria |
+
+#### Example: Before and After
+
+**Before (680 lines - too long):**
+
+```markdown
+## Workflow
+
+### Step 1: Discovery
+
+[50 lines of detailed commands and examples]
+
+### Step 2: Extraction
+
+[80 lines of detailed procedures]
+...
+```
+
+**After (200 lines - optimal):**
+
+```markdown
+## Workflow (Quick Summary)
+
+### Core Steps
+
+1. **Discovery**: Identify files using grep/glob patterns
+2. **Extraction**: Read source, copy exact signatures
+3. **Documentation**: Use templates, follow patterns
+4. **Verification**: Check accuracy against source
+
+**For detailed workflow with commands and verification checklists:**
+\`\`\`
+Read `~/.claude/skills/my-skill/references/WORKFLOW-STEPS.md`
+\`\`\`
+```
+
+#### Reference File Guidelines
+
+- ✅ Keep references ONE level deep (SKILL.md → references/FILE.md)
+- ✅ Use ALL CAPS for reference filenames
+- ✅ Include complete, standalone content (don't reference other references)
+- ✅ Start each reference with brief context of what it contains
+- ❌ Don't nest references (references/A.md → references/B.md)
+- ❌ Don't duplicate content between SKILL.md and references
 
 ### File Naming Conventions
+
 ```
 ✅ Good:
 - Skill.md (capital S, required)
@@ -221,28 +306,34 @@ See REFERENCE.md for complete API documentation
 ## Instruction Clarity
 
 ### Sequential Workflows
+
 ```markdown
 ## Workflow
 
 ### Step 1: Validate Input
+
 \`\`\`bash
+
 # Check file exists
+
 test -f document.pdf || echo "File not found"
 \`\`\`
 
 ### Step 2: Extract Text
+
 \`\`\`python
 import pdfplumber
 with pdfplumber.open('document.pdf') as pdf:
-    text = pdf.pages[0].extract_text()
+text = pdf.pages[0].extract_text()
 \`\`\`
 
 ### Step 3: Verify Output
+
 Expected format:
 \`\`\`json
 {
-  "pages": 5,
-  "text": "extracted content..."
+"pages": 5,
+"text": "extracted content..."
 }
 \`\`\`
 ```
@@ -255,6 +346,7 @@ Expected format:
 ## Examples
 
 ### Example 1: Simple Text Extraction
+
 **Input:**
 \`\`\`
 document.pdf (invoice)
@@ -263,13 +355,14 @@ document.pdf (invoice)
 **Output:**
 \`\`\`json
 {
-  "invoice_number": "INV-001",
-  "amount": "$100.00",
-  "date": "2024-01-01"
+"invoice_number": "INV-001",
+"amount": "$100.00",
+"date": "2024-01-01"
 }
 \`\`\`
 
 ### Example 2: Table Extraction
+
 **Input:**
 \`\`\`
 spreadsheet.pdf (financial data)
@@ -278,8 +371,8 @@ spreadsheet.pdf (financial data)
 **Output:**
 \`\`\`json
 [
-  {"month": "Jan", "revenue": 1000},
-  {"month": "Feb", "revenue": 1200}
+{"month": "Jan", "revenue": 1000},
+{"month": "Feb", "revenue": 1200}
 ]
 \`\`\`
 ```
@@ -293,13 +386,13 @@ spreadsheet.pdf (financial data)
 
 \`\`\`json
 {
-  "field1": "value",      // Required
-  "field2": 123,          // Optional, number
-  "field3": ["array"],    // Optional, array of strings
-  "metadata": {           // Required
-    "timestamp": "ISO8601",
-    "version": "1.0"
-  }
+"field1": "value", // Required
+"field2": 123, // Optional, number
+"field3": ["array"], // Optional, array of strings
+"metadata": { // Required
+"timestamp": "ISO8601",
+"version": "1.0"
+}
 }
 \`\`\`
 ```
@@ -310,6 +403,7 @@ spreadsheet.pdf (financial data)
 ## Validation Checklist
 
 After extraction:
+
 - [ ] All required fields present
 - [ ] Data types correct
 - [ ] Values within expected ranges
@@ -319,6 +413,7 @@ After extraction:
 ## Common Pitfalls to Avoid
 
 **Key anti-patterns to watch for:**
+
 - ❌ Offering too many options (pick ONE default approach)
 - ❌ Vague descriptions (be specific about what skill does)
 - ❌ Deeply nested references (max one level: Skill.md → REFERENCE.md)
@@ -334,6 +429,7 @@ After extraction:
 ## Code and Script Guidance
 
 **Best practices for code in skills:**
+
 - ✅ Explicit error handling (catch specific exceptions)
 - ✅ Configuration comments explain WHY, not WHAT
 - ✅ Forward slashes in all paths (cross-platform)
@@ -345,6 +441,7 @@ After extraction:
 ## Testing Guidelines
 
 **Required testing before releasing a skill:**
+
 - ✅ Create 3+ evaluation scenarios first (test-driven approach)
 - ✅ Test across models (Haiku, Sonnet, Opus)
 - ✅ Fresh instance testing (no prior context)
@@ -359,6 +456,7 @@ After extraction:
 Before sharing a skill, verify:
 
 ### Core Quality
+
 - [ ] Description includes specific key terms and usage triggers
 - [ ] Description written in third person
 - [ ] SKILL.md body under 500 lines
@@ -369,6 +467,7 @@ Before sharing a skill, verify:
 - [ ] Clear workflow steps with verification points
 
 ### Naming & Structure
+
 - [ ] Name uses gerund form (verb + -ing)
 - [ ] Name max 64 characters, lowercase-with-hyphens
 - [ ] Directory named correctly (matches skill name)
@@ -376,6 +475,7 @@ Before sharing a skill, verify:
 - [ ] YAML frontmatter complete (name, description, version)
 
 ### Content Quality
+
 - [ ] Only includes info Claude doesn't already know
 - [ ] Progressive disclosure pattern used
 - [ ] One default approach (not too many options)
@@ -384,6 +484,7 @@ Before sharing a skill, verify:
 - [ ] No vague confidence language
 
 ### Code Quality (if applicable)
+
 - [ ] Scripts handle errors explicitly
 - [ ] All constants justified in comments
 - [ ] Required packages listed and verified available
@@ -391,6 +492,7 @@ Before sharing a skill, verify:
 - [ ] Forward slashes in all file paths
 
 ### Testing
+
 - [ ] At least 3 evaluations created
 - [ ] Tested with Haiku, Sonnet, and Opus
 - [ ] Real-world usage scenarios validated
