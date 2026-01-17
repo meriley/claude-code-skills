@@ -16,23 +16,32 @@ All checks completed:
 Code quality verified. Safe to commit.
 ```
 
-### If Auto-Fixable Issues:
+### If Auto-Fixable Issues (ANY Language):
 
-1. Run auto-fix commands
+1. Run auto-fix commands for the language
 2. Show what was fixed:
 
    ```
    🔧 Auto-fixed code quality issues:
 
-   - Formatted 5 files with prettier
-   - Fixed 3 linting issues with eslint --fix
-   - Sorted imports in 2 Python files
+   - [Tool]: Fixed N issues
+   - [Tool]: Formatted N files
 
-   Changes have been applied. Please review the fixes.
+   ⚠️ VERIFYING FIXES - DO NOT SKIP THIS STEP
    ```
 
-3. Re-run checks to verify
-4. If still failing after auto-fix, report manual issues
+3. **CRITICAL: Re-run ALL checks that had issues**
+   - This step is MANDATORY, not optional
+   - Assuming fixes worked is FORBIDDEN
+   - Must see clean output before proceeding
+   - Applies to ALL languages, ALL tools
+
+4. **If rerun still shows issues:**
+   - Report remaining issues as manual fixes required
+   - DO NOT proceed to commit
+   - DO NOT assume "it's probably fine"
+
+5. **Only after clean rerun:** Proceed to next step
 
 ### If Manual Fixes Required:
 

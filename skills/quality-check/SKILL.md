@@ -74,6 +74,51 @@ When NOT to run linters manually:
 - Auto-fix when tools support it
 - Manual fix when auto-fix unavailable
 
+## ⚠️ CRITICAL: Rerun Policy - ZERO TOLERANCE (All Languages)
+
+**Assuming fixes resolved all errors is FORBIDDEN.**
+
+This applies to ALL auto-fix operations in ANY language:
+
+- ESLint --fix, Prettier --write (Node.js/TypeScript)
+- gofmt -w, golangci-lint --fix (Go)
+- ruff --fix, ruff format, black, isort (Python)
+- cargo fmt, cargo clippy --fix (Rust)
+- spotless:apply (Java)
+
+### After ANY Auto-Fix Operation:
+
+1. **MUST rerun the same check** to verify fix succeeded
+2. **MUST NOT proceed** until rerun passes
+3. **MUST NOT assume** auto-fix caught everything
+
+### Why This Matters
+
+- Auto-fix tools don't catch 100% of issues
+- Some fixes introduce new issues
+- Some issues require manual intervention even after auto-fix
+- Proceeding without verification can commit broken code
+
+### Example (WRONG) - Applies to ALL Languages
+
+```
+❌ Found 5 linting errors
+❌ Running auto-fix...
+❌ "Fixed! Proceeding to commit..."  ← FORBIDDEN
+```
+
+### Example (CORRECT) - Applies to ALL Languages
+
+```
+✅ Found 5 linting errors
+✅ Running auto-fix...
+✅ Re-running lint check...
+✅ Found 1 remaining error (requires manual fix)
+✅ [Fix manually]
+✅ Re-running lint check...
+✅ All checks pass. Safe to proceed.
+```
+
 ## Workflow (Quick Summary)
 
 ### Core Steps
@@ -88,7 +133,7 @@ When NOT to run linters manually:
 
 - **Node.js/TypeScript**: ESLint, Prettier, tsc, npm audit
 - **Go**: gofmt, go vet, golangci-lint, go mod tidy
-- **Python**: black, flake8, mypy, isort
+- **Python**: ruff (lint+format), mypy | fallback: black, flake8, isort
 - **Rust**: rustfmt, clippy
 - **Java**: Maven/Gradle spotless, checkstyle
 

@@ -40,6 +40,8 @@ npx eslint . --ext .js,.jsx,.ts,.tsx
 npx eslint . --ext .js,.jsx,.ts,.tsx --fix
 ```
 
+**CRITICAL: After --fix, MUST re-run check to verify. NEVER assume fix succeeded.**
+
 ### Check 2.2: Prettier (Formatting)
 
 ```bash
@@ -51,6 +53,8 @@ npx prettier --check "**/*.{js,jsx,ts,tsx,json,css,md}"
 ```bash
 npx prettier --write "**/*.{js,jsx,ts,tsx,json,css,md}"
 ```
+
+**CRITICAL: After --write, MUST re-run check to verify. NEVER assume fix succeeded.**
 
 ### Check 2.3: TypeScript Type Checking (if TypeScript)
 
@@ -84,6 +88,8 @@ gofmt -l .
 gofmt -w .
 ```
 
+**CRITICAL: After -w, MUST re-run `gofmt -l .` to verify. NEVER assume fix succeeded.**
+
 ### Check 2.2: go vet (Static Analysis)
 
 ```bash
@@ -104,6 +110,8 @@ golangci-lint run
 golangci-lint run --fix
 ```
 
+**CRITICAL: After --fix, MUST re-run `golangci-lint run` to verify. NEVER assume fix succeeded.**
+
 ### Check 2.4: go mod tidy (Dependency Cleanup)
 
 ```bash
@@ -116,25 +124,33 @@ Auto-fixes dependency issues.
 
 ## Python
 
-### Check 2.1: black (Formatting)
+### Check 2.1: ruff (Linting)
 
 ```bash
-black --check .
+ruff check .
 ```
 
 **If issues found:**
 
 ```bash
-black .
+ruff check --fix .
 ```
 
-### Check 2.2: flake8 (Linting)
+**CRITICAL: After --fix, MUST re-run `ruff check .` to verify. NEVER assume fix succeeded.**
+
+### Check 2.2: ruff format (Formatting)
 
 ```bash
-flake8 .
+ruff format --check .
 ```
 
-**No auto-fix** - must address issues manually.
+**If issues found:**
+
+```bash
+ruff format .
+```
+
+**CRITICAL: After formatting, MUST re-run `ruff format --check .` to verify.**
 
 ### Check 2.3: mypy (Type Checking)
 
@@ -144,17 +160,17 @@ mypy .
 
 **No auto-fix** - must add type hints manually.
 
-### Check 2.4: isort (Import Sorting)
+**CRITICAL: Type errors are build failures, not warnings. ALL must be resolved.**
 
-```bash
-isort --check-only .
-```
+### Legacy Tools (if ruff unavailable)
 
-**If issues found:**
+If project doesn't have ruff configured, fall back to:
 
-```bash
-isort .
-```
+- black --check / black (formatting)
+- flake8 (linting)
+- isort --check-only / isort (import sorting)
+
+**Same rerun policy applies to legacy tools.**
 
 ---
 
@@ -172,6 +188,8 @@ cargo fmt --check
 cargo fmt
 ```
 
+**CRITICAL: After formatting, MUST re-run `cargo fmt --check` to verify. NEVER assume fix succeeded.**
+
 ### Check 2.2: clippy (Linting)
 
 ```bash
@@ -183,6 +201,8 @@ cargo clippy -- -D warnings
 ```bash
 cargo clippy --fix --allow-dirty --allow-staged
 ```
+
+**CRITICAL: After --fix, MUST re-run `cargo clippy -- -D warnings` to verify. NEVER assume fix succeeded.**
 
 ---
 
@@ -208,6 +228,8 @@ mvn spotless:apply
 gradle spotlessApply
 ```
 
+**CRITICAL: After :apply, MUST re-run :check to verify. NEVER assume fix succeeded.**
+
 ### Check 2.2: Maven/Gradle Linting
 
 ```bash
@@ -217,4 +239,3 @@ mvn checkstyle:check
 # Gradle:
 gradle checkstyleMain
 ```
-

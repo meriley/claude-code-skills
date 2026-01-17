@@ -44,4 +44,46 @@ Guide users through proper GitOps workflow when they attempt to mutate Kubernete
 
 **For detailed step-by-step workflow with commands, verification, and examples, see `references/WORKFLOW-STEPS.md`.**
 
+## Bootstrap Exception (ArgoCD Only)
+
+When kubectl targets ArgoCD itself, normal GitOps cannot apply - ArgoCD cannot sync itself. Use the bootstrap workflow instead.
+
+### Decision Tree
+
+**ONE-OFF scenarios (skip bootstrap script):**
+
+- Temporary debugging
+- One-time migration step
+- Testing that won't be repeated
+
+**RECOVERY-NEEDED scenarios (MUST add to bootstrap):**
+
+- New cluster initialization
+- Disaster recovery procedures
+- Repeatable infrastructure setup
+- Changes needed on future servers
+
+### Bootstrap Workflow
+
+1. **Edit bootstrap scripts:**
+   - `scripts/bootstrap.sh` - Run once during initial setup
+   - `scripts/bootstrap-idempotent.sh` - Safe to re-run anytime
+
+2. **Add kubectl command with idempotency pattern:**
+
+   ```bash
+   kubectl create namespace argocd 2>/dev/null || true
+   kubectl apply -n argocd -f argocd/install.yaml
+   kubectl wait --for=condition=available deployment/argocd-server \
+     -n argocd --timeout=300s || true
+   ```
+
+3. **Commit bootstrap script changes** (conventional commit format)
+
+4. **Execute kubectl** (now allowed after bootstrap update)
+
+**For detailed bootstrap patterns and examples, see `references/BOOTSTRAP-WORKFLOW.md`.**
+
+## Related Skills
+
 - **check-history** - Review git history before making changes
