@@ -68,6 +68,10 @@
           {
             "type": "command",
             "command": "~/.claude/hooks/session-context.sh"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/project-detect.sh"
           }
         ]
       }
@@ -100,7 +104,8 @@
   },
   "enabledPlugins": {
     "gopls-lsp@claude-plugins-official": true,
-    "playwright-skill@playwright-skill": true
+    "playwright-skill@playwright-skill": true,
+    "ralph-loop@claude-plugins-official": true
   },
   "alwaysThinkingEnabled": true,
   "feedbackSurveyState": {
