@@ -93,6 +93,10 @@
           {
             "type": "prompt",
             "prompt": "<skill-unload>Skills from this task are now unloaded. Re-evaluate skill needs for the next task.</skill-unload>"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/tmux-notify.sh"
           }
         ]
       }
