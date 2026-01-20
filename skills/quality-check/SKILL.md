@@ -14,6 +14,17 @@ Enforce code quality standards through automated linting, formatting, and static
 
 **CRITICAL:** This skill is automatically invoked by safe-commit. NEVER run linters manually.
 
+## CRITICAL: Full Repository Scope
+
+**All quality checks run on the ENTIRE repository:**
+
+- `ruff check .` - ALL Python files
+- `eslint .` - ALL JS/TS files
+- `golangci-lint run ./...` - ALL Go files
+
+**You MUST fix ALL issues found, not just those in files you modified.**
+**Whoever runs quality-check is responsible for fixing discovered issues.**
+
 ## 🚫 NEVER DO THIS
 
 - ❌ Running `eslint` or `npm run lint` manually before commit

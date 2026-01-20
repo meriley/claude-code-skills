@@ -44,6 +44,7 @@ Write self-documenting code:
 10. Get user approval for milestones
 11. Batch tool calls for efficiency
 12. Never commit secrets
+13. Fix all quality issues found (even pre-existing ones)
 
 ## Tool Usage
 

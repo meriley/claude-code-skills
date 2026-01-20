@@ -27,6 +27,23 @@
 
 ---
 
+## CRITICAL: QUALITY CHECK POLICY - ZERO TOLERANCE
+
+**Quality checks ALWAYS run on the ENTIRE repository, not just modified files.**
+
+**Rules:**
+
+1. ANY quality check failure is a blocking error
+2. Failures MUST be fixed before committing - NO EXCEPTIONS
+3. **Whoever discovers failing quality is responsible for fixing it**
+4. This applies even if you didn't introduce the issue
+5. Do not pass broken code to future sessions
+
+**Rationale:** Technical debt compounds. Fixing issues when discovered prevents
+accumulation and ensures every commit maintains quality standards.
+
+---
+
 ## Skill Decision Tree
 
 **Skills are MANDATORY - never execute workflows manually.**
