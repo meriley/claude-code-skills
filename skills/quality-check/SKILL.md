@@ -1,7 +1,7 @@
 ---
 name: quality-check
 description: ⚠️ MANDATORY - Automatically invoked by safe-commit. Runs language-specific linting, formatting, static analysis, and type checking. Treats linter issues as build failures that MUST be fixed before commit. Auto-fixes when possible. NEVER run linters manually.
-version: 1.0.1
+version: 1.0.2
 ---
 
 # Code Quality Check Skill
@@ -13,6 +13,20 @@ version: 1.0.1
 Enforce code quality standards through automated linting, formatting, and static analysis. Ensures code meets project conventions before committing.
 
 **CRITICAL:** This skill is automatically invoked by safe-commit. NEVER run linters manually.
+
+## 🚫 COMMIT BLOCKING RULE - ZERO TOLERANCE
+
+**Commits are FORBIDDEN unless the LATEST quality check run shows ZERO issues.**
+
+This means:
+
+1. If quality check finds errors → FIX THEM
+2. After fixing → RERUN quality check (MANDATORY)
+3. If rerun finds errors → FIX AND RERUN AGAIN
+4. Repeat until clean pass
+5. **Only after a clean pass may you proceed to commit**
+
+**The last quality check output MUST show all checks passing. No exceptions.**
 
 ## CRITICAL: Full Repository Scope
 
@@ -97,36 +111,56 @@ This applies to ALL auto-fix operations in ANY language:
 - cargo fmt, cargo clippy --fix (Rust)
 - spotless:apply (Java)
 
-### After ANY Auto-Fix Operation:
+### After ANY Fix (Auto or Manual):
 
 1. **MUST rerun the same check** to verify fix succeeded
 2. **MUST NOT proceed** until rerun passes
-3. **MUST NOT assume** auto-fix caught everything
+3. **MUST NOT assume** any fix caught everything
+4. **MUST repeat** fix → rerun cycle until clean
+
+### The Fix-Rerun Loop (MANDATORY)
+
+```
+while (quality_check_has_errors) {
+    fix_errors();           // Auto-fix or manual
+    rerun_quality_check();  // ALWAYS rerun after fixing
+}
+// Only exit loop when rerun shows ZERO errors
+```
 
 ### Why This Matters
 
 - Auto-fix tools don't catch 100% of issues
-- Some fixes introduce new issues
-- Some issues require manual intervention even after auto-fix
+- Manual fixes can introduce new issues
+- Some fixes reveal previously hidden issues
 - Proceeding without verification can commit broken code
+- **Commits with quality issues pollute the codebase**
 
 ### Example (WRONG) - Applies to ALL Languages
 
 ```
 ❌ Found 5 linting errors
 ❌ Running auto-fix...
-❌ "Fixed! Proceeding to commit..."  ← FORBIDDEN
+❌ "Fixed! Proceeding to commit..."  ← FORBIDDEN - DID NOT RERUN
 ```
 
-### Example (CORRECT) - Applies to ALL Languages
+### Example (ALSO WRONG) - Manual Fix Without Rerun
+
+```
+❌ Found 3 type errors
+❌ [Manually fixed the code]
+❌ "Fixed! Proceeding to commit..."  ← FORBIDDEN - DID NOT RERUN
+```
+
+### Example (CORRECT) - Full Fix-Rerun Loop
 
 ```
 ✅ Found 5 linting errors
 ✅ Running auto-fix...
-✅ Re-running lint check...
+✅ Re-running lint check...          ← MANDATORY RERUN
 ✅ Found 1 remaining error (requires manual fix)
 ✅ [Fix manually]
-✅ Re-running lint check...
+✅ Re-running lint check...          ← MANDATORY RERUN AGAIN
 ✅ All checks pass. Safe to proceed.
 ```
 

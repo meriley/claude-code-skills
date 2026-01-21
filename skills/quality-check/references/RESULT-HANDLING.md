@@ -37,11 +37,23 @@ Code quality verified. Safe to commit.
    - Applies to ALL languages, ALL tools
 
 4. **If rerun still shows issues:**
-   - Report remaining issues as manual fixes required
-   - DO NOT proceed to commit
+   - Report remaining issues
+   - Fix them (manually if needed)
+   - **RERUN AGAIN** - repeat until clean
+   - DO NOT proceed to commit until clean pass
    - DO NOT assume "it's probably fine"
 
 5. **Only after clean rerun:** Proceed to next step
+
+### If Manual Fixes Applied:
+
+**CRITICAL: Manual fixes ALSO require rerun verification.**
+
+1. Fix the reported issues in code
+2. **MUST rerun quality check** - not optional
+3. If rerun shows new/remaining issues → fix and rerun again
+4. Repeat until clean pass
+5. **Commits blocked until latest run shows zero issues**
 
 ### If Manual Fixes Required:
 
