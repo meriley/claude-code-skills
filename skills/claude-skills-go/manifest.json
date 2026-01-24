@@ -1,0 +1,8 @@
+{
+  "always": ["naming-convention/Skill.md"],
+  "paths": {
+    "**/*_test.go": ["testing/Skill.md"],
+    "**/test_*.go": ["testing/Skill.md"],
+    "**/tests/**/*.go": ["testing/Skill.md"]
+  }
+}
