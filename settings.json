@@ -55,7 +55,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/claude-skills-go/inject-style.sh"
+            "command": "~/.claude/hooks/claude-skills-go/inject-style.sh"
           }
         ]
       }
@@ -75,7 +75,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/claude-skills-go/post-validate.sh"
+            "command": "~/.claude/hooks/claude-skills-go/post-validate.sh"
           }
         ]
       }
@@ -109,12 +109,12 @@
         "matcher": "*",
         "hooks": [
           {
-            "type": "prompt",
-            "prompt": "<skill-unload>Skills from this task are now unloaded. Re-evaluate skill needs for the next task.</skill-unload>"
+            "type": "command",
+            "command": "~/.claude/hooks/tmux-notify.sh"
           },
           {
             "type": "command",
-            "command": "~/.claude/hooks/tmux-notify.sh"
+            "command": "~/.claude/hooks/skill-unload.sh"
           }
         ]
       }

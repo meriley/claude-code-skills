@@ -23,6 +23,9 @@ SKILLS_DIR="$(dirname "$(dirname "$SCRIPT_DIR")")/skills/claude-skills-go"
 
 # Function to output skills on lint failure
 output_skills_on_failure() {
+    # Write to stderr so Claude Code sees the failure reason
+    echo "Lint check failed for: $FILE_PATH" >&2
+
     echo "---"
     echo "# Lint Failure - Review Style Guidelines"
     echo "---"

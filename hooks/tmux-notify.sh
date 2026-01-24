@@ -1,6 +1,8 @@
 #!/bin/bash
 # Hook: Notify tmux when Claude completes a task
 # Triggers: visual bell, window flag, and optional desktop notification
+#
+# Stop hooks must output valid JSON with a "decision" field.
 
 # Only run if inside tmux
 if [[ -n "$TMUX" ]]; then
@@ -8,7 +10,7 @@ if [[ -n "$TMUX" ]]; then
     tmux set-window-option -q alert-activity on
 
     # Trigger visual/audible bell (shows ! in status bar)
-    printf '\a'
+    printf '\a' >&2
 
     # Optional: Set custom window status to show completion icon
     # tmux set-window-option -q window-status-current-format '#I:#{?window_zoomed_flag,🔍,}#W🤖'
@@ -19,4 +21,6 @@ if [[ -n "$TMUX" ]]; then
     fi
 fi
 
+# Output valid JSON for Stop hook (empty object = allow continue)
+echo '{}'
 exit 0
