@@ -27,7 +27,7 @@
 !hooks/**
 
 # Keep settings.json
-!settings.json
+settings.json
 
 # Python cache
 __pycache__/
