@@ -231,7 +231,7 @@ git show --stat HEAD
 - Correct files included
 - Commit message formatted correctly
 - NO AI attribution present
-- Author is Pedro (mriley)
+- Author is mriley (mriley)
 
 **Report to user:**
 
@@ -239,7 +239,7 @@ git show --stat HEAD
 ✅ Commit created successfully
 
 Commit: a1b2c3d
-Author: Pedro
+Author: mriley
 Message: feat(auth): add JWT token validation
 
 Files committed:

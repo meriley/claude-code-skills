@@ -130,7 +130,7 @@ func Authenticate(username, password string) (*Session, error)
 
 ### Business Constraints
 - Timeline: 3 weeks
-- Resources: 1 developer (Pedro)
+- Resources: 1 developer (mriley)
 - Budget: No new tools/services
 
 ### Compatibility Constraints

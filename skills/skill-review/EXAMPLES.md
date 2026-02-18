@@ -15,7 +15,7 @@ This document provides concrete examples of skill reviews at different quality l
 ## PASS Example
 
 # Skill Review: processing-pdfs
-**Reviewer:** Pedro
+**Reviewer:** mriley
 **Date:** 2025-01-15
 **Version Reviewed:** 1.0.0
 
@@ -188,7 +188,7 @@ None
 ## NEEDS WORK Example
 
 # Skill Review: analyzing-data
-**Reviewer:** Pedro
+**Reviewer:** mriley
 **Date:** 2025-01-15
 **Version Reviewed:** 0.9.0
 
@@ -391,7 +391,7 @@ None
 ## FAIL Example
 
 # Skill Review: data-helper
-**Reviewer:** Pedro
+**Reviewer:** mriley
 **Date:** 2025-01-15
 **Version Reviewed:** 0.5.0
 

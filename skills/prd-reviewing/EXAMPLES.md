@@ -64,7 +64,7 @@ so that I can choose between speed and cost.
 ```markdown
 # PRD Review: Shipping Cost Transparency
 
-**Reviewer:** Pedro
+**Reviewer:** mriley
 **Review Date:** 2024-01-15
 **PRD Version:** 1.2
 **PRD Author:** Product Team
@@ -202,7 +202,7 @@ As an admin, I want to see who changed what.
 ```markdown
 # PRD Review: Team Permissions
 
-**Reviewer:** Pedro
+**Reviewer:** mriley
 **Review Date:** 2024-01-15
 **PRD Version:** 0.5
 **PRD Author:** Product Team
@@ -368,7 +368,7 @@ Users will like the new dashboard better.
 ```markdown
 # PRD Review: New Dashboard
 
-**Reviewer:** Pedro
+**Reviewer:** mriley
 **Review Date:** 2024-01-15
 **PRD Version:** 0.1
 **PRD Author:** Product Team

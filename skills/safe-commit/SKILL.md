@@ -112,7 +112,7 @@ This skill handles:
 4. **Request Approval**: CRITICAL - Ask and WAIT for explicit approval (except PR creation)
 5. **Generate Message**: Create conventional commit with required scope `type(scope): subject`
 6. **Create Commit**: Stage all changes, commit with heredoc, NO AI attribution
-7. **Verify Success**: Confirm commit created, correct files, proper author (Pedro)
+7. **Verify Success**: Confirm commit created, correct files, proper author (mriley)
 8. **Status Check**: Verify working directory clean
 
 ### Optional: PRD Task Auto-Update
@@ -227,7 +227,7 @@ Please investigate and retry.
 3. **Get explicit approval** - Don't assume permission (except PR creation)
 4. **Descriptive messages** - Help future you understand why
 5. **Proper scopes** - Never omit scope from commit message
-6. **Verify attribution** - Always ensure Pedro is sole author
+6. **Verify attribution** - Always ensure mriley is sole author
 7. **Clean commits** - Stage all changes, commit once
 
 ---

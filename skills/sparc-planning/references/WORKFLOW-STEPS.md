@@ -266,29 +266,29 @@ Break down implementation into ordered tasks:
 1. [ ] Set up database schema for users table
    - Estimated: 2 hours
    - Dependencies: None
-   - Owner: Pedro
+   - Owner: mriley
 
 2. [ ] Implement User model with validation
    - Estimated: 1 hour
    - Dependencies: Task 1
-   - Owner: Pedro
+   - Owner: mriley
 
 3. [ ] Create database repository layer
    - Estimated: 3 hours
    - Dependencies: Task 2
-   - Owner: Pedro
+   - Owner: mriley
 
 ### Phase 2: Core Logic (Priority: HIGH)
 
 4. [ ] Implement password hashing service
    - Estimated: 2 hours
    - Dependencies: Task 2
-   - Owner: Pedro
+   - Owner: mriley
 
 5. [ ] Implement JWT token generation
    - Estimated: 2 hours
    - Dependencies: Task 2
-   - Owner: Pedro
+   - Owner: mriley
 
 [... continue with all tasks ...]
 
@@ -297,12 +297,12 @@ Break down implementation into ordered tasks:
 15. [ ] Add unit tests for all services (target: 95%)
     - Estimated: 6 hours
     - Dependencies: Tasks 4-10
-    - Owner: Pedro
+    - Owner: mriley
 
 16. [ ] Add integration tests for auth flow
     - Estimated: 4 hours
     - Dependencies: Tasks 11-14
-    - Owner: Pedro
+    - Owner: mriley
 ```
 
 ### Step 10: Identify Dependencies and Blockers

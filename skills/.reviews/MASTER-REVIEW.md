@@ -269,7 +269,7 @@
 - All BLOCKER issues resolved
 - Users can access referenced documentation
 
-**Owner:** Pedro
+**Owner:** mriley
 **Estimated Effort:** 6-8 hours
 
 ---
@@ -295,7 +295,7 @@
 - Gate 5 passes for both skills
 - Both skills move to PASS status
 
-**Owner:** Pedro
+**Owner:** mriley
 **Estimated Effort:** 6-8 hours
 
 ---
@@ -319,7 +319,7 @@
 - Template files available for copying
 - All minor issues resolved
 
-**Owner:** Pedro
+**Owner:** mriley
 **Estimated Effort:** 4-6 hours
 
 ---
@@ -340,7 +340,7 @@
 - Skill review process automated
 - Documentation updated
 
-**Owner:** Pedro
+**Owner:** mriley
 **Estimated Effort:** 4-6 hours
 
 ---
