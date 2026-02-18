@@ -45,6 +45,13 @@ All skills have full documentation in `~/.claude/skills/[skill-name]/SKILL.md`
 | `playwright-writing`   | Write tests (locators, assertions) |
 | `playwright-reviewing` | Review tests (violations audit)    |
 
+## Diagrams & Visualization
+
+| Skill                | Purpose                                              |
+| -------------------- | ---------------------------------------------------- |
+| `creating-diagrams`  | Mermaid syntax + Excalidraw conversion and embedding |
+| `reviewing-diagrams` | Audit Mermaid + Excalidraw code (P0-P3 checklist)    |
+
 ## OBS Plugin Development
 
 | Skill                      | When to Use                         |
@@ -87,6 +94,12 @@ All skills have full documentation in `~/.claude/skills/[skill-name]/SKILL.md`
 
 **Agent:** `helm-kubernetes-expert` - Coordinates all Helm skills
 
+## Quip Documents
+
+| Skill        | Purpose                                             |
+| ------------ | --------------------------------------------------- |
+| `using-quip` | Read, create, edit, search, organize Quip documents |
+
 ## Grafana & Monitoring
 
 | Skill                     | Purpose                  |
@@ -97,14 +110,16 @@ All skills have full documentation in `~/.claude/skills/[skill-name]/SKILL.md`
 
 ## Documentation
 
-| Skill                    | Purpose                  |
-| ------------------------ | ------------------------ |
-| `api-doc-writer`         | API reference (Diátaxis) |
-| `migration-guide-writer` | Migration how-to guides  |
-| `tutorial-writer`        | Learning tutorials       |
-| `technical-spec-writing` | Technical design docs    |
-| `feature-spec-writing`   | Feature specifications   |
-| `prd-writing`            | Product requirements     |
+| Skill                    | Purpose                      |
+| ------------------------ | ---------------------------- |
+| `api-doc-writer`         | API reference (Diátaxis)     |
+| `migration-guide-writer` | Migration how-to guides      |
+| `tutorial-writer`        | Learning tutorials           |
+| `technical-spec-writing` | Technical design docs        |
+| `feature-spec-writing`   | Feature specifications       |
+| `prd-writing`            | Product requirements         |
+| `design-doc-writing`     | RMS Backend Design Documents |
+| `reviewing-design-docs`  | Review RMS design docs       |
 
 **Agent:** `documentation-coordinator` - Coordinates doc skills
 

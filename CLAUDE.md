@@ -9,7 +9,7 @@
 - "Generated with Claude", "AI-suggested", "Claude recommends"
 - Any reference to being an AI assistant
 
-**User's name is Pedro.**
+**User's name is mriley.**
 
 ---
 
@@ -100,6 +100,22 @@ accumulation and ensures every commit maintains quality standards.
 | GitOps drift      | `gitops-audit`                 |
 | General help      | `helm-kubernetes-expert` agent |
 
+#### Diagrams & Visualization
+
+| Request                             | Skill                |
+| ----------------------------------- | -------------------- |
+| Create Mermaid diagram              | `creating-diagrams`  |
+| Convert Mermaid → Excalidraw        | `creating-diagrams`  |
+| Embed diagram in React (Excalidraw) | `creating-diagrams`  |
+| Export `.excalidraw` file           | `creating-diagrams`  |
+| Review diagram / Excalidraw code    | `reviewing-diagrams` |
+
+#### Quip Documents
+
+| Request           | Skill        |
+| ----------------- | ------------ |
+| Read/write/search | `using-quip` |
+
 #### Testing & Quality
 
 | Request                 | Skill                            |
@@ -110,12 +126,14 @@ accumulation and ensures every commit maintains quality standards.
 
 #### Documentation
 
-| Request         | Skill                    |
-| --------------- | ------------------------ |
-| API reference   | `api-doc-writer`         |
-| Migration guide | `migration-guide-writer` |
-| Tutorial        | `tutorial-writer`        |
-| Tech spec       | `technical-spec-writing` |
+| Request            | Skill                    |
+| ------------------ | ------------------------ |
+| API reference      | `api-doc-writer`         |
+| Migration guide    | `migration-guide-writer` |
+| Tutorial           | `tutorial-writer`        |
+| Tech spec          | `technical-spec-writing` |
+| RMS Backend Design | `design-doc-writing`     |
+| Review design doc  | `reviewing-design-docs`  |
 
 #### Code Review Agents
 
@@ -150,7 +168,7 @@ accumulation and ensures every commit maintains quality standards.
 
 | Item            | Value                                |
 | --------------- | ------------------------------------ |
-| **User**        | Pedro                                |
+| **User**        | mriley                               |
 | **Branches**    | `mriley/` prefix required            |
 | **Attribution** | Never self-identify as AI            |
 | **Commits**     | Conventional format with scope       |

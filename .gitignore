@@ -26,8 +26,8 @@
 !hooks/
 !hooks/**
 
-# Keep settings.json
-settings.json
+# Explicitly exclude settings.json (contains user-specific config and potential secrets)
+# settings.json is user-local only - use settings.template.json for sharing defaults
 
 # Python cache
 __pycache__/

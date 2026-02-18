@@ -37,7 +37,7 @@ Message:
 ```
 
 Check:
-1. **Authorship**: Is the commit by the current user (Pedro)?
+1. **Authorship**: Is the commit by the current user (mriley)?
 2. **Branch status**: Has the commit been pushed to remote?
 3. **Working directory**: Are there uncommitted changes?
 

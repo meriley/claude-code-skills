@@ -13,9 +13,9 @@
 1. No Co-authored-by signatures
 2. No AI attribution in commit message
 3. No Claude references in code comments
-4. Only human attribution (Pedro)
+4. Only human attribution (mriley)
 
-**User's name is Pedro.**
+**User's name is mriley.**
 
 ---
 
